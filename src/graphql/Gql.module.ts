@@ -10,6 +10,7 @@ import { UserGqlModule } from './user/UserGql.module';
       driver: ApolloDriver,
       playground: process.env.GRAPHQL_PLAYGROUND === 'true',
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
+      path: '/graphql',
     }),
     UserGqlModule,
   ],
