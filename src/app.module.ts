@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ApiModule } from './api/ApiModue';
+import { ApiModule } from './api/Api.module';
 import { GqlModule } from './graphql/Gql.module';
 
 @Module({
