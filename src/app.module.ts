@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entity/domain/User.entity';
+import { ApiModule } from './api/ApiModue';
+import { GqlModule } from './graphql/Gql.module';
 
 @Module({
   imports: [
@@ -23,9 +23,8 @@ import { User } from './entity/domain/User.entity';
       },
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([User]),
+    ApiModule,
+    GqlModule,
   ],
-  controllers: [],
-  providers: [AppService],
 })
 export class AppModule {}
