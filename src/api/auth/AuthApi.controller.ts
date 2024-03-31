@@ -11,6 +11,7 @@ import { LocalAuthGuard } from 'src/lib/auth/decorator/LocalAuth.guard';
 import { ApiController } from 'src/common/decorator/ApiController';
 import { RegisterRequestDto } from './dto/RegisterRequest.dto';
 import { RestTemplate } from 'src/common/response/RestTemplate';
+import { JwtAuthGuard } from 'src/lib/auth/decorator/JwtAuth.guard';
 
 @ApiController('auth')
 // @Controller('/api/auth')
@@ -30,5 +31,11 @@ export class AuthApiController {
     const user = req.user;
     const loginResponse = await this.authService.login(user);
     return RestTemplate.OK_WITH_DATA(loginResponse);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('access')
+  async tokenLogin() {
+    return RestTemplate.OK();
   }
 }
