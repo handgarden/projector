@@ -1,4 +1,4 @@
-import { NilDataAccessError } from 'src/error/NilDataAccessError';
+import { NilDataAccessError } from './NilDataAccessError';
 
 export class Nil<T> {
   constructor(private readonly value: T | null | undefined) {}
