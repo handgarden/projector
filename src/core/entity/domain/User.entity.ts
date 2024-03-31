@@ -6,10 +6,10 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'account', type: 'varchar', length: 50, unique: true })
+  @Column({ name: 'account', type: 'varchar', length: 255, unique: true })
   account: string;
 
   @Exclude()
-  @Column({ name: 'password', type: 'varchar', length: 50 })
+  @Column({ name: 'password', type: 'varchar', length: 255 })
   password: string;
 }
