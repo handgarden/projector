@@ -4,11 +4,20 @@ import { CustomValidationError } from './validation/CustomValidationError';
 import { RestTemplate } from '../response/RestTemplate';
 import { ResponseStatus } from '../response/ResponseStatus';
 import { BadParameterError } from './validation/BadParameterError';
+import { Request } from 'express';
+import { RestApiExceptionFilter } from './RestApiExceptionFilter';
 
 @Catch(BadParameterError)
-export class BadParameterErrorFilter implements ExceptionFilter {
+export class BadParameterErrorFilter
+  implements ExceptionFilter, RestApiExceptionFilter
+{
   catch(exception: BadParameterError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
+
+    const request = ctx.getRequest<Request>();
+    if (this.isNotRestApiRequest(request)) {
+      throw exception;
+    }
 
     const response = ctx.getResponse();
     const status = exception.getStatus();
@@ -28,5 +37,9 @@ export class BadParameterErrorFilter implements ExceptionFilter {
           ),
         ),
       );
+  }
+
+  isNotRestApiRequest(request: Request) {
+    return request.url.includes('/api');
   }
 }
