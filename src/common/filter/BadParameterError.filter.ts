@@ -40,6 +40,6 @@ export class BadParameterErrorFilter
   }
 
   isNotRestApiRequest(request: Request) {
-    return request.url.includes('/api');
+    return !request.url.includes('/api');
   }
 }
