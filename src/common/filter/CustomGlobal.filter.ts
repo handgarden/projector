@@ -8,21 +8,11 @@ import { BaseExceptionFilter } from '@nestjs/core';
 import { instanceToPlain } from 'class-transformer';
 import { RestTemplate } from '../response/RestTemplate';
 import { ResponseStatusConvertor } from '../response/ResponseStatusConvertor';
-import { RestApiExceptionFilter } from './RestApiExceptionFilter';
-import { Request } from 'express';
 
 @Catch()
-export class CustomGlobalFilter
-  extends BaseExceptionFilter
-  implements RestApiExceptionFilter
-{
+export class CustomGlobalFilter extends BaseExceptionFilter {
   catch(exception: Error, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
-
-    const request = ctx.getRequest();
-    if (this.isNotRestApiRequest(request)) {
-      throw exception;
-    }
 
     const response = ctx.getResponse();
 
@@ -47,9 +37,5 @@ export class CustomGlobalFilter
           ),
         ),
       );
-  }
-
-  isNotRestApiRequest(request: Request) {
-    return request.url.includes('/api');
   }
 }
