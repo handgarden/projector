@@ -21,5 +21,5 @@ export function NestAppConfig(app: INestApplication<any>) {
         new BadParameterError(...errors),
     }),
   );
-  app.useGlobalFilters(new BadParameterErrorFilter(), new CustomGlobalFilter());
+  app.useGlobalFilters(new CustomGlobalFilter(), new BadParameterErrorFilter());
 }
