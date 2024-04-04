@@ -3,3 +3,5 @@ export interface ObjectStorageClient {
   putObject(bucket: string, key: string, body: any): Promise<any>;
   deleteObject(bucket: string, key: string): Promise<any>;
 }
+
+export const ObjectStorageClient = Symbol('ObjectStorageClient');
