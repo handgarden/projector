@@ -6,6 +6,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/Jwt.strategy';
 import { UserRepository } from 'src/core/entity/repository/User.repository';
+import { BcryptPasswordEncoder } from 'src/common/password/BcryptPasswordEncorder';
+import { PasswordEncoder } from 'src/common/password/PasswordEncoder';
 
 @Module({
   imports: [
@@ -18,7 +20,16 @@ import { UserRepository } from 'src/core/entity/repository/User.repository';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, UserRepository],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    UserRepository,
+    {
+      provide: PasswordEncoder,
+      useClass: BcryptPasswordEncoder,
+    },
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

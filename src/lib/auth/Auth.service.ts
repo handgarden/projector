@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import { Inject, Injectable } from '@nestjs/common';
 import { TokenPayload } from './types/TokenPayload';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterRequestDto } from 'src/api/auth/dto/RegisterRequest.dto';
@@ -7,12 +6,14 @@ import { DuplicateAccountError } from './error/AccountDuplicateError';
 import { LoginResponseDto } from 'src/api/auth/dto/LoginResponse.dto';
 import { UserRepository } from 'src/core/entity/repository/User.repository';
 import { User } from 'src/core/entity/domain/User.entity';
+import { PasswordEncoder } from 'src/common/password/PasswordEncoder';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
+    @Inject(PasswordEncoder) private readonly passwordEncoder: PasswordEncoder,
   ) {}
 
   async register({ account, password }: RegisterRequestDto) {
@@ -21,7 +22,7 @@ export class AuthService {
       throw new DuplicateAccountError({ account, password });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await this.passwordEncoder.encode(password, 10);
     await this.userRepository.save({ account, password: hashedPassword });
     return true;
   }
@@ -33,7 +34,10 @@ export class AuthService {
     }
     const user = userNil.unwrap();
 
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    const isPasswordMatch = await this.passwordEncoder.matches(
+      password,
+      user.password,
+    );
 
     if (!isPasswordMatch) {
       return null;
