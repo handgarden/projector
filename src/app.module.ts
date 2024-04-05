@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiModule } from './api/Api.module';
 import { GqlModule } from './graphql/Gql.module';
+import { UUIDUtilService } from './util/UUIDUtil.service';
+import { UtilsModule } from './util/Utils.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { GqlModule } from './graphql/Gql.module';
     }),
     ApiModule,
     GqlModule,
+    UtilsModule,
   ],
+  providers: [UUIDUtilService],
 })
 export class AppModule {}

@@ -22,6 +22,7 @@ export class BadParameterErrorFilter
     const response = ctx.getResponse();
     const status = exception.getStatus();
 
+    console.log(exception);
     const responseBody = exception.getResponse() as {
       message: CustomValidationError[];
     };

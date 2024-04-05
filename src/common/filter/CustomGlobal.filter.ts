@@ -3,6 +3,7 @@ import {
   Catch,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { instanceToPlain } from 'class-transformer';
@@ -11,7 +12,9 @@ import { ResponseStatusConvertor } from '../response/ResponseStatusConvertor';
 
 @Catch()
 export class CustomGlobalFilter extends BaseExceptionFilter {
+  private readonly logger = new Logger(CustomGlobalFilter.name);
   catch(exception: Error, host: ArgumentsHost): void {
+    this.logger.error(exception);
     const ctx = host.switchToHttp();
 
     const response = ctx.getResponse();
