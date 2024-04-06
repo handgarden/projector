@@ -1,9 +1,9 @@
-import { UploadFile } from 'src/core/entity/domain/UploadFile.entity';
 import { RawFile } from './RawFile';
+import { StoredFile } from './StoredFile';
 
 export interface ObjectStorageClient {
   getPresignedObjectUrl(bucket: string, key: string): Promise<string>;
-  putObject(file: RawFile): Promise<UploadFile>;
+  putObject(file: RawFile): Promise<StoredFile>;
   deleteObject(bucket: string, key: string): Promise<void>;
 }
 

@@ -4,6 +4,7 @@ import { User } from 'src/core/entity/domain/User.entity';
 import { UploadFileRepository } from 'src/core/entity/repository/UploadFile.repository';
 import { TokenUser } from 'src/lib/auth/types/TokenUser';
 import { S3Service } from 'src/lib/s3/S3.service';
+import { UploadFileResponseDto } from './dto/UploadFileResponse.dto';
 
 @Injectable()
 export class FileApiService {
@@ -15,19 +16,22 @@ export class FileApiService {
   public async uploadFiles(
     files: Express.Multer.File[],
     uploader: TokenUser,
-  ): Promise<UploadFile[]> {
-    const uploadFiles = await this.s3Service.uploadFiles(files);
-
-    uploadFiles.forEach((uploadFile) => {
-      const userEntity = new User();
-      userEntity.id = uploader.id;
-      uploadFile.uploader = userEntity;
-    });
+  ): Promise<UploadFileResponseDto[]> {
+    const storedFiles = await this.s3Service.uploadFiles(files);
 
     return this.uploadFileRepository.manager.transaction((em) => {
       return Promise.all(
-        uploadFiles.map(async (uploadFile) => {
-          return em.save(uploadFile);
+        storedFiles.map(async (file) => {
+          const user = new User();
+          user.id = uploader.id;
+          const uploadFile = UploadFile.fromStoredFile(user, file);
+
+          await em.save(uploadFile);
+          return new UploadFileResponseDto(
+            uploadFile.fileKey,
+            file.url,
+            file.originalName,
+          );
         }),
       );
     });

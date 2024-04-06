@@ -2,9 +2,9 @@ import { ConfigService } from '@nestjs/config';
 import { ObjectStorageClient } from '../ObjectStorageClient';
 import * as Minio from 'minio';
 import { RawFile } from '../RawFile';
-import { UploadFile } from 'src/core/entity/domain/UploadFile.entity';
 import { Injectable } from '@nestjs/common';
 import { BucketRequiredError } from '../error/BucketRequiredError';
+import { StoredFile } from '../StoredFile';
 
 @Injectable()
 export class MinioObjectClient implements ObjectStorageClient {
@@ -42,16 +42,17 @@ export class MinioObjectClient implements ObjectStorageClient {
     return this.client.presignedGetObject(bucket, key);
   }
 
-  async putObject(file: RawFile): Promise<UploadFile> {
-    console.log('putObject', file.key, file.buffer.length, this.bucket);
+  async putObject(file: RawFile): Promise<StoredFile> {
     await this.client.putObject(this.bucket, file.key, file.buffer);
 
-    const uploadFile = new UploadFile();
-    uploadFile.fileKey = file.key;
-    uploadFile.bucket = this.bucket;
-    uploadFile.originalName = file.key;
+    const storedFile = new StoredFile({
+      bucket: this.bucket,
+      key: file.key,
+      originalName: file.originalname,
+      url: await this.getPresignedObjectUrl(this.bucket, file.key),
+    });
 
-    return uploadFile;
+    return storedFile;
   }
 
   async deleteObject(bucket: string, key: string): Promise<any> {

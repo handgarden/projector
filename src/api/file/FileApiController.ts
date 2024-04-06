@@ -25,9 +25,7 @@ export class FileApiController {
     files: Express.Multer.File[],
     @CurrentUser() user: TokenUser,
   ) {
-    const uploadFiles = await this.fileService.uploadFiles(files, user);
-    return RestTemplate.OK_WITH_DATA(
-      uploadFiles.map((uploadFile) => uploadFile.toDto()),
-    );
+    const uploadFileResponse = await this.fileService.uploadFiles(files, user);
+    return RestTemplate.OK_WITH_DATA(uploadFileResponse);
   }
 }

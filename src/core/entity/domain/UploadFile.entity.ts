@@ -7,9 +7,8 @@ import {
   RelationId,
 } from 'typeorm';
 import { BaseTimeEntity } from '../BaseTimeEntity';
-import { RawFile } from 'src/lib/s3/RawFile';
 import { User } from './User.entity';
-import { UploadFileDto } from '../../../api/file/dto/UploadFileDto';
+import { StoredFile } from '../../../lib/s3/StoredFile';
 
 @Entity()
 export class UploadFile extends BaseTimeEntity {
@@ -35,14 +34,12 @@ export class UploadFile extends BaseTimeEntity {
   @RelationId((self: UploadFile) => self.uploader)
   uploaderId: number;
 
-  fromRawFile(bucket: string, file: RawFile): UploadFile {
-    this.fileKey = file.key;
-    this.originalName = file.originalname;
-    this.bucket = bucket;
-    return this;
-  }
-
-  toDto(): UploadFileDto {
-    return new UploadFileDto(this.fileKey, this.createdAt);
+  static fromStoredFile(uploader: User, storedFile: StoredFile): UploadFile {
+    const uploadFile = new UploadFile();
+    uploadFile.bucket = storedFile.bucket;
+    uploadFile.fileKey = storedFile.key;
+    uploadFile.originalName = storedFile.originalName;
+    uploadFile.uploader = uploader;
+    return uploadFile;
   }
 }
