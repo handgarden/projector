@@ -17,7 +17,7 @@ export class UploadFile extends BaseTimeEntity {
     type: 'varchar',
     length: 255,
   })
-  fileKey: string;
+  key: string;
 
   @Column()
   originalName: string;
@@ -37,7 +37,7 @@ export class UploadFile extends BaseTimeEntity {
   static fromStoredFile(uploader: User, storedFile: StoredFile): UploadFile {
     const uploadFile = new UploadFile();
     uploadFile.bucket = storedFile.bucket;
-    uploadFile.fileKey = storedFile.key;
+    uploadFile.key = storedFile.key;
     uploadFile.originalName = storedFile.originalName;
     uploadFile.uploader = Promise.resolve(uploader);
     return uploadFile;

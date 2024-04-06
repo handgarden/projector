@@ -28,7 +28,7 @@ export class FileApiService {
 
           await em.save(uploadFile);
           return new UploadFileResponseDto(
-            uploadFile.fileKey,
+            uploadFile.key,
             file.url,
             file.originalName,
           );
