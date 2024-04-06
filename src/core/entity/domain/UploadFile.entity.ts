@@ -1,7 +1,15 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  RelationId,
+} from 'typeorm';
 import { BaseTimeEntity } from '../BaseTimeEntity';
 import { RawFile } from 'src/lib/s3/RawFile';
-import { UploadFileDto } from 'src/api/file/dto/UploadFileDto';
+import { User } from './User.entity';
+import { UploadFileDto } from '../../../api/file/dto/UploadFileDto';
 
 @Entity()
 export class UploadFile extends BaseTimeEntity {
@@ -17,6 +25,15 @@ export class UploadFile extends BaseTimeEntity {
 
   @Column()
   bucket: string;
+
+  @ManyToOne(() => User, { nullable: false })
+  @JoinColumn({
+    name: 'uploader_id',
+  })
+  uploader: User;
+
+  @RelationId((self: UploadFile) => self.uploader)
+  uploaderId: number;
 
   fromRawFile(bucket: string, file: RawFile): UploadFile {
     this.fileKey = file.key;
