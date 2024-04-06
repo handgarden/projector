@@ -25,11 +25,11 @@ export class UploadFile extends BaseTimeEntity {
   @Column()
   bucket: string;
 
-  @ManyToOne(() => User, { nullable: false })
+  @ManyToOne(() => User, { nullable: false, lazy: true })
   @JoinColumn({
     name: 'uploader_id',
   })
-  uploader: User;
+  uploader: Promise<User>;
 
   @RelationId((self: UploadFile) => self.uploader)
   uploaderId: number;
@@ -39,7 +39,7 @@ export class UploadFile extends BaseTimeEntity {
     uploadFile.bucket = storedFile.bucket;
     uploadFile.fileKey = storedFile.key;
     uploadFile.originalName = storedFile.originalName;
-    uploadFile.uploader = uploader;
+    uploadFile.uploader = Promise.resolve(uploader);
     return uploadFile;
   }
 }
