@@ -1,8 +1,9 @@
 import { Exclude } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseTimeEntity } from '../BaseTimeEntity';
 
 @Entity()
-export class User {
+export class User extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

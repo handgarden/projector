@@ -8,9 +8,10 @@ import {
 } from 'typeorm';
 import { SlideImage } from './SlideImage.entity';
 import { Project } from './Project.entity';
+import { BaseTimeEntity } from '../../BaseTimeEntity';
 
 @Entity()
-export class Slide {
+export class Slide extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
