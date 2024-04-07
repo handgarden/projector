@@ -7,6 +7,16 @@ type User {
   account: String!
 }
 
+type UploadFileModel {
+  key: ID!
+  url: String!
+  originalName: String!
+  bucket: String!
+  uploader: User!
+}
+
 type Query {
   user: User!
+  uploadFile(key: String!): UploadFileModel!
+  uploadFiles(keys: [String!]!): [UploadFileModel!]!
 }
