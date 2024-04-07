@@ -3,14 +3,19 @@ import { GraphQLScalarType, StringValueNode } from 'graphql';
 import { DateTimeUtils } from '../../../util/DateTImeUtils';
 import { CustomGraphQLScalarParseError } from '../exception/CustomGraphQLScalarParseError';
 
-function validate(date: unknown): LocalDateTime | never {
-  if (typeof date !== 'string') {
-    throw new CustomGraphQLScalarParseError(LocalDateTime.name, date);
+function validate(value: any) {
+  if (value instanceof LocalDateTime) {
+    return value;
   }
 
-  const dateTime = DateTimeUtils.toLocalDateTimeFromString(date as string);
+  if (typeof value !== 'string') {
+    throw new CustomGraphQLScalarParseError(LocalDateTime.name, value);
+  }
+
+  const dateTime = DateTimeUtils.toLocalDateTimeFromString(value);
+
   if (dateTime.isNil()) {
-    throw new CustomGraphQLScalarParseError(LocalDateTime.name, date);
+    throw new CustomGraphQLScalarParseError(LocalDateTime.name, value);
   }
 
   return dateTime.unwrap();
