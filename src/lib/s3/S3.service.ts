@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ObjectStorageClient } from './ObjectStorageClient';
 import { RawFile } from './RawFile';
-import { UUIDUtils } from 'src/util/UUIDUtil.service';
+import { UUIDUtils } from 'src/util/UUIDUtils';
 
 @Injectable()
 export class S3Service {
