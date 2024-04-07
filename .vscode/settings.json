@@ -1,5 +1,6 @@
 {
-  "prettier.endOfLine": "lf",
+  "prettier.endOfLine": "crlf",
   "javascript.preferences.importModuleSpecifier": "relative",
   "typescript.preferences.importModuleSpecifier": "relative"
 }
+
