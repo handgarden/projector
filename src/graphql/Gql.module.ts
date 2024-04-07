@@ -3,16 +3,19 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { UserGqlModule } from './user/UserGql.module';
+import { UploadFileGqlModule } from './file/UploadFileGql.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      playground: process.env.GRAPHQL_PLAYGROUND === 'true',
+      introspection: process.env.NODE_ENV !== 'production',
+      playground: process.env.NODE_ENV !== 'production',
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
       path: '/graphql',
     }),
     UserGqlModule,
+    UploadFileGqlModule,
   ],
 })
 export class GqlModule {}
