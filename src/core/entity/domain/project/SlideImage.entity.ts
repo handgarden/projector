@@ -10,11 +10,14 @@ export class SlideImage {
   @PrimaryColumn({ name: 'file_id' })
   fileId: string;
 
-  @ManyToOne(() => Slide, (slide) => slide.images)
+  @ManyToOne(() => Slide, (slide) => slide.images, {
+    nullable: false,
+    lazy: true,
+  })
   @JoinColumn({ name: 'slide_id' })
-  slide: Slide;
+  slide: Promise<Slide>;
 
-  @ManyToOne(() => UploadFile)
+  @ManyToOne(() => UploadFile, { nullable: false, lazy: true })
   @JoinColumn({ name: 'file_id' })
-  file: UploadFile;
+  file: Promise<UploadFile>;
 }

@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { UserGqlModule } from './user/UserGql.module';
 import { UploadFileGqlModule } from './file/UploadFileGql.module';
+import { ProjectGqlModule } from './project/ProjectGql.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UploadFileGqlModule } from './file/UploadFileGql.module';
     }),
     UserGqlModule,
     UploadFileGqlModule,
+    ProjectGqlModule,
   ],
 })
 export class GqlModule {}

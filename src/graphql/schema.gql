@@ -7,16 +7,33 @@ type User {
   account: String!
 }
 
-type UploadFileModel {
+type UploadFile {
   key: ID!
-  url: String!
   originalName: String!
   bucket: String!
   uploader: User!
+  url: String!
+}
+
+type Slide {
+  id: ID!
+  seq: Int!
+  title: String!
+  description: String!
+  images: [UploadFile!]!
+}
+
+type Project {
+  id: ID!
+  title: String!
+  creator: User!
+  slides: [Slide!]!
 }
 
 type Query {
   user: User!
-  uploadFile(key: String!): UploadFileModel!
-  uploadFiles(keys: [String!]!): [UploadFileModel!]!
+  uploadFile(key: String!): UploadFile!
+  uploadFiles(keys: [String!]!): [UploadFile!]!
+  project(id: Float!): Project!
+  slide(id: Float!): Slide!
 }
