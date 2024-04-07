@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { UploadFile } from '../../core/entity/domain/UploadFile.entity';
+import { UploadFile } from '../../../core/entity/domain/UploadFile.entity';
 
-@ObjectType()
+@ObjectType(UploadFile.name)
 export class UploadFileModel {
   @Field(() => ID)
   key: string;

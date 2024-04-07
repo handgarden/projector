@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UploadFileRepository } from '../../core/entity/repository/UploadFile.repository';
-import { UploadFileModel } from './UploadFile.model';
+import { UploadFileModel } from './model/UploadFile.model';
 
 @Injectable()
 export default class UploadFileGqlService {

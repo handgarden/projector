@@ -1,9 +1,9 @@
 import { Args, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
-import { UploadFileModel } from './UploadFile.model';
-import { UserModel } from '../user/User.model';
-import UploadFileGqlService from './UploadFileGql.service';
-import { UploadFileLoader } from './UploadFIleLoader';
-import { S3Service } from '../../lib/s3/S3.service';
+import { UploadFileModel } from '../model/UploadFile.model';
+import { UserModel } from '../../user/model/User.model';
+import UploadFileGqlService from '../UploadFileGql.service';
+import { UploadFileLoader } from '../loader/UploadFIleLoader';
+import { S3Service } from '../../../lib/s3/S3.service';
 
 @Resolver(() => UploadFileModel)
 export class UploadFileQueryResolver {

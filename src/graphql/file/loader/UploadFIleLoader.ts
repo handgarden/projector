@@ -1,7 +1,7 @@
 import { Injectable, Scope } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
-import { UserModel } from '../user/User.model';
-import { UploadFileRepository } from '../../core/entity/repository/UploadFile.repository';
+import { UserModel } from '../../user/model/User.model';
+import { UploadFileRepository } from '../../../core/entity/repository/UploadFile.repository';
 
 @Injectable({ scope: Scope.REQUEST })
 export class UploadFileLoader {
