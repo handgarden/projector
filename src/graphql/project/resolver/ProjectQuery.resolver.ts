@@ -1,4 +1,4 @@
-import { Args, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
+import { Args, ID, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
 import { UserModel } from '../../user/model/User.model';
 import { SlideModel } from '../model/Slide.model';
 import { ProjectModel } from '../model/Project.model';
@@ -13,8 +13,8 @@ export class ProjectQueryResolver {
   ) {}
 
   @Query(() => ProjectModel)
-  project(@Args('id', { type: () => Number }) id: number) {
-    return this.projectService.getProject(id);
+  project(@Args('id', { type: () => ID }) id: string) {
+    return this.projectService.getProject(parseInt(id));
   }
 
   @ResolveField(() => UserModel)
