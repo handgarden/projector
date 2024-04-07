@@ -8,12 +8,17 @@ type User {
 }
 
 type UploadFile {
+  createdAt: LocalDateTime!
+  updatedAt: LocalDateTime!
   key: ID!
   originalName: String!
   bucket: String!
   uploader: User!
   url: String!
 }
+
+"""LocalDateTime custom scalar type"""
+scalar LocalDateTime
 
 type Slide {
   createdAt: LocalDateTime!
@@ -24,9 +29,6 @@ type Slide {
   description: String!
   images: [UploadFile!]!
 }
-
-"""LocalDateTime custom scalar type"""
-scalar LocalDateTime
 
 type Project {
   createdAt: LocalDateTime!
