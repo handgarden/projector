@@ -7,20 +7,16 @@ export class UploadFileModel {
   key: string;
 
   @Field(() => String)
-  url: string;
-
-  @Field(() => String)
   originalName: string;
 
   @Field(() => String)
   bucket: string;
 
-  static fromEntity(uploadFile: UploadFile, url: string) {
+  static fromEntity(uploadFile: UploadFile) {
     const model = new UploadFileModel();
     model.bucket = uploadFile.bucket;
     model.key = uploadFile.key;
     model.originalName = uploadFile.originalName;
-    model.url = url;
 
     return model;
   }

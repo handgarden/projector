@@ -3,12 +3,14 @@ import { UploadFileModel } from './UploadFile.model';
 import { UserModel } from '../user/User.model';
 import UploadFileGqlService from './UploadFileGql.service';
 import { UploadFileLoader } from './UploadFIleLoader';
+import { S3Service } from '../../lib/s3/S3.service';
 
 @Resolver(() => UploadFileModel)
 export class UploadFileQueryResolver {
   constructor(
     private readonly uploadFileGqlService: UploadFileGqlService,
     private readonly fileLoader: UploadFileLoader,
+    private readonly s3Service: S3Service,
   ) {}
 
   @Query(() => UploadFileModel)
@@ -26,5 +28,10 @@ export class UploadFileQueryResolver {
     const userModel = this.fileLoader.findUserModelByKeys.load(uploadFile.key);
 
     return userModel;
+  }
+
+  @ResolveField(() => String)
+  url(@Root() uploadFile: UploadFileModel) {
+    return this.s3Service.getPresignedUrl(uploadFile.key);
   }
 }
