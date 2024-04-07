@@ -1,7 +1,7 @@
 import { NilDataAccessError } from './NilDataAccessError';
 
 export class Nil<T> {
-  constructor(private readonly value: T | null | undefined) {}
+  constructor(private readonly value: T | null | undefined = null) {}
 
   isNil(): this is Nil<null | undefined> {
     return this.value === null || this.value === undefined;
