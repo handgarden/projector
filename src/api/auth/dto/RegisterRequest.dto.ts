@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, Length, Matches } from 'class-validator';
 import { AuthValidationMessage } from 'src/common/message/validation/AuthValidation.message';
-import { DefaultValidationMessage } from 'src/common/message/validation/DefaultValidation.meesage';
+import { DefaultValidationMessage } from 'src/common/message/validation/DefaultValidation.message';
 
 export class RegisterRequestDto {
   @IsString({ message: DefaultValidationMessage.IS_STRING })
