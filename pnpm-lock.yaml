@@ -11,6 +11,9 @@ dependencies:
   '@aws-sdk/client-s3':
     specifier: ^3.540.0
     version: 3.540.0
+  '@js-joda/core':
+    specifier: ^5.6.2
+    version: 5.6.2
   '@nestjs/apollo':
     specifier: ^12.1.0
     version: 12.1.0(@apollo/server@4.10.2)(@nestjs/common@10.3.7)(@nestjs/core@10.3.7)(@nestjs/graphql@12.1.1)(graphql@16.8.1)
@@ -1810,6 +1813,10 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@js-joda/core@5.6.2:
+    resolution: {integrity: sha512-ow4R+7C24xeTjiMTTZ4k6lvxj7MRBqvqLCQjThQff3RjOmIMokMP20LNYVFhGafJtUx/Xo2Qp4qU8eNoTVH0SA==}
+    dev: false
 
   /@ljharb/through@2.3.13:
     resolution: {integrity: sha512-/gKJun8NNiWGZJkGzI/Ragc53cOdcLNdzjLaIa+GEjguQs0ulsurx8WN0jijdK9yPqDvziX995sMRLyLt1uZMQ==}
