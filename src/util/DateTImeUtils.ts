@@ -1,9 +1,21 @@
-import { LocalDate, LocalDateTime } from '@js-joda/core';
+import {
+  DateTimeFormatter,
+  LocalDate,
+  LocalDateTime,
+  nativeJs,
+} from '@js-joda/core';
 import { Nil } from '../common/nil/Nil';
 
 export class DateTimeUtils {
+  private static DATE_FORMATTER = DateTimeFormatter.ofPattern('yyyy-MM-dd');
+  private static DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
+    'yyyy-MM-dd HH:mm:ss',
+  );
   static toString(date: LocalDate | LocalDateTime): string {
-    return date.toString();
+    if (date instanceof LocalDateTime) {
+      return date.format(DateTimeUtils.DATE_TIME_FORMATTER);
+    }
+    return date.format(DateTimeUtils.DATE_FORMATTER);
   }
 
   static toDate(date: LocalDate | LocalDateTime): Date {
@@ -11,11 +23,11 @@ export class DateTimeUtils {
   }
 
   static toLocalDate(date: Date): LocalDate {
-    return LocalDate.parse(date.toISOString());
+    return LocalDate.from(nativeJs(date));
   }
 
   static toLocalDateTime(date: Date): LocalDateTime {
-    return LocalDateTime.parse(date.toISOString());
+    return LocalDateTime.from(nativeJs(date));
   }
 
   static toLocalDateFromString(date: string): Nil<LocalDate> {
