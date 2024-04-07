@@ -1,7 +1,7 @@
 import { Query, Resolver } from '@nestjs/graphql';
-import { UserModel } from './User.model';
+import { UserModel } from '../model/User.model';
 
-@Resolver((of) => UserModel)
+@Resolver(() => UserModel)
 export class UserQueryResolver {
   @Query((returns) => UserModel)
   async user() {

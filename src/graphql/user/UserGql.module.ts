@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserQueryResolver } from './User.query';
+import { UserQueryResolver } from './resolver/UserQuery.resolver';
 
 @Module({
   providers: [UserQueryResolver],
