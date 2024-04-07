@@ -17,7 +17,7 @@ export class UploadFileRepository extends Repository<UploadFile> {
       },
     });
 
-    return new Nil(file);
+    return Nil.of(file);
   }
 
   async findUserByKeys(keys: string[]): Promise<[string, User][]> {

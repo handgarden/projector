@@ -10,7 +10,7 @@ export class UserRepository extends Repository<User> {
   }
 
   async findOneByAccount(account: string): Promise<Nil<User>> {
-    const data = await this.findOne({ where: { account } });
-    return new Nil(data);
+    const user = await this.findOne({ where: { account } });
+    return Nil.of(user);
   }
 }

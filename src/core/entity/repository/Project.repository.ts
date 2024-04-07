@@ -18,7 +18,7 @@ export class ProjectRepository extends Repository<Project> {
       },
     });
 
-    return new Nil(project);
+    return Nil.of(project);
   }
 
   async findCreatorByIds(ids: number[]): Promise<[number, User][]> {

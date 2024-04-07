@@ -20,17 +20,17 @@ export class DateTimeUtils {
 
   static toLocalDateFromString(date: string): Nil<LocalDate> {
     if (!date) {
-      return new Nil();
+      return Nil.empty();
     }
 
-    return new Nil(LocalDate.parse(date));
+    return Nil.of(LocalDate.parse(date));
   }
 
   static toLocalDateTimeFromString(date: string): Nil<LocalDateTime> {
     if (!date) {
-      return new Nil();
+      return Nil.empty();
     }
 
-    return new Nil(LocalDateTime.parse(date));
+    return Nil.of(LocalDateTime.parse(date));
   }
 }

@@ -17,7 +17,7 @@ export class SlideRepository extends Repository<Slide> {
       },
     });
 
-    return new Nil(entity);
+    return Nil.of(entity);
   }
 
   async findImagesByIds(ids: number[]): Promise<[number, UploadFile[]][]> {
