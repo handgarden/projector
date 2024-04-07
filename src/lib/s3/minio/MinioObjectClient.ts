@@ -38,10 +38,6 @@ export class MinioObjectClient implements ObjectStorageClient {
     this.client.makeBucket(this.bucket, 'us-east-1');
   }
 
-  async getPresignedObjectUrl(bucket: string, key: string): Promise<any> {
-    return this.client.presignedGetObject(bucket, key);
-  }
-
   async putObject(file: RawFile): Promise<StoredFile> {
     await this.client.putObject(this.bucket, file.key, file.buffer);
 
@@ -49,13 +45,17 @@ export class MinioObjectClient implements ObjectStorageClient {
       bucket: this.bucket,
       key: file.key,
       originalName: file.originalname,
-      url: await this.getPresignedObjectUrl(this.bucket, file.key),
+      url: await this.getPresignedUrl(file.key),
     });
 
     return storedFile;
   }
 
-  async deleteObject(bucket: string, key: string): Promise<any> {
-    return this.client.removeObject(bucket, key);
+  async getPresignedUrl(key: string): Promise<any> {
+    return this.client.presignedGetObject(this.bucket, key);
+  }
+
+  async deleteObject(key: string): Promise<any> {
+    return this.client.removeObject(this.bucket, key);
   }
 }

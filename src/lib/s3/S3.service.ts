@@ -24,4 +24,8 @@ export class S3Service {
     const rawFile = new RawFile(key, file);
     return this.objectStorageClient.putObject(rawFile);
   }
+
+  public async getPresignedUrl(key: string) {
+    return this.objectStorageClient.getPresignedUrl(key);
+  }
 }
