@@ -16,6 +16,8 @@ type UploadFile {
 }
 
 type Slide {
+  createdAt: LocalDateTime!
+  updatedAt: LocalDateTime!
   id: ID!
   seq: Int!
   title: String!
@@ -23,7 +25,12 @@ type Slide {
   images: [UploadFile!]!
 }
 
+"""LocalDateTime custom scalar type"""
+scalar LocalDateTime
+
 type Project {
+  createdAt: LocalDateTime!
+  updatedAt: LocalDateTime!
   id: ID!
   title: String!
   creator: User!
@@ -34,6 +41,6 @@ type Query {
   user: User!
   uploadFile(key: String!): UploadFile!
   uploadFiles(keys: [String!]!): [UploadFile!]!
-  project(id: Float!): Project!
+  project(id: ID!): Project!
   slide(id: Float!): Slide!
 }
