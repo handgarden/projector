@@ -1,12 +1,12 @@
 import { LocalDateTime } from '@js-joda/core';
-import { Field, ObjectType } from '@nestjs/graphql';
-import { LocalDateTimeScalar } from './scalar/LocalDateTimeScalar';
+import { ObjectType } from '@nestjs/graphql';
+import { LocalDateTimeField } from './decorator/LocalDateTimeField.decorator';
 
 @ObjectType()
 export class BaseTimeModel {
-  @Field(() => LocalDateTimeScalar)
+  @LocalDateTimeField()
   createdAt: LocalDateTime;
 
-  @Field(() => LocalDateTimeScalar)
+  @LocalDateTimeField()
   updatedAt: LocalDateTime;
 }
