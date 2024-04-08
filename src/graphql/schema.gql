@@ -48,7 +48,7 @@ type Query {
 }
 
 type Mutation {
-  create(project: CreateProjectInput!): Project!
+  createProject(project: CreateProjectInput!): Project!
 }
 
 input CreateProjectInput {
