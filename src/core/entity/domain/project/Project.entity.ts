@@ -32,4 +32,9 @@ export class Project extends BaseTimeEntity {
     cascade: true,
   })
   slides: Promise<Slide[]>;
+
+  async addSlides(slides: Slide[]) {
+    slides.forEach((s) => (s.project = Promise.resolve(this)));
+    (await this.slides).push(...slides);
+  }
 }

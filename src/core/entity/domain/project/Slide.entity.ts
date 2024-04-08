@@ -43,4 +43,9 @@ export class Slide extends BaseTimeEntity {
     lazy: true,
   })
   images: Promise<SlideImage[]>;
+
+  async addImages(images: SlideImage[]) {
+    const prevImages = await this.images;
+    prevImages.push(...images);
+  }
 }
