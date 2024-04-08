@@ -7,6 +7,7 @@ import { Slide } from '../../core/entity/domain/project/Slide.entity';
 import { CreateSlideInput } from './input/CreateSlide.input';
 import { UploadFile } from '../../core/entity/domain/UploadFile.entity';
 import { SlideImage } from '../../core/entity/domain/project/SlideImage.entity';
+import { User } from '../../core/entity/domain/User.entity';
 
 @Injectable()
 export class ProjectGqlService {
@@ -24,37 +25,53 @@ export class ProjectGqlService {
     return model;
   }
 
-  async createProject(projectInput: CreateProjectInput) {
+  async createProject(userId: number, projectInput: CreateProjectInput) {
     const project = new Project();
     project.title = projectInput.title;
-    project.slides = Promise.all(
-      projectInput.slides.map((slideInput) =>
-        this.convertSlideToEntity(slideInput),
-      ),
-    );
+    await this.handleSlides(project, projectInput.slides);
+    this.handleUser(project, userId);
     const saved = await this.projectRepository.save(project);
     return ProjectModel.fromEntity(saved);
   }
 
-  private async convertSlideToEntity(slideInput: CreateSlideInput) {
+  private async handleSlides(
+    project: Project,
+    slideInputs: CreateSlideInput[],
+  ) {
+    const slides = slideInputs.map((slideInput) =>
+      this.handleSlide(slideInput),
+    );
+    await project.addSlides(await Promise.all(slides));
+  }
+
+  private async handleSlide(slideInput: CreateSlideInput) {
     const slideEntity = new Slide();
     slideEntity.title = slideInput.title;
     slideEntity.description = slideInput.description;
     slideEntity.seq = slideInput.seq;
-    slideEntity.images = Promise.all(
-      slideInput.imageKeys.map((imageKey) => {
-        return this.convertImageKeyToEntity(slideEntity, imageKey);
-      }),
-    );
+    await this.handleImageKeys(slideEntity, slideInput.imageKeys);
     return slideEntity;
   }
 
-  private async convertImageKeyToEntity(slide: Slide, imageKey: string) {
+  private async handleImageKeys(slide: Slide, imageKeys: string[]) {
+    const images = imageKeys.map((imageKey) =>
+      this.handleImageKey(slide, imageKey),
+    );
+    await slide.addImages(await Promise.all(images));
+  }
+
+  private async handleImageKey(slide: Slide, imageKey: string) {
     const uploadFile = new UploadFile();
     uploadFile.key = imageKey;
     const slideImage = new SlideImage();
     slideImage.file = Promise.resolve(uploadFile);
     slideImage.slide = Promise.resolve(slide);
     return slideImage;
+  }
+
+  private handleUser(project: Project, userId: number) {
+    const user = new User();
+    user.id = userId;
+    project.creator = Promise.resolve(user);
   }
 }
