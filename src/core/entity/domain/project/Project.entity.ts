@@ -29,6 +29,7 @@ export class Project extends BaseTimeEntity {
   @OneToMany(() => Slide, (slide) => slide.project, {
     nullable: false,
     lazy: true,
+    cascade: true,
   })
   slides: Promise<Slide[]>;
 }

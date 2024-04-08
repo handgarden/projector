@@ -1,4 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, ID, InputType, Int } from '@nestjs/graphql';
 import { SlideModel } from '../model/Slide.model';
 import { DefaultValidationMessage } from '../../../common/message/validation/DefaultValidation.message';
 import { IsInt, IsNotEmpty, IsString, Length } from 'class-validator';
@@ -18,4 +18,7 @@ export class CreateSlideInput implements Partial<SlideModel> {
   @IsString({ message: DefaultValidationMessage.IS_STRING })
   @IsNotEmpty({ message: DefaultValidationMessage.IS_NOT_EMPTY })
   description: string;
+
+  @Field(() => [ID], { nullable: 'items' })
+  imageKeys: string[];
 }

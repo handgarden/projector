@@ -46,3 +46,19 @@ type Query {
   project(id: ID!): Project!
   slide(id: Float!): Slide!
 }
+
+type Mutation {
+  create(project: CreateProjectInput!): Project!
+}
+
+input CreateProjectInput {
+  title: String!
+  slides: [CreateSlideInput!]!
+}
+
+input CreateSlideInput {
+  seq: Int!
+  title: String!
+  description: String!
+  imageKeys: [ID]!
+}

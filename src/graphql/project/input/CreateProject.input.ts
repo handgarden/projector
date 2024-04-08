@@ -12,7 +12,7 @@ export class CreateProjectInput implements Partial<ProjectModel> {
   @Length(1, 255, { message: DefaultValidationMessage.LENGTH })
   title: string;
 
-  @Field(() => CreateSlideInput)
+  @Field(() => [CreateSlideInput])
   @ArrayMinSize(1, { message: DefaultValidationMessage.ARRAY_MIN_SIZE })
   slides: CreateSlideInput[];
 }

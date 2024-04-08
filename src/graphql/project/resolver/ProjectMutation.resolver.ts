@@ -1,13 +1,17 @@
-import { Args, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { ProjectModel } from '../model/Project.model';
 import { CreateProjectInput } from '../input/CreateProject.input';
+import { ProjectGqlService } from '../ProjectGql.service';
 
 @Resolver(() => ProjectModel)
 export class ProjectMutationResolver {
-  create(
-    @Args('project', { type: () => CreateProjectInput })
+  constructor(private readonly projectGqlService: ProjectGqlService) {}
+
+  @Mutation(() => ProjectModel)
+  createProject(
+    @Args('project')
     project: CreateProjectInput,
   ) {
-    console.log(project);
+    return this.projectGqlService.createProject(project);
   }
 }
