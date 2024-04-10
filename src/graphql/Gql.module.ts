@@ -11,7 +11,12 @@ import { LocalDateTimeScalar } from './common/scalar/LocalDateTimeScalar';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      resolvers: { LocalDateTime: LocalDateTimeScalar },
+      buildSchemaOptions: {
+        numberScalarMode: 'integer',
+      },
+      resolvers: {
+        LocalDateTime: LocalDateTimeScalar,
+      },
       introspection: process.env.NODE_ENV !== 'production',
       playground: process.env.NODE_ENV !== 'production',
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
