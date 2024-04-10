@@ -1,8 +1,17 @@
-import { Args, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Int,
+  Query,
+  ResolveField,
+  Resolver,
+  Root,
+} from '@nestjs/graphql';
 import { UploadFileModel } from '../../file/model/UploadFile.model';
 import { SlideModel } from '../model/Slide.model';
 import { SlideLoader } from '../loader/SlideLoader';
 import { SlideGqlService } from '../SlideGql.service';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Resolver(() => SlideModel)
 export class SlideQueryResolver {
@@ -12,7 +21,7 @@ export class SlideQueryResolver {
   ) {}
 
   @Query(() => SlideModel)
-  async slide(@Args('id', { type: () => Number }) id: number) {
+  async slide(@Args('id', { type: () => ID }, ParseIntPipe) id: number) {
     return this.slideService.getSlide(id);
   }
 

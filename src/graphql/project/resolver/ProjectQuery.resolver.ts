@@ -4,6 +4,7 @@ import { SlideModel } from '../model/Slide.model';
 import { ProjectModel } from '../model/Project.model';
 import { ProjectLoader } from '../loader/ProjectLoader';
 import { ProjectGqlService } from '../ProjectGql.service';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Resolver(() => ProjectModel)
 export class ProjectQueryResolver {
@@ -13,8 +14,8 @@ export class ProjectQueryResolver {
   ) {}
 
   @Query(() => ProjectModel)
-  project(@Args('id', { type: () => ID }) id: string) {
-    return this.projectService.getProject(parseInt(id));
+  project(@Args('id', { type: () => ID }, ParseIntPipe) id: number) {
+    return this.projectService.getProject(id);
   }
 
   @ResolveField(() => UserModel)
