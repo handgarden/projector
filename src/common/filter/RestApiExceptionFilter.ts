@@ -1,5 +1,5 @@
-import { Request } from 'express';
+import { ArgumentsHost } from '@nestjs/common';
 
 export interface RestApiExceptionFilter {
-  isNotRestApiRequest: (request: Request) => boolean;
+  isGraphQLRequest(host: ArgumentsHost): boolean;
 }

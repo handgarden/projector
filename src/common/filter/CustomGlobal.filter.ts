@@ -9,6 +9,7 @@ import { BaseExceptionFilter } from '@nestjs/core';
 import { instanceToPlain } from 'class-transformer';
 import { RestTemplate } from '../response/RestTemplate';
 import { ResponseStatusConvertor } from '../response/ResponseStatusConvertor';
+import { GqlContextType } from '@nestjs/graphql';
 
 @Catch()
 export class CustomGlobalFilter extends BaseExceptionFilter {
@@ -18,6 +19,10 @@ export class CustomGlobalFilter extends BaseExceptionFilter {
     const ctx = host.switchToHttp();
 
     const response = ctx.getResponse();
+
+    if (this.isGraphqlRequest(host)) {
+      throw exception;
+    }
 
     const isHttpException = exception instanceof HttpException;
     if (!isHttpException) {
@@ -40,5 +45,9 @@ export class CustomGlobalFilter extends BaseExceptionFilter {
           ),
         ),
       );
+  }
+
+  private isGraphqlRequest(host: ArgumentsHost) {
+    return host.getType<GqlContextType>() === 'graphql';
   }
 }

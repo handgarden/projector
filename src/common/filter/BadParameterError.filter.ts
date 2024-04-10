@@ -4,8 +4,8 @@ import { CustomValidationError } from './validation/CustomValidationError';
 import { RestTemplate } from '../response/RestTemplate';
 import { ResponseStatus } from '../response/ResponseStatus';
 import { BadParameterError } from './validation/BadParameterError';
-import { Request } from 'express';
 import { RestApiExceptionFilter } from './RestApiExceptionFilter';
+import { GqlContextType } from '@nestjs/graphql';
 
 @Catch(BadParameterError)
 export class BadParameterErrorFilter
@@ -14,15 +14,13 @@ export class BadParameterErrorFilter
   catch(exception: BadParameterError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
 
-    const request = ctx.getRequest<Request>();
-    if (this.isNotRestApiRequest(request)) {
+    if (this.isGraphQLRequest(host)) {
       throw exception;
     }
 
     const response = ctx.getResponse();
     const status = exception.getStatus();
 
-    console.log(exception);
     const responseBody = exception.getResponse() as {
       message: CustomValidationError[];
     };
@@ -40,7 +38,7 @@ export class BadParameterErrorFilter
       );
   }
 
-  isNotRestApiRequest(request: Request) {
-    return !request.url.includes('/api');
+  isGraphQLRequest(host: ArgumentsHost) {
+    return host.getType<GqlContextType>() === 'graphql';
   }
 }
