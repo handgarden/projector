@@ -44,7 +44,7 @@ type Query {
   uploadFile(key: String!): UploadFile!
   uploadFiles(keys: [String!]!): [UploadFile!]!
   project(id: ID!): Project!
-  slide(id: Float!): Slide!
+  slide(id: ID!): Slide!
 }
 
 type Mutation {
