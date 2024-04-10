@@ -1,6 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { SlideRepository } from '../../../core/entity/repository/Slide.repository';
-import DataLoader from 'dataloader';
+import * as DataLoader from 'dataloader';
 import { UploadFileModel } from '../../file/model/UploadFile.model';
 
 @Injectable({ scope: Scope.REQUEST })
