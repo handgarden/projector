@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { UploadFile } from '../UploadFile.entity';
 import { Slide } from './Slide.entity';
 
@@ -20,4 +20,7 @@ export class SlideImage {
   @ManyToOne(() => UploadFile, { nullable: false, lazy: true })
   @JoinColumn({ name: 'file_id' })
   file: Promise<UploadFile>;
+
+  @Column({ name: 'image_seq', type: 'int', nullable: false })
+  seq: number;
 }
