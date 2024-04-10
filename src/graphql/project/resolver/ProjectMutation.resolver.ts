@@ -14,7 +14,7 @@ export class ProjectMutationResolver {
   @Mutation(() => ProjectModel)
   createProject(
     @GqlUser() user: TokenUser,
-    @Args('project')
+    @Args('project', { type: () => CreateProjectInput })
     project: CreateProjectInput,
   ) {
     return this.projectGqlService.createProject(user.id, project);
