@@ -1,12 +1,4 @@
-import {
-  Args,
-  ID,
-  Int,
-  Query,
-  ResolveField,
-  Resolver,
-  Root,
-} from '@nestjs/graphql';
+import { Args, ID, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
 import { UploadFileModel } from '../../file/model/UploadFile.model';
 import { SlideModel } from '../model/Slide.model';
 import { SlideLoader } from '../loader/SlideLoader';
