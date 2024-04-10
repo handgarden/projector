@@ -26,11 +26,14 @@ export class ProjectGqlService {
   }
 
   async createProject(userId: number, projectInput: CreateProjectInput) {
-    const project = new Project();
-    project.title = projectInput.title;
-    await this.handleSlides(project, projectInput.slides);
-    this.handleUser(project, userId);
+    const project = await Project.create({
+      creatorId: userId,
+      title: projectInput.title,
+      description: projectInput.description,
+    });
+
     const saved = await this.projectRepository.save(project);
+
     return ProjectModel.fromEntity(saved);
   }
 

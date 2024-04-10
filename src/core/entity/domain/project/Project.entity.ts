@@ -26,6 +26,13 @@ export class Project extends BaseTimeEntity {
   })
   title: string;
 
+  @Column({
+    type: 'varchar',
+    length: 255,
+    name: 'description',
+  })
+  description: string;
+
   @OneToMany(() => Slide, (slide) => slide.project, {
     nullable: false,
     lazy: true,
@@ -36,5 +43,21 @@ export class Project extends BaseTimeEntity {
   async addSlides(slides: Slide[]) {
     slides.forEach((s) => (s.project = Promise.resolve(this)));
     (await this.slides).push(...slides);
+  }
+
+  static async create({
+    title,
+    description,
+    creatorId,
+  }: {
+    title: string;
+    description: string;
+    creatorId: number;
+  }) {
+    const project = new Project();
+    project.title = title;
+    project.description = description;
+    project.creator = Promise.resolve({ id: creatorId } as User);
+    return project;
   }
 }

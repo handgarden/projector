@@ -35,6 +35,7 @@ type Project {
   updatedAt: LocalDateTime!
   id: ID!
   title: String!
+  description: String!
   creator: User!
   slides: [Slide!]!
 }
@@ -53,12 +54,5 @@ type Mutation {
 
 input CreateProjectInput {
   title: String!
-  slides: [CreateSlideInput!]!
-}
-
-input CreateSlideInput {
-  seq: Int!
-  title: String!
   description: String!
-  imageKeys: [ID]!
 }

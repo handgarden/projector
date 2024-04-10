@@ -7,6 +7,10 @@ import { IsInt, IsNotEmpty, IsString, Length } from 'class-validator';
 export class CreateSlideInput implements Partial<SlideModel> {
   @Field(() => Int)
   @IsInt({ message: DefaultValidationMessage.IS_NUMBER })
+  projectId: number;
+
+  @Field(() => Int)
+  @IsInt({ message: DefaultValidationMessage.IS_NUMBER })
   seq: number;
 
   @Field(() => String)

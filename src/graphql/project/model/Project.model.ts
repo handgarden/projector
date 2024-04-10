@@ -11,6 +11,9 @@ export class ProjectModel extends BaseTimeModel {
   @Field(() => String)
   title: string;
 
+  @Field(() => String)
+  description: string;
+
   static fromEntity(project: Project): ProjectModel {
     const model = new ProjectModel();
     model.id = project.id.toString();

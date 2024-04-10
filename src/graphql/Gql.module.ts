@@ -21,7 +21,7 @@ import { GqlExceptionFormatter } from './common/GqlExceptionFormatter';
       formatError: GqlExceptionFormatter,
       introspection: process.env.NODE_ENV !== 'production',
       playground: process.env.NODE_ENV !== 'production',
-      autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
+      autoSchemaFile: join(process.cwd(), 'schema.gql'),
       path: '/graphql',
     }),
     UserGqlModule,
