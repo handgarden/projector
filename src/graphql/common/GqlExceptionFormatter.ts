@@ -13,8 +13,6 @@ export function GqlExceptionFormatter(
   const originalError = error.extensions?.originalError as
     | undefined
     | OriginalError;
-  console.log(originalError);
-  console.log(originalError && originalError['statusCode']);
 
   if (originalError) {
     const message = originalError.message as string | object;
