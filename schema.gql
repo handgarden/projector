@@ -38,6 +38,7 @@ type Project {
   description: String!
   creator: User!
   slides: [Slide!]!
+  thumbnail: String
 }
 
 type Query {
@@ -45,6 +46,7 @@ type Query {
   uploadFile(key: String!): UploadFile!
   uploadFiles(keys: [String!]!): [UploadFile!]!
   project(id: ID!): Project!
+  projects: [Project!]!
   slide(id: ID!): Slide!
 }
 

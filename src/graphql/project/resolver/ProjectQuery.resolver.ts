@@ -6,6 +6,9 @@ import { ProjectLoader } from '../loader/ProjectLoader';
 import { ProjectGqlService } from '../ProjectGql.service';
 import { ParseIntPipe } from '@nestjs/common';
 import { S3Service } from '../../../lib/s3/S3.service';
+import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
+import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
+import { TokenUser } from '../../../lib/auth/types/TokenUser';
 
 @Resolver(() => ProjectModel)
 export class ProjectQueryResolver {
@@ -18,6 +21,12 @@ export class ProjectQueryResolver {
   @Query(() => ProjectModel)
   project(@Args('id', { type: () => ID }, ParseIntPipe) id: number) {
     return this.projectService.getProject(id);
+  }
+
+  @GqlAuth()
+  @Query(() => [ProjectModel])
+  projects(@GqlUser() user: TokenUser) {
+    return this.projectService.getProjects(user.id);
   }
 
   @ResolveField(() => UserModel)

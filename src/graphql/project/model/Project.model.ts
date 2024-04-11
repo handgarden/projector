@@ -18,6 +18,7 @@ export class ProjectModel extends BaseTimeModel {
     const model = new ProjectModel();
     model.id = project.id.toString();
     model.title = project.title;
+    model.description = project.description;
     model.createdAt = DateTimeUtils.toLocalDateTime(project.createdAt);
     model.updatedAt = DateTimeUtils.toLocalDateTime(project.updatedAt);
     return model;

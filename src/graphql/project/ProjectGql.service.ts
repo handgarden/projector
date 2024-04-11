@@ -25,6 +25,11 @@ export class ProjectGqlService {
     return model;
   }
 
+  async getProjects(creatorId: number) {
+    const projects = await this.projectRepository.findAllByCreatorId(creatorId);
+    return projects.map((project) => ProjectModel.fromEntity(project));
+  }
+
   async createProject(userId: number, projectInput: CreateProjectInput) {
     const project = await Project.create({
       creatorId: userId,

@@ -8,9 +8,11 @@ import { SlideRepository } from '../../core/entity/repository/Slide.repository';
 import { ProjectGqlService } from './ProjectGql.service';
 import { SlideGqlService } from './SlideGql.service';
 import { ProjectMutationResolver } from './resolver/ProjectMutation.resolver';
+import { S3Module } from '../../lib/s3/S3.module';
+import { SlideImageRepository } from '../../core/entity/repository/SlideImage.repository';
 
 @Module({
-  imports: [],
+  imports: [S3Module],
   providers: [
     ProjectGqlService,
     ProjectQueryResolver,
@@ -21,6 +23,7 @@ import { ProjectMutationResolver } from './resolver/ProjectMutation.resolver';
     SlideQueryResolver,
     SlideLoader,
     SlideRepository,
+    SlideImageRepository,
   ],
   exports: [],
 })
