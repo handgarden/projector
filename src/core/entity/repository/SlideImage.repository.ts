@@ -11,25 +11,29 @@ export class SlideImageRepository extends Repository<SlideImage> {
   async findThumbnailByProjectIds(
     projectIds: number[],
   ): Promise<[number, string][]> {
-    const entries = await this.find({
-      select: {
-        slide: {
-          project: {
-            id: true,
-          },
+    const entries = await this.createQueryBuilder('slideImage')
+      .select('slideImage.fileId')
+      .addSelect('slide.id')
+      .addSelect('project.id')
+      .innerJoin('slideImage.slide', 'slide')
+      .innerJoin('slide.project', 'project')
+      .innerJoin(
+        (qb) => {
+          return qb
+            .select('MIN(slide2.seq)', 'seq')
+            .addSelect('project2.id', 'projectId')
+            .from(SlideImage, 'slideImage2')
+            .innerJoin('slideImage2.slide', 'slide2')
+            .innerJoin('slide2.project', 'project2')
+            .where('project2.id IN (:...projectIds)', { projectIds })
+            .groupBy('project2.id');
         },
-        fileId: true,
-      },
-      where: {
-        slide: {
-          project: {
-            id: In(projectIds),
-          },
-          seq: 1,
-        },
-        seq: 1,
-      },
-    });
+        'firstSlide',
+        'project.id = firstSlide.projectId AND slide.seq = firstSlide.seq',
+      )
+      .where('slideImage.seq = 1')
+      .andWhere('project.id IN (:...projectIds)', { projectIds })
+      .getMany();
 
     return Promise.all(
       entries.map(async (entry) => {
