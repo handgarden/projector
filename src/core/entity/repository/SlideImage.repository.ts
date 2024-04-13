@@ -1,4 +1,4 @@
-import { DataSource, In, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { SlideImage } from '../domain/project/SlideImage.entity';
 import { Injectable } from '@nestjs/common';
 
