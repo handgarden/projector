@@ -1,7 +1,14 @@
-import { Field, ID, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { SlideModel } from '../model/Slide.model';
 import { DefaultValidationMessage } from '../../../common/message/validation/DefaultValidation.message';
-import { IsInt, IsNotEmpty, IsString, Length } from 'class-validator';
+import {
+  ArrayMaxSize,
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  Length,
+} from 'class-validator';
+import { CreateSlideImageInput } from './CreateSlideImage.input';
 
 @InputType()
 export class CreateSlideInput implements Partial<SlideModel> {
@@ -23,6 +30,7 @@ export class CreateSlideInput implements Partial<SlideModel> {
   @IsNotEmpty({ message: DefaultValidationMessage.IS_NOT_EMPTY })
   description: string;
 
-  @Field(() => [ID], { nullable: 'items' })
-  imageKeys: string[];
+  @Field(() => [CreateSlideImageInput], { nullable: 'items' })
+  @ArrayMaxSize(5, { message: DefaultValidationMessage.ARRAY_MAX_SIZE })
+  images: CreateSlideImageInput[];
 }

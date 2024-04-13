@@ -9,6 +9,7 @@ import {
 import { User } from '../User.entity';
 import { Slide } from './Slide.entity';
 import { BaseTimeEntity } from '../../BaseTimeEntity';
+import { DuplicateSequenceSlideError } from '../../exception/DuplicateSequenceSlideError';
 
 @Entity()
 export class Project extends BaseTimeEntity {
@@ -34,15 +35,20 @@ export class Project extends BaseTimeEntity {
   description: string;
 
   @OneToMany(() => Slide, (slide) => slide.project, {
-    nullable: false,
     lazy: true,
-    cascade: true,
   })
   slides: Promise<Slide[]>;
 
-  async addSlides(slides: Slide[]) {
-    slides.forEach((s) => (s.project = Promise.resolve(this)));
-    (await this.slides).push(...slides);
+  async addSlide(userId: number, slide: Slide) {
+    const creator = await this.creator;
+    creator.confirmUserId(userId);
+
+    const prevSlides = await this.slides;
+    if (prevSlides.find((s) => s.seq === slide.seq)) {
+      throw new DuplicateSequenceSlideError(this.id, slide.seq);
+    }
+    this.slides = Promise.resolve([...prevSlides, slide]);
+    slide.project = Promise.resolve(this);
   }
 
   static async create({

@@ -3,6 +3,7 @@ import { DataSource, In, Repository } from 'typeorm';
 import { Slide } from '../domain/project/Slide.entity';
 import { UploadFile } from '../domain/UploadFile.entity';
 import { Nil } from '../../../common/nil/Nil';
+import { SlideImage } from '../domain/project/SlideImage.entity';
 
 @Injectable()
 export class SlideRepository extends Repository<Slide> {
@@ -20,7 +21,7 @@ export class SlideRepository extends Repository<Slide> {
     return Nil.of(entity);
   }
 
-  async findImagesByIds(ids: number[]): Promise<[number, UploadFile[]][]> {
+  async findImagesByIds(ids: number[]): Promise<[number, SlideImage[]][]> {
     const slides = await this.find({
       select: {
         id: true,
@@ -39,10 +40,8 @@ export class SlideRepository extends Repository<Slide> {
     return Promise.all(
       slides.map(async (slide) => {
         const slideImages = await slide.images;
-        const images = await Promise.all(
-          slideImages.map(async (image) => await image.file),
-        );
-        return [slide.id, images];
+
+        return [slide.id, slideImages];
       }),
     );
   }

@@ -44,8 +44,31 @@ export class Slide extends BaseTimeEntity {
   })
   images: Promise<SlideImage[]>;
 
+  static async create({
+    seq,
+    title,
+    description,
+  }: {
+    seq: number;
+    title: string;
+    description: string;
+  }) {
+    const slide = new Slide();
+    slide.seq = seq;
+    slide.title = title;
+    slide.description = description;
+
+    return slide;
+  }
+
   async addImages(images: SlideImage[]) {
     const prevImages = await this.images;
-    prevImages.push(...images);
+    images.forEach((i) => {
+      i.slide = Promise.resolve(this);
+      i.slideId = this.id;
+    });
+    this.images = Promise.resolve([...prevImages, ...images]);
+
+    return this;
   }
 }

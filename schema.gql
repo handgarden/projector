@@ -27,7 +27,12 @@ type Slide {
   seq: Int!
   title: String!
   description: String!
-  images: [UploadFile!]!
+  images: [SlideImage!]!
+}
+
+type SlideImage {
+  seq: Int!
+  file: UploadFile!
 }
 
 type Project {
@@ -52,9 +57,24 @@ type Query {
 
 type Mutation {
   createProject(project: CreateProjectInput!): Project!
+  updateProject(id: ID!, project: CreateProjectInput!): Project!
+  createSlide(slide: CreateSlideInput!): Slide!
 }
 
 input CreateProjectInput {
   title: String!
   description: String!
+}
+
+input CreateSlideInput {
+  projectId: Int!
+  seq: Int!
+  title: String!
+  description: String!
+  images: [CreateSlideImageInput]!
+}
+
+input CreateSlideImageInput {
+  seq: Int!
+  key: ID!
 }

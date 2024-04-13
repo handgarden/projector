@@ -4,4 +4,5 @@ export enum DefaultValidationMessage {
   IS_STRING = '문자열을 입력해주세요.',
   IS_NUMBER = '숫자를 입력해주세요.',
   ARRAY_MIN_SIZE = '배열에 $constraint1개 이상 값을 넣어주세요.',
+  ARRAY_MAX_SIZE = '배열에 $constraint1개 이하 값을 넣어주세요.',
 }

@@ -21,6 +21,20 @@ export class ProjectRepository extends Repository<Project> {
     return Nil.of(project);
   }
 
+  async findByIdWithCreatorAndSlides(id: number): Promise<Nil<Project>> {
+    const project = await this.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        creator: true,
+        slides: true,
+      },
+    });
+
+    return Nil.of(project);
+  }
+
   async findAllByCreatorId(userId: number): Promise<Project[]> {
     return this.find({
       where: {

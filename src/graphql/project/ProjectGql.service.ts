@@ -3,11 +3,7 @@ import { ProjectRepository } from '../../core/entity/repository/Project.reposito
 import { ProjectModel } from './model/Project.model';
 import { CreateProjectInput } from './input/CreateProject.input';
 import { Project } from '../../core/entity/domain/project/Project.entity';
-import { Slide } from '../../core/entity/domain/project/Slide.entity';
-import { CreateSlideInput } from './input/CreateSlide.input';
-import { UploadFile } from '../../core/entity/domain/UploadFile.entity';
-import { SlideImage } from '../../core/entity/domain/project/SlideImage.entity';
-import { User } from '../../core/entity/domain/User.entity';
+import { GraphQLNotFoundError } from '../common/exception/GraphQLNotFoundError';
 
 @Injectable()
 export class ProjectGqlService {
@@ -42,44 +38,26 @@ export class ProjectGqlService {
     return ProjectModel.fromEntity(saved);
   }
 
-  private async handleSlides(
-    project: Project,
-    slideInputs: CreateSlideInput[],
+  async updateProject(
+    creatorId: number,
+    projectId: number,
+    projectInput: CreateProjectInput,
   ) {
-    const slides = slideInputs.map((slideInput) =>
-      this.handleSlide(slideInput),
-    );
-    await project.addSlides(await Promise.all(slides));
-  }
+    const nilProject = await this.projectRepository.findById(projectId);
 
-  private async handleSlide(slideInput: CreateSlideInput) {
-    const slideEntity = new Slide();
-    slideEntity.title = slideInput.title;
-    slideEntity.description = slideInput.description;
-    slideEntity.seq = slideInput.seq;
-    await this.handleImageKeys(slideEntity, slideInput.imageKeys);
-    return slideEntity;
-  }
+    if (nilProject.isNil()) {
+      throw new GraphQLNotFoundError();
+    }
+    const project = nilProject.unwrap();
 
-  private async handleImageKeys(slide: Slide, imageKeys: string[]) {
-    const images = imageKeys.map((imageKey) =>
-      this.handleImageKey(slide, imageKey),
-    );
-    await slide.addImages(await Promise.all(images));
-  }
+    await project.update({
+      creatorId,
+      title: projectInput.title,
+      description: projectInput.description,
+    });
 
-  private async handleImageKey(slide: Slide, imageKey: string) {
-    const uploadFile = new UploadFile();
-    uploadFile.key = imageKey;
-    const slideImage = new SlideImage();
-    slideImage.file = Promise.resolve(uploadFile);
-    slideImage.slide = Promise.resolve(slide);
-    return slideImage;
-  }
+    await this.projectRepository.save(project);
 
-  private handleUser(project: Project, userId: number) {
-    const user = new User();
-    user.id = userId;
-    project.creator = Promise.resolve(user);
+    return ProjectModel.fromEntity(project);
   }
 }
