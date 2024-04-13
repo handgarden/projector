@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, In, Repository } from 'typeorm';
 import { Slide } from '../domain/project/Slide.entity';
-import { UploadFile } from '../domain/UploadFile.entity';
 import { Nil } from '../../../common/nil/Nil';
 import { SlideImage } from '../domain/project/SlideImage.entity';
 
