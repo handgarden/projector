@@ -60,4 +60,19 @@ export class Project extends BaseTimeEntity {
     project.creator = Promise.resolve({ id: creatorId } as User);
     return project;
   }
+
+  async update({
+    creatorId,
+    title,
+    description,
+  }: {
+    creatorId: number;
+    title: string;
+    description: string;
+  }) {
+    (await this.creator).confirmUserId(creatorId);
+
+    this.title = title;
+    this.description = description;
+  }
 }
