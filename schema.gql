@@ -58,6 +58,7 @@ type Query {
 type Mutation {
   createProject(project: CreateProjectInput!): Project!
   updateProject(id: ID!, project: CreateProjectInput!): Project!
+  deleteProject(id: ID!): Boolean!
   createSlide(slide: CreateSlideInput!): Slide!
   updateSlide(slide: UpdateSlideInput!): Slide!
   deleteSlide(slideId: ID!): Boolean!

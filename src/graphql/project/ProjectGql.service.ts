@@ -60,4 +60,40 @@ export class ProjectGqlService {
 
     return ProjectModel.fromEntity(project);
   }
+
+  async deleteProject({
+    userId,
+    projectId,
+  }: {
+    userId: number;
+    projectId: number;
+  }) {
+    const nilProject =
+      await this.projectRepository.findOneByIdWithSlidesAndImages(projectId);
+
+    if (nilProject.isNil()) {
+      return false;
+    }
+
+    const project = nilProject.unwrap();
+
+    await project.validateCreator(userId);
+
+    const slidesForDelete = await project.slides;
+    const imagesForDelete = await Promise.all(
+      slidesForDelete.map((s) => s.images),
+    );
+    const imagesForDeleteFlat = imagesForDelete.flat();
+    await this.projectRepository.manager.transaction(async (manager) => {
+      if (imagesForDeleteFlat.length > 0) {
+        await manager.remove(imagesForDeleteFlat);
+      }
+      if (slidesForDelete.length > 0) {
+        await manager.remove(slidesForDelete);
+      }
+      await manager.remove(project);
+    });
+
+    return true;
+  }
 }

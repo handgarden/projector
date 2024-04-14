@@ -6,12 +6,11 @@ import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { ParseIntPipe } from '@nestjs/common';
-
+@GqlAuth()
 @Resolver(() => ProjectModel)
 export class ProjectMutationResolver {
   constructor(private readonly projectGqlService: ProjectGqlService) {}
 
-  @GqlAuth()
   @Mutation(() => ProjectModel)
   createProject(
     @GqlUser() user: TokenUser,
@@ -21,7 +20,6 @@ export class ProjectMutationResolver {
     return this.projectGqlService.createProject(user.id, project);
   }
 
-  @GqlAuth()
   @Mutation(() => ProjectModel)
   updateProject(
     @GqlUser() user: TokenUser,
@@ -30,5 +28,16 @@ export class ProjectMutationResolver {
     project: CreateProjectInput,
   ) {
     return this.projectGqlService.updateProject(user.id, id, project);
+  }
+
+  @Mutation(() => Boolean)
+  async deleteProject(
+    @GqlUser() user: TokenUser,
+    @Args('id', { type: () => ID }, ParseIntPipe) id: number,
+  ) {
+    return await this.projectGqlService.deleteProject({
+      userId: user.id,
+      projectId: id,
+    });
   }
 }

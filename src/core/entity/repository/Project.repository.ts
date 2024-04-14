@@ -86,14 +86,13 @@ export class ProjectRepository extends Repository<Project> {
     );
   }
 
-  async findOneBySlideId(slideId: number): Promise<Nil<Project>> {
+  async findOneByIdWithSlidesAndImages(id: number): Promise<Nil<Project>> {
     const project = await this.findOne({
       where: {
-        slides: {
-          id: slideId,
-        },
+        id: id,
       },
       relations: {
+        creator: true,
         slides: {
           images: true,
         },
