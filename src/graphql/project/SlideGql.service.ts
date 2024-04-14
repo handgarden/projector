@@ -66,15 +66,9 @@ export class SlideGqlService {
 
         const saved = await manager.save(slide);
 
-        const slideImages = slideInput.images.map((i) => {
-          const file = new UploadFile();
-          file.key = i.key;
-          const slideImage = new SlideImage();
-          slideImage.file = Promise.resolve(file);
-          slideImage.fileId = file.key;
-          slideImage.seq = i.seq;
-          return slideImage;
-        });
+        const slideImages = slideInput.images.map((i) =>
+          this.convertSlideImageInputToEntity(i),
+        );
 
         await saved.addImages(slideImages);
 
