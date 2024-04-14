@@ -86,4 +86,19 @@ export class Project extends BaseTimeEntity {
     const creator = await this.creator;
     creator.confirmUserId(userId);
   }
+
+  async removeSlide({ userId, slideId }: { userId: number; slideId: number }) {
+    const creator = await this.creator;
+    creator.confirmUserId(userId);
+
+    const slides = await this.slides;
+    const filteredSlides = slides.filter((s) => s.id !== slideId);
+    const sortedSlides = [...filteredSlides]
+      .sort((a, b) => a.seq - b.seq)
+      .map((s, i) => {
+        s.seq = i + 1;
+        return s;
+      });
+    this.slides = Promise.resolve(sortedSlides);
+  }
 }

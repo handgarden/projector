@@ -60,6 +60,7 @@ type Mutation {
   updateProject(id: ID!, project: CreateProjectInput!): Project!
   createSlide(slide: CreateSlideInput!): Slide!
   updateSlide(slide: UpdateSlideInput!): Slide!
+  deleteSlide(slideId: ID!): Boolean!
 }
 
 input CreateProjectInput {

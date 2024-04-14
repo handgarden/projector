@@ -21,7 +21,7 @@ export class ProjectRepository extends Repository<Project> {
     return Nil.of(project);
   }
 
-  async findByIdWithCreatorAndSlides(id: number): Promise<Nil<Project>> {
+  async findOneByIdWithCreatorAndSlides(id: number): Promise<Nil<Project>> {
     const project = await this.findOne({
       where: {
         id,
@@ -84,5 +84,22 @@ export class ProjectRepository extends Repository<Project> {
     return Promise.all(
       projects.map(async (project) => [project.id, await project.slides]),
     );
+  }
+
+  async findOneBySlideId(slideId: number): Promise<Nil<Project>> {
+    const project = await this.findOne({
+      where: {
+        slides: {
+          id: slideId,
+        },
+      },
+      relations: {
+        slides: {
+          images: true,
+        },
+      },
+    });
+
+    return Nil.of(project);
   }
 }

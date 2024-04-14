@@ -125,6 +125,45 @@ export class SlideGqlService {
     return SlideModel.fromEntity(updatedSlide);
   }
 
+  async deleteSlide({ userId, slideId }: { userId: number; slideId: number }) {
+    const nilSlide = await this.slideRepository.findById(slideId);
+
+    if (nilSlide.isNil()) {
+      return false;
+    }
+    const slideForRemove = nilSlide.unwrap();
+
+    const projectId = (await slideForRemove.project).id;
+
+    const nilProject =
+      await this.projectRepository.findOneByIdWithCreatorAndSlides(projectId);
+
+    if (nilProject.isNil()) {
+      return false;
+    }
+
+    const project = nilProject.unwrap();
+
+    await project.removeSlide({
+      userId,
+      slideId,
+    });
+    const updatedSlides = await project.slides;
+    const imagesForRemove = await slideForRemove.images;
+
+    await this.slideRepository.manager.transaction(async (manager) => {
+      if (updatedSlides.length > 0) {
+        await manager.save(updatedSlides);
+      }
+      if (imagesForRemove.length > 0) {
+        await manager.delete(SlideImage, imagesForRemove);
+      }
+      await manager.delete(Slide, slideForRemove.id);
+    });
+
+    return true;
+  }
+
   private convertSlideImageInputToEntity(
     image: CreateSlideImageInput,
   ): SlideImage {
