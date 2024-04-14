@@ -8,6 +8,10 @@ import { CreateSlideInput } from './input/CreateSlide.input';
 import { UploadFile } from '../../core/entity/domain/UploadFile.entity';
 import { SlideImage } from '../../core/entity/domain/project/SlideImage.entity';
 import { SlideImageRepository } from '../../core/entity/repository/SlideImage.repository';
+import { GraphQLNotFoundError } from '../common/exception/GraphQLNotFoundError';
+import { UpdateSlideInput } from './input/UpdateSlide.input';
+import { In, Not } from 'typeorm';
+import { CreateSlideImageInput } from './input/CreateSlideImage.input';
 
 @Injectable()
 export class SlideGqlService {
@@ -17,11 +21,14 @@ export class SlideGqlService {
     private readonly slideImageRepository: SlideImageRepository,
   ) {}
 
-  async getSlide(id: number) {
-    const slide = await this.slideRepository.findById(id);
+  async getSlide({ projectId, seq }: { projectId: number; seq: number }) {
+    const slide = await this.slideRepository.findOneByProjectIdAndSeq(
+      projectId,
+      seq,
+    );
 
     if (slide.isNil()) {
-      throw new Error('Slide not found');
+      throw new GraphQLNotFoundError();
     }
 
     return SlideModel.fromEntity(slide.unwrap());
@@ -78,5 +85,61 @@ export class SlideGqlService {
     );
 
     return SlideModel.fromEntity(saved);
+  }
+
+  async updateSlide({
+    userId,
+    slideInput,
+  }: {
+    userId: number;
+    slideInput: UpdateSlideInput;
+  }) {
+    const nilSlide = await this.slideRepository.findById(
+      Number(slideInput.slideId),
+    );
+
+    if (nilSlide.isNil()) {
+      throw new GraphQLNotFoundError();
+    }
+
+    const slide = nilSlide.unwrap();
+
+    const slideImages = slideInput.images.map((i) =>
+      this.convertSlideImageInputToEntity(i),
+    );
+
+    await slide.update({
+      userId,
+      title: slideInput.title,
+      description: slideInput.description,
+      images: slideImages,
+    });
+
+    const imageIds = slideInput.images.map((i) => i.key);
+
+    const updatedSlide = await this.slideRepository.manager.transaction(
+      async (manager) => {
+        await manager.delete(SlideImage, {
+          fileId: Not(In(imageIds)),
+          slideId: slide.id,
+        });
+        await manager.save(slideImages);
+        return await manager.save(slide);
+      },
+    );
+
+    return SlideModel.fromEntity(updatedSlide);
+  }
+
+  private convertSlideImageInputToEntity(
+    image: CreateSlideImageInput,
+  ): SlideImage {
+    const file = new UploadFile();
+    file.key = image.key;
+    const slideImage = new SlideImage();
+    slideImage.file = Promise.resolve(file);
+    slideImage.fileId = file.key;
+    slideImage.seq = image.seq;
+    return slideImage;
   }
 }

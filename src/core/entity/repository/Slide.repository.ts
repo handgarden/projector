@@ -15,6 +15,25 @@ export class SlideRepository extends Repository<Slide> {
       where: {
         id,
       },
+      relations: {
+        project: {
+          creator: true,
+        },
+        images: true,
+      },
+    });
+
+    return Nil.of(entity);
+  }
+
+  async findOneByProjectIdAndSeq(projectId: number, seq: number) {
+    const entity = await this.findOne({
+      where: {
+        project: {
+          id: projectId,
+        },
+        seq,
+      },
     });
 
     return Nil.of(entity);

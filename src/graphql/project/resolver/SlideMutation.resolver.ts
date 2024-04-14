@@ -5,6 +5,7 @@ import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { SlideGqlService } from '../SlideGql.service';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
+import { UpdateSlideInput } from '../input/UpdateSlide.input';
 
 @GqlAuth()
 @Resolver(() => SlideModel)
@@ -17,6 +18,17 @@ export class SlideMutationResolver {
     @Args('slide', { type: () => CreateSlideInput }) slide: CreateSlideInput,
   ) {
     return this.slideService.createSlide({
+      userId: user.id,
+      slideInput: slide,
+    });
+  }
+
+  @Mutation(() => SlideModel)
+  updateSlide(
+    @GqlUser() user: TokenUser,
+    @Args('slide', { type: () => UpdateSlideInput }) slide: UpdateSlideInput,
+  ) {
+    return this.slideService.updateSlide({
       userId: user.id,
       slideInput: slide,
     });

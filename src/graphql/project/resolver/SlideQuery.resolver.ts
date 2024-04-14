@@ -6,6 +6,7 @@ import { ParseIntPipe } from '@nestjs/common';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { SlideImageModel } from '../model/SlideImage.model';
 
+@GqlAuth()
 @Resolver(() => SlideModel)
 export class SlideQueryResolver {
   constructor(
@@ -13,13 +14,14 @@ export class SlideQueryResolver {
     private readonly slideLoader: SlideLoader,
   ) {}
 
-  @GqlAuth()
   @Query(() => SlideModel)
-  async slide(@Args('id', { type: () => ID }, ParseIntPipe) id: number) {
-    return this.slideService.getSlide(id);
+  async slide(
+    @Args('projectId', { type: () => ID }, ParseIntPipe) projectId: number,
+    @Args('seq', { type: () => Number }, ParseIntPipe) seq: number,
+  ) {
+    return this.slideService.getSlide({ projectId, seq });
   }
 
-  @GqlAuth()
   @ResolveField(() => [SlideImageModel])
   images(@Root() slide: SlideModel) {
     return this.slideLoader.loadImagesById.load(slide.id);

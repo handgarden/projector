@@ -41,6 +41,8 @@ export class Slide extends BaseTimeEntity {
   @OneToMany(() => SlideImage, (image) => image.slide, {
     nullable: false,
     lazy: true,
+    cascade: false,
+    persistence: false,
   })
   images: Promise<SlideImage[]>;
 
@@ -70,5 +72,35 @@ export class Slide extends BaseTimeEntity {
     this.images = Promise.resolve([...prevImages, ...images]);
 
     return this;
+  }
+
+  async update({
+    userId,
+    title,
+    description,
+    images,
+  }: {
+    userId: number;
+    title: string;
+    description: string;
+    images: SlideImage[];
+  }) {
+    await this.validateCreator(userId);
+
+    this.title = title;
+    this.description = description;
+    images.forEach((i) => {
+      i.slide = Promise.resolve(this);
+      i.slideId = this.id;
+    });
+    this.images = Promise.resolve(images);
+
+    return this;
+  }
+
+  private async validateCreator(userId: number) {
+    const project = await this.project;
+
+    project.validateCreator(userId);
   }
 }

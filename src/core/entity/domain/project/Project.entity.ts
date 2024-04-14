@@ -81,4 +81,9 @@ export class Project extends BaseTimeEntity {
     this.title = title;
     this.description = description;
   }
+
+  async validateCreator(userId: number) {
+    const creator = await this.creator;
+    creator.confirmUserId(userId);
+  }
 }
