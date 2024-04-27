@@ -2,8 +2,9 @@ import { GraphQLFormattedError } from 'graphql';
 import { CustomValidationError } from '../../common/filter/validation/CustomValidationError';
 import { ResponseStatus } from '../../common/response/ResponseStatus';
 import { CustomGraphQLError } from './exception/CustomGraphQLError';
-import { DomainError } from '../../core/entity/exception/DomainError';
-import { DomainForbiddenError } from '../../core/entity/exception/DomainForbiddenError';
+import { CustomError } from '../../common/filter/error/CustomError';
+import { CustomForbiddenError } from '../../common/filter/error/CustomForbiddenError';
+import { CustomBadRequestError } from '../../common/filter/error/CustomBadRequestError';
 
 type OriginalError = {
   statusCode: number;
@@ -39,8 +40,8 @@ export function GqlExceptionFormatter(
         },
       };
     }
-    if (message[0] instanceof DomainError) {
-      return domainErrorFormatter(message[0]);
+    if (message[0] instanceof CustomError) {
+      return customErrorFormatter(message[0]);
     }
   }
 
@@ -55,13 +56,23 @@ export function GqlExceptionFormatter(
     : error;
 }
 
-function domainErrorFormatter(error: DomainError): GraphQLFormattedError {
-  if (error instanceof DomainForbiddenError) {
+function customErrorFormatter(error: CustomError): GraphQLFormattedError {
+  if (error instanceof CustomForbiddenError) {
     return {
       message: error.message,
       extensions: {
         code: ResponseStatus.FORBIDDEN,
         message: '권한이 없습니다.',
+      },
+    };
+  }
+
+  if (error instanceof CustomBadRequestError) {
+    return {
+      message: error.message,
+      extensions: {
+        code: ResponseStatus.BAD_REQUEST,
+        message: error.message,
       },
     };
   }

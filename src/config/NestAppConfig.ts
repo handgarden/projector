@@ -8,6 +8,7 @@ import { ValidationError } from 'class-validator';
 import { BadParameterErrorFilter } from 'src/common/filter/BadParameterError.filter';
 import { CustomGlobalFilter } from 'src/common/filter/CustomGlobal.filter';
 import { BadParameterError } from 'src/common/filter/validation/BadParameterError';
+import { CustomErrorFilter } from '../common/filter/CustomError.filter';
 
 export function NestAppConfig(app: INestApplication<any>) {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
@@ -21,5 +22,13 @@ export function NestAppConfig(app: INestApplication<any>) {
         new BadParameterError(...errors),
     }),
   );
-  app.useGlobalFilters(new CustomGlobalFilter(), new BadParameterErrorFilter());
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
+  app.useGlobalFilters(
+    new CustomGlobalFilter(),
+    new BadParameterErrorFilter(),
+    new CustomErrorFilter(),
+  );
 }

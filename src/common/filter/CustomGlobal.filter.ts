@@ -16,13 +16,14 @@ export class CustomGlobalFilter extends BaseExceptionFilter {
   private readonly logger = new Logger(CustomGlobalFilter.name);
   catch(exception: Error, host: ArgumentsHost): void {
     this.logger.error(exception);
-    const ctx = host.switchToHttp();
-
-    const response = ctx.getResponse();
 
     if (this.isGraphqlRequest(host)) {
       throw exception;
     }
+
+    const ctx = host.switchToHttp();
+
+    const response = ctx.getResponse();
 
     const isHttpException = exception instanceof HttpException;
     if (!isHttpException) {
