@@ -6,10 +6,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../User.entity';
+import { User } from '../user/User.entity';
 import { Slide } from './Slide.entity';
 import { BaseTimeEntity } from '../../BaseTimeEntity';
-import { DuplicateSequenceSlideError } from '../../exception/DuplicateSequenceSlideError';
+import { DuplicateSequenceSlideError } from '../../error/DuplicateSequenceSlideError';
 
 @Entity()
 export class Project extends BaseTimeEntity {

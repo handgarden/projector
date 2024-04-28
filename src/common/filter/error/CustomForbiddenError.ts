@@ -2,6 +2,6 @@ import { CustomError } from './CustomError';
 
 export class CustomForbiddenError extends CustomError {
   constructor() {
-    super('You are not authorized to access this resource');
+    super('접근 권한이 없습니다.');
   }
 }

@@ -1,7 +1,8 @@
 import { DataSource, Repository } from 'typeorm';
-import { User } from '../domain/User.entity';
+import { User } from '../domain/user/User.entity';
 import { Injectable } from '@nestjs/common';
 import { Nil } from 'src/common/nil/Nil';
+import { OAuthProfileDto } from '../../../lib/auth/oauth/dto/OAuthProfile';
 
 @Injectable()
 export class UserRepository extends Repository<User> {
@@ -16,6 +17,18 @@ export class UserRepository extends Repository<User> {
 
   async findById(id: number): Promise<Nil<User>> {
     const user = await this.findOne({ where: { id } });
+    return Nil.of(user);
+  }
+
+  async findOneByOAuthProfile(oAuthProfile: OAuthProfileDto) {
+    const user = await this.findOne({
+      where: {
+        oauthProfile: {
+          provider: oAuthProfile.provider,
+          id: oAuthProfile.id,
+        },
+      },
+    });
     return Nil.of(user);
   }
 }

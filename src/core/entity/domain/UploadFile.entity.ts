@@ -7,7 +7,7 @@ import {
   RelationId,
 } from 'typeorm';
 import { BaseTimeEntity } from '../BaseTimeEntity';
-import { User } from './User.entity';
+import { User } from './user/User.entity';
 import { StoredFile } from '../../../lib/s3/StoredFile';
 
 @Entity()

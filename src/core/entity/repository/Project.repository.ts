@@ -1,7 +1,7 @@
 import { DataSource, In, Repository } from 'typeorm';
 import { Project } from '../domain/project/Project.entity';
 import { Injectable } from '@nestjs/common';
-import { User } from '../domain/User.entity';
+import { User } from '../domain/user/User.entity';
 import { Slide } from '../domain/project/Slide.entity';
 import { Nil } from '../../../common/nil/Nil';
 

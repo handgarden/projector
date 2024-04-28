@@ -8,6 +8,8 @@ import { JwtStrategy } from './strategy/Jwt.strategy';
 import { UserRepository } from 'src/core/entity/repository/User.repository';
 import { BcryptPasswordEncoder } from 'src/common/password/BcryptPasswordEncorder';
 import { PasswordEncoder } from 'src/common/password/PasswordEncoder';
+import { OAuthModule } from './oauth/OAuth.module';
+import { OAuthProfileRepository } from '../../core/entity/repository/OAuthProfile.repository';
 
 @Module({
   imports: [
@@ -19,17 +21,19 @@ import { PasswordEncoder } from 'src/common/password/PasswordEncoder';
       }),
       inject: [ConfigService],
     }),
+    OAuthModule,
   ],
   providers: [
     AuthService,
     LocalStrategy,
     JwtStrategy,
     UserRepository,
+    OAuthProfileRepository,
     {
       provide: PasswordEncoder,
       useClass: BcryptPasswordEncoder,
     },
   ],
-  exports: [AuthService],
+  exports: [AuthService, OAuthModule],
 })
 export class AuthModule {}

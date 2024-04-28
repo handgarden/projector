@@ -5,14 +5,21 @@ import { RegisterRequestDto } from 'src/api/auth/dto/RegisterRequest.dto';
 import { DuplicateAccountError } from './error/AccountDuplicateError';
 import { LoginResponseDto } from 'src/api/auth/dto/LoginResponse.dto';
 import { UserRepository } from 'src/core/entity/repository/User.repository';
-import { User } from 'src/core/entity/domain/User.entity';
+import { User } from 'src/core/entity/domain/user/User.entity';
 import { PasswordEncoder } from 'src/common/password/PasswordEncoder';
+import { OAuthProfileDto } from './oauth/dto/OAuthProfile';
+import { OAuthProfile } from '../../core/entity/domain/user/OAuthProfile.entity';
+import { OAuthProfileRepository } from '../../core/entity/repository/OAuthProfile.repository';
+import { OAuthProvider } from '../../core/entity/enum/OAuthProvider';
+import { DuplicateOAuthProfileError } from './error/DuplicateOAuthProfileError';
+import { OAuthAccountNotFoundError } from './error/OAuthAccountNotFoundError';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
+    private readonly oAuthProfileRepository: OAuthProfileRepository,
     @Inject(PasswordEncoder) private readonly passwordEncoder: PasswordEncoder,
   ) {}
 
@@ -46,6 +53,17 @@ export class AuthService {
     return user;
   }
 
+  async OAuthLogin(oAuthProfile: OAuthProfileDto) {
+    const userNil =
+      await this.userRepository.findOneByOAuthProfile(oAuthProfile);
+
+    if (userNil.isNil()) {
+      throw new OAuthAccountNotFoundError();
+    }
+
+    return this.login(userNil.unwrap());
+  }
+
   async login(user: User) {
     const payload: TokenPayload = {
       account: user.account,
@@ -55,5 +73,27 @@ export class AuthService {
     const accessToken = this.jwtService.sign(payload);
 
     return new LoginResponseDto(accessToken);
+  }
+
+  async linkOAuthProfile(userId: number, oAuthProfile: OAuthProfileDto) {
+    const profile = OAuthProfile.fromDto(userId, oAuthProfile);
+
+    await this.checkOAuthProfileDuplicate(profile.provider, userId);
+
+    await this.oAuthProfileRepository.save(profile);
+  }
+
+  private async checkOAuthProfileDuplicate(
+    provider: OAuthProvider,
+    userId: number,
+  ) {
+    const profileNil =
+      await this.oAuthProfileRepository.findOneByProviderAndUserId(
+        provider,
+        userId,
+      );
+    if (profileNil.isNotNil()) {
+      throw new DuplicateOAuthProfileError({ userId, provider });
+    }
   }
 }
