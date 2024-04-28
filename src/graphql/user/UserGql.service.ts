@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../core/entity/repository/User.repository';
+import { UserModel } from './model/User.model';
 
 @Injectable()
 export class UserGqlService {
@@ -12,6 +13,6 @@ export class UserGqlService {
       throw new Error('User not found');
     }
 
-    return user.unwrap();
+    return UserModel.fromEntity(user.unwrap());
   }
 }

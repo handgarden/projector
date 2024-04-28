@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { OAuthProfile } from '../domain/user/OAuthProfile.entity';
 import { Injectable } from '@nestjs/common';
 import { OAuthProvider } from '../enum/OAuthProvider';
@@ -19,5 +19,15 @@ export class OAuthProfileRepository extends Repository<OAuthProfile> {
     });
 
     return Nil.of(data);
+  }
+
+  async findByUserIds(userIds: number[]) {
+    const profiles = await this.find({
+      where: {
+        userId: In(userIds),
+      },
+    });
+
+    return profiles;
   }
 }

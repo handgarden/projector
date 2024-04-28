@@ -19,7 +19,7 @@ export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
-    private readonly oAuthProfileRepository: OAuthProfileRepository,
+    private readonly oauthProfileRepository: OAuthProfileRepository,
     @Inject(PasswordEncoder) private readonly passwordEncoder: PasswordEncoder,
   ) {}
 
@@ -53,9 +53,9 @@ export class AuthService {
     return user;
   }
 
-  async OAuthLogin(oAuthProfile: OAuthProfileDto) {
+  async OAuthLogin(oauthProfile: OAuthProfileDto) {
     const userNil =
-      await this.userRepository.findOneByOAuthProfile(oAuthProfile);
+      await this.userRepository.findOneByOAuthProfile(oauthProfile);
 
     if (userNil.isNil()) {
       throw new OAuthAccountNotFoundError();
@@ -75,12 +75,12 @@ export class AuthService {
     return new LoginResponseDto(accessToken);
   }
 
-  async linkOAuthProfile(userId: number, oAuthProfile: OAuthProfileDto) {
-    const profile = OAuthProfile.fromDto(userId, oAuthProfile);
+  async linkOAuthProfile(userId: number, oauthProfile: OAuthProfileDto) {
+    const profile = OAuthProfile.fromDto(userId, oauthProfile);
 
     await this.checkOAuthProfileDuplicate(profile.provider, userId);
 
-    await this.oAuthProfileRepository.save(profile);
+    await this.oauthProfileRepository.save(profile);
   }
 
   private async checkOAuthProfileDuplicate(
@@ -88,7 +88,7 @@ export class AuthService {
     userId: number,
   ) {
     const profileNil =
-      await this.oAuthProfileRepository.findOneByProviderAndUserId(
+      await this.oauthProfileRepository.findOneByProviderAndUserId(
         provider,
         userId,
       );

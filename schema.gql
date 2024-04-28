@@ -5,6 +5,19 @@
 type User {
   id: ID!
   account: String!
+  oauthProfiles: [OAuthProfile]!
+}
+
+type OAuthProfile {
+  id: ID!
+  name: String!
+  email: String
+  provider: OAuthProvider!
+}
+
+"""OAuth provider"""
+enum OAuthProvider {
+  GITHUB
 }
 
 type UploadFile {

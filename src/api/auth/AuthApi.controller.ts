@@ -25,7 +25,7 @@ import { CustomEnumPipe } from '../../common/pipe/CustomEnum.pipe';
 export class AuthApiController {
   constructor(
     private readonly authService: AuthService,
-    private readonly oAuthService: OAuthFacadeService,
+    private readonly oauthService: OAuthFacadeService,
   ) {}
 
   @Post('register')
@@ -82,8 +82,8 @@ export class AuthApiController {
 
   private async getOAuthProfile(provider: OAuthProvider, code: string) {
     try {
-      const githubToken = await this.oAuthService.getToken(provider, code);
-      const githubProfile = await this.oAuthService.getProfile(
+      const githubToken = await this.oauthService.getToken(provider, code);
+      const githubProfile = await this.oauthService.getProfile(
         provider,
         githubToken.accessToken,
       );

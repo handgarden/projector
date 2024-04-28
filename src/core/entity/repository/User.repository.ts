@@ -20,12 +20,12 @@ export class UserRepository extends Repository<User> {
     return Nil.of(user);
   }
 
-  async findOneByOAuthProfile(oAuthProfile: OAuthProfileDto) {
+  async findOneByOAuthProfile(oauthProfile: OAuthProfileDto) {
     const user = await this.findOne({
       where: {
         oauthProfile: {
-          provider: oAuthProfile.provider,
-          id: oAuthProfile.id,
+          provider: oauthProfile.provider,
+          id: oauthProfile.id,
         },
       },
     });

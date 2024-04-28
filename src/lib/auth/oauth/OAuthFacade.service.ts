@@ -6,7 +6,7 @@ import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
 @Injectable()
 export class OAuthFacadeService {
   constructor(
-    @Inject(OAuthService) private readonly oAuthServices: OAuthService[],
+    @Inject(OAuthService) private readonly oauthServices: OAuthService[],
   ) {}
 
   async getToken(provider: OAuthProvider, code: string) {
@@ -20,7 +20,7 @@ export class OAuthFacadeService {
   }
 
   private async getOAuthService(provider: OAuthProvider) {
-    for (const service of this.oAuthServices) {
+    for (const service of this.oauthServices) {
       if (service.isMatchProvider(provider)) {
         return service;
       }
