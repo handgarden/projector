@@ -14,16 +14,18 @@ import { ApiController } from 'src/common/decorator/ApiController';
 import { RegisterRequestDto } from './dto/RegisterRequest.dto';
 import { RestTemplate } from 'src/common/response/RestTemplate';
 import { Authorized } from 'src/lib/auth/decorator/Authorized.decorator';
-import { GithubOAuthService } from '../../lib/auth/oauth/github/Github.service';
 import { CurrentUser } from '../../lib/auth/decorator/CurrentUser.decorator';
 import { TokenUser } from '../../lib/auth/types/TokenUser';
 import { CustomError } from '../../common/filter/error/CustomError';
+import { OAuthFacadeService } from '../../lib/auth/oauth/OAuthFacade.service';
+import { OAuthProvider } from '../../core/entity/enum/OAuthProvider';
+import { CustomEnumPipe } from '../../common/pipe/CustomEnum.pipe';
 
 @ApiController('auth')
 export class AuthApiController {
   constructor(
     private readonly authService: AuthService,
-    private readonly githubService: GithubOAuthService,
+    private readonly oAuthService: OAuthFacadeService,
   ) {}
 
   @Post('register')
@@ -47,9 +49,13 @@ export class AuthApiController {
     return RestTemplate.OK();
   }
 
-  @Post('github/login')
-  async githubLogin(@Query('code') code: string) {
-    const githubProfile = await this.getGithubProfile(code);
+  @Post('oauth/login')
+  async githubLogin(
+    @Query('provider', new CustomEnumPipe(OAuthProvider))
+    provider: OAuthProvider,
+    @Query('code') code: string,
+  ) {
+    const githubProfile = await this.getOAuthProfile(provider, code);
     try {
       const loginResponse = await this.authService.OAuthLogin(githubProfile);
       return RestTemplate.OK_WITH_DATA(loginResponse);
@@ -62,20 +68,23 @@ export class AuthApiController {
   }
 
   @Authorized()
-  @Post('github/register')
+  @Post('oauth/register')
   async githubRegister(
     @CurrentUser() user: TokenUser,
+    @Query('provider', new CustomEnumPipe(OAuthProvider))
+    provider: OAuthProvider,
     @Query('code') code: string,
   ) {
-    const githubProfile = await this.getGithubProfile(code);
+    const githubProfile = await this.getOAuthProfile(provider, code);
     await this.authService.linkOAuthProfile(user.id, githubProfile);
     return RestTemplate.OK();
   }
 
-  private async getGithubProfile(code: string) {
+  private async getOAuthProfile(provider: OAuthProvider, code: string) {
     try {
-      const githubToken = await this.githubService.getToken(code);
-      const githubProfile = await this.githubService.profile(
+      const githubToken = await this.oAuthService.getToken(provider, code);
+      const githubProfile = await this.oAuthService.getProfile(
+        provider,
         githubToken.accessToken,
       );
       return githubProfile;

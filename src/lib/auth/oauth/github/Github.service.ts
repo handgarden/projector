@@ -5,10 +5,14 @@ import { OAuthService } from '../OAuth.service';
 import { OAuthToken } from '../dto/OAuthToken';
 import { OAuthProfileDto } from '../dto/OAuthProfile';
 import { GithubProfile } from './GithubProfile';
+import { OAuthProvider } from '../../../../core/entity/enum/OAuthProvider';
 
 @Injectable()
 export class GithubOAuthService implements OAuthService {
   constructor(private readonly configService: ConfigService) {}
+  isMatchProvider(provider: string): boolean {
+    return provider === OAuthProvider.GITHUB;
+  }
 
   async getToken(code: string) {
     const query = new URLSearchParams();
@@ -50,7 +54,7 @@ export class GithubOAuthService implements OAuthService {
     }
   }
 
-  async profile(accessToken: string) {
+  async getProfile(accessToken: string) {
     try {
       const userResponse = await fetch('https://api.github.com/user', {
         method: 'GET',
