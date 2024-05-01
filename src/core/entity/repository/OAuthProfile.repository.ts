@@ -30,4 +30,11 @@ export class OAuthProfileRepository extends Repository<OAuthProfile> {
 
     return profiles;
   }
+
+  async deleteByUserIdAndProvider(userId: number, provider: OAuthProvider) {
+    await this.delete({
+      userId,
+      provider,
+    });
+  }
 }

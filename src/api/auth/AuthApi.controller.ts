@@ -80,6 +80,17 @@ export class AuthApiController {
     return RestTemplate.OK();
   }
 
+  @Authorized()
+  @Post('oauth/unregister')
+  async githubUnregister(
+    @CurrentUser() user: TokenUser,
+    @Query('provider', new CustomEnumPipe(OAuthProvider))
+    provider: OAuthProvider,
+  ) {
+    await this.authService.unlinkOAuthProfile(user.id, provider);
+    return RestTemplate.OK();
+  }
+
   private async getOAuthProfile(provider: OAuthProvider, code: string) {
     try {
       const githubToken = await this.oauthService.getToken(provider, code);

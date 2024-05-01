@@ -83,6 +83,13 @@ export class AuthService {
     await this.oauthProfileRepository.save(profile);
   }
 
+  async unlinkOAuthProfile(userId: number, provider: OAuthProvider) {
+    await this.oauthProfileRepository.deleteByUserIdAndProvider(
+      userId,
+      provider,
+    );
+  }
+
   private async checkOAuthProfileDuplicate(
     provider: OAuthProvider,
     userId: number,
