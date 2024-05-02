@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '../domain/user/User.entity';
 import { Slide } from '../domain/project/Slide.entity';
 import { Nil } from '../../../common/nil/Nil';
+import { PageableType } from '../../../common/page/Pageable';
 
 @Injectable()
 export class ProjectRepository extends Repository<Project> {
@@ -35,8 +36,11 @@ export class ProjectRepository extends Repository<Project> {
     return Nil.of(project);
   }
 
-  async findAllByCreatorId(userId: number): Promise<Project[]> {
-    return this.find({
+  async findAllByCreatorId(
+    userId: number,
+    pageable: PageableType,
+  ): Promise<[Project[], number]> {
+    return this.findAndCount({
       where: {
         creator: {
           id: userId,
@@ -45,6 +49,8 @@ export class ProjectRepository extends Repository<Project> {
       relations: {
         creator: true,
       },
+      skip: pageable.skip,
+      take: pageable.size,
     });
   }
 

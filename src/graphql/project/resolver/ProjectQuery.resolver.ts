@@ -9,6 +9,8 @@ import { S3Service } from '../../../lib/s3/S3.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
+import { PaginationArgs } from '../../common/page/PaginationArgs';
+import { PaginatedProjectModel } from '../model/PaginatedProject.model';
 
 @Resolver(() => ProjectModel)
 export class ProjectQueryResolver {
@@ -24,9 +26,22 @@ export class ProjectQueryResolver {
   }
 
   @GqlAuth()
-  @Query(() => [ProjectModel])
-  projects(@GqlUser() user: TokenUser) {
-    return this.projectService.getProjects(user.id);
+  @Query(() => PaginatedProjectModel)
+  async projects(
+    @GqlUser() user: TokenUser,
+    @Args({ type: () => PaginationArgs })
+    pagination: PaginationArgs,
+  ) {
+    const { items, total } = await this.projectService.getProjects(
+      user.id,
+      pagination,
+    );
+
+    const response = new PaginatedProjectModel();
+    response.items = items;
+    response.total = total;
+    response.hasNext = pagination.skip + pagination.size < total;
+    return response;
   }
 
   @ResolveField(() => UserModel)

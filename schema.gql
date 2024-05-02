@@ -59,12 +59,18 @@ type Project {
   thumbnail: String
 }
 
+type PaginatedProjectModel {
+  items: [Project!]!
+  total: Int!
+  hasNext: Boolean!
+}
+
 type Query {
   user: User!
   uploadFile(key: String!): UploadFile!
   uploadFiles(keys: [String!]!): [UploadFile!]!
   project(id: ID!): Project!
-  projects: [Project!]!
+  projects(page: Int! = 1, size: Int! = 20): PaginatedProjectModel!
   slide(projectId: ID!, seq: Int!): Slide!
 }
 

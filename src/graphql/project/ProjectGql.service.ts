@@ -4,6 +4,7 @@ import { ProjectModel } from './model/Project.model';
 import { CreateProjectInput } from './input/CreateProject.input';
 import { Project } from '../../core/entity/domain/project/Project.entity';
 import { GraphQLNotFoundError } from '../common/exception/GraphQLNotFoundError';
+import { PageableType } from '../../common/page/Pageable';
 
 @Injectable()
 export class ProjectGqlService {
@@ -21,9 +22,16 @@ export class ProjectGqlService {
     return model;
   }
 
-  async getProjects(creatorId: number) {
-    const projects = await this.projectRepository.findAllByCreatorId(creatorId);
-    return projects.map((project) => ProjectModel.fromEntity(project));
+  async getProjects(creatorId: number, pageable: PageableType) {
+    const [data, total] = await this.projectRepository.findAllByCreatorId(
+      creatorId,
+      pageable,
+    );
+
+    return {
+      items: data.map(ProjectModel.fromEntity),
+      total,
+    };
   }
 
   async createProject(userId: number, projectInput: CreateProjectInput) {
