@@ -17,6 +17,11 @@ export class FileApiService {
     files: Express.Multer.File[],
     uploader: TokenUser,
   ): Promise<UploadFileResponseDto[]> {
+    files.forEach((file) => {
+      file.originalname = Buffer.from(file.originalname, 'ascii').toString(
+        'utf8',
+      );
+    });
     const storedFiles = await this.s3Service.uploadFiles(files);
 
     return this.uploadFileRepository.manager.transaction((em) => {
