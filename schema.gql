@@ -101,7 +101,6 @@ input CreateProjectInput {
 
 input CreateSlideInput {
   projectId: Int!
-  seq: Int!
   title: String!
   description: String!
   images: [CreateSlideImageInput]!
@@ -114,7 +113,6 @@ input CreateSlideImageInput {
 
 input UpdateSlideInput {
   projectId: Int!
-  seq: Int!
   title: String!
   description: String!
   images: [CreateSlideImageInput]!

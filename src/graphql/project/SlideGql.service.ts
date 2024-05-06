@@ -55,7 +55,6 @@ export class SlideGqlService {
     const project = nilProject.unwrap();
 
     const slide = await Slide.create({
-      seq: slideInput.seq,
       title: slideInput.title,
       description: slideInput.description,
     });

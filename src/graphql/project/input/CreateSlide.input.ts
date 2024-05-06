@@ -16,10 +16,6 @@ export class CreateSlideInput implements Partial<SlideModel> {
   @IsInt({ message: DefaultValidationMessage.IS_NUMBER })
   projectId: number;
 
-  @Field(() => Int)
-  @IsInt({ message: DefaultValidationMessage.IS_NUMBER })
-  seq: number;
-
   @Field(() => String)
   @IsString({ message: DefaultValidationMessage.IS_STRING })
   @Length(1, 255, { message: DefaultValidationMessage.LENGTH })

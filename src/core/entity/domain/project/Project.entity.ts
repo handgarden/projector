@@ -9,7 +9,6 @@ import {
 import { User } from '../user/User.entity';
 import { Slide } from './Slide.entity';
 import { BaseTimeEntity } from '../../BaseTimeEntity';
-import { DuplicateSequenceSlideError } from '../../error/DuplicateSequenceSlideError';
 
 @Entity()
 export class Project extends BaseTimeEntity {
@@ -44,9 +43,7 @@ export class Project extends BaseTimeEntity {
     creator.confirmUserId(userId);
 
     const prevSlides = await this.slides;
-    if (prevSlides.find((s) => s.seq === slide.seq)) {
-      throw new DuplicateSequenceSlideError(this.id, slide.seq);
-    }
+    slide.seq = prevSlides.length + 1;
     this.slides = Promise.resolve([...prevSlides, slide]);
     slide.project = Promise.resolve(this);
   }
