@@ -95,7 +95,7 @@ export class Slide extends BaseTimeEntity {
     return this;
   }
 
-  private async validateCreator(userId: number) {
+  async validateCreator(userId: number) {
     const project = await this.project;
 
     project.validateCreator(userId);

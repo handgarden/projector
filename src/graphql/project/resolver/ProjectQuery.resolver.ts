@@ -30,12 +30,12 @@ export class ProjectQueryResolver {
   @Query(() => PaginatedProjectModel)
   async projectsPageable(
     @GqlUser() user: TokenUser,
-    @Args('pagination', { nullable: true })
-    pagination: PaginationInput,
+    @Args('pageable', { nullable: true })
+    pageable: PaginationInput,
   ) {
     const { items, total } = await this.projectService.getProjectsPagable(
       user.id,
-      pagination,
+      pageable,
     );
 
     const response = new PaginatedProjectModel();

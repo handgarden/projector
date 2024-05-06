@@ -26,19 +26,6 @@ export class SlideRepository extends Repository<Slide> {
     return Nil.of(entity);
   }
 
-  async findOneByProjectIdAndSeq(projectId: number, seq: number) {
-    const entity = await this.findOne({
-      where: {
-        project: {
-          id: projectId,
-        },
-        seq,
-      },
-    });
-
-    return Nil.of(entity);
-  }
-
   async findImagesByIds(ids: number[]): Promise<[number, SlideImage[]][]> {
     const slides = await this.find({
       select: {

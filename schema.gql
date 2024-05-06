@@ -70,9 +70,9 @@ type Query {
   uploadFile(key: String!): UploadFile!
   uploadFiles(keys: [String!]!): [UploadFile!]!
   project(id: ID!): Project!
-  projectsPageable(pagination: PaginationInput): PaginatedProjectModel!
+  projectsPageable(pageable: PaginationInput): PaginatedProjectModel!
   projectsScrollable(scrollable: ScrollableInput): PaginatedProjectModel!
-  slide(projectId: ID!, seq: Int!): Slide!
+  slide(slideId: ID!): Slide!
 }
 
 input PaginationInput {

@@ -21,17 +21,18 @@ export class SlideGqlService {
     private readonly slideImageRepository: SlideImageRepository,
   ) {}
 
-  async getSlide({ projectId, seq }: { projectId: number; seq: number }) {
-    const slide = await this.slideRepository.findOneByProjectIdAndSeq(
-      projectId,
-      seq,
-    );
+  async getSlide({ slideId, userId }: { slideId: number; userId: number }) {
+    const nilSlide = await this.slideRepository.findById(slideId);
 
-    if (slide.isNil()) {
+    if (nilSlide.isNil()) {
       throw new GraphQLNotFoundError();
     }
 
-    return SlideModel.fromEntity(slide.unwrap());
+    const slide = nilSlide.unwrap();
+
+    slide.validateCreator(userId);
+
+    return SlideModel.fromEntity(slide);
   }
 
   async createSlide({
