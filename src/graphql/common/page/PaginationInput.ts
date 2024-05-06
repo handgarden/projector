@@ -1,8 +1,8 @@
-import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { PageableType } from '../../../common/page/Pageable';
 
-@ArgsType()
-export class PaginationArgs implements PageableType {
+@InputType()
+export class PaginationInput implements PageableType {
   @Field(() => Int)
   page: number = 1;
 
@@ -13,15 +13,15 @@ export class PaginationArgs implements PageableType {
     return (this.page - 1) * this.size;
   }
 
-  next(): PaginationArgs {
-    const nextPage = new PaginationArgs();
+  next(): PaginationInput {
+    const nextPage = new PaginationInput();
     nextPage.page = this.page + 1;
     nextPage.size = this.size;
     return nextPage;
   }
 
-  prev(): PaginationArgs {
-    const prevPage = new PaginationArgs();
+  prev(): PaginationInput {
+    const prevPage = new PaginationInput();
     prevPage.page = this.page - 1 < 1 ? 1 : this.page - 1;
     prevPage.size = this.size;
     return prevPage;

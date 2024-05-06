@@ -70,8 +70,19 @@ type Query {
   uploadFile(key: String!): UploadFile!
   uploadFiles(keys: [String!]!): [UploadFile!]!
   project(id: ID!): Project!
-  projects(page: Int! = 1, size: Int! = 20): PaginatedProjectModel!
+  projectsPageable(pagination: PaginationInput): PaginatedProjectModel!
+  projectsScrollable(scrollable: ScrollableInput): PaginatedProjectModel!
   slide(projectId: ID!, seq: Int!): Slide!
+}
+
+input PaginationInput {
+  page: Int! = 1
+  size: Int! = 20
+}
+
+input ScrollableInput {
+  lastKey: ID
+  size: Int!
 }
 
 type Mutation {

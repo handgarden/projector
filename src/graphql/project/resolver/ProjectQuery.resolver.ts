@@ -9,8 +9,9 @@ import { S3Service } from '../../../lib/s3/S3.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
-import { PaginationArgs } from '../../common/page/PaginationArgs';
 import { PaginatedProjectModel } from '../model/PaginatedProject.model';
+import { PaginationInput } from '../../common/page/PaginationInput';
+import { ScrollableInput } from '../../common/page/ScrollableInput';
 
 @Resolver(() => ProjectModel)
 export class ProjectQueryResolver {
@@ -27,12 +28,12 @@ export class ProjectQueryResolver {
 
   @GqlAuth()
   @Query(() => PaginatedProjectModel)
-  async projects(
+  async projectsPageable(
     @GqlUser() user: TokenUser,
-    @Args({ type: () => PaginationArgs })
-    pagination: PaginationArgs,
+    @Args('pagination', { nullable: true })
+    pagination: PaginationInput,
   ) {
-    const { items, total } = await this.projectService.getProjects(
+    const { items, total } = await this.projectService.getProjectsPagable(
       user.id,
       pagination,
     );
@@ -40,7 +41,26 @@ export class ProjectQueryResolver {
     const response = new PaginatedProjectModel();
     response.items = items;
     response.total = total;
-    response.hasNext = pagination.skip + pagination.size < total;
+    response.hasNext = !!items.length;
+    return response;
+  }
+
+  @GqlAuth()
+  @Query(() => PaginatedProjectModel)
+  async projectsScrollable(
+    @GqlUser() user: TokenUser,
+    @Args('scrollable', { nullable: true })
+    scrollable: ScrollableInput,
+  ) {
+    const { items, total } = await this.projectService.getProjectsScrollable(
+      user.id,
+      scrollable,
+    );
+
+    const response = new PaginatedProjectModel();
+    response.items = items;
+    response.total = total;
+    response.hasNext = !!items.length;
     return response;
   }
 

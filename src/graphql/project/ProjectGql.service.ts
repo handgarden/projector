@@ -5,6 +5,7 @@ import { CreateProjectInput } from './input/CreateProject.input';
 import { Project } from '../../core/entity/domain/project/Project.entity';
 import { GraphQLNotFoundError } from '../common/exception/GraphQLNotFoundError';
 import { PageableType } from '../../common/page/Pageable';
+import { ScrollableType } from '../../common/page/InfiniteScrollableType';
 
 @Injectable()
 export class ProjectGqlService {
@@ -22,11 +23,28 @@ export class ProjectGqlService {
     return model;
   }
 
-  async getProjects(creatorId: number, pageable: PageableType) {
-    const [data, total] = await this.projectRepository.findAllByCreatorId(
-      creatorId,
-      pageable,
-    );
+  async getProjectsPagable(creatorId: number, pageable: PageableType) {
+    const [data, total] =
+      await this.projectRepository.findAllByCreatorIdPageable(
+        creatorId,
+        pageable,
+      );
+
+    return {
+      items: data.map(ProjectModel.fromEntity),
+      total,
+    };
+  }
+
+  async getProjectsScrollable(
+    creatorId: number,
+    scrollable: ScrollableType<string>,
+  ) {
+    const [data, total] =
+      await this.projectRepository.findAllByCreatorIdScrollable(
+        creatorId,
+        scrollable,
+      );
 
     return {
       items: data.map(ProjectModel.fromEntity),
