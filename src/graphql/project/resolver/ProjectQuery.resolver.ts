@@ -11,7 +11,6 @@ import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { PaginatedProjectModel } from '../model/PaginatedProject.model';
 import { PaginationInput } from '../../common/page/PaginationInput';
-import { ScrollableInput } from '../../common/page/ScrollableInput';
 
 @Resolver(() => ProjectModel)
 export class ProjectQueryResolver {
@@ -36,25 +35,6 @@ export class ProjectQueryResolver {
     const { items, total } = await this.projectService.getProjectsPagable(
       user.id,
       pageable,
-    );
-
-    const response = new PaginatedProjectModel();
-    response.items = items;
-    response.total = total;
-    response.hasNext = !!items.length;
-    return response;
-  }
-
-  @GqlAuth()
-  @Query(() => PaginatedProjectModel)
-  async projectsScrollable(
-    @GqlUser() user: TokenUser,
-    @Args('scrollable', { nullable: true })
-    scrollable: ScrollableInput,
-  ) {
-    const { items, total } = await this.projectService.getProjectsScrollable(
-      user.id,
-      scrollable,
     );
 
     const response = new PaginatedProjectModel();

@@ -1,11 +1,10 @@
-import { DataSource, In, LessThan, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { Project } from '../domain/project/Project.entity';
 import { Injectable } from '@nestjs/common';
 import { User } from '../domain/user/User.entity';
 import { Slide } from '../domain/project/Slide.entity';
 import { Nil } from '../../../common/nil/Nil';
 import { PageableType } from '../../../common/page/Pageable';
-import { ScrollableType } from '../../../common/page/InfiniteScrollableType';
 
 @Injectable()
 export class ProjectRepository extends Repository<Project> {
@@ -52,29 +51,6 @@ export class ProjectRepository extends Repository<Project> {
       },
       skip: pageable.skip,
       take: pageable.size,
-      order: {
-        id: 'DESC',
-      },
-    });
-  }
-
-  async findAllByCreatorIdScrollable(
-    userId: number,
-    scrollable: ScrollableType<string>,
-  ): Promise<[Project[], number]> {
-    return this.findAndCount({
-      where: {
-        creator: {
-          id: userId,
-        },
-        id: scrollable.lastKey
-          ? LessThan(parseInt(scrollable.lastKey, 10))
-          : undefined,
-      },
-      relations: {
-        creator: true,
-      },
-      take: scrollable.size,
       order: {
         id: 'DESC',
       },
