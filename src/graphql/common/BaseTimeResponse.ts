@@ -3,7 +3,7 @@ import { ObjectType } from '@nestjs/graphql';
 import { LocalDateTimeField } from './decorator/LocalDateTimeField.decorator';
 
 @ObjectType()
-export class BaseTimeModel {
+export class BaseTimeResponse {
   @LocalDateTimeField()
   createdAt: LocalDateTime;
 

@@ -1,8 +1,8 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { UploadFileModel } from '../../file/model/UploadFile.model';
+import { UploadFileResponse } from '../../file/response/UploadFile.response';
 
 @InputType()
-export class CreateSlideImageInput implements Partial<UploadFileModel> {
+export class CreateSlideImageInput implements Partial<UploadFileResponse> {
   @Field(() => Number)
   seq: number;
 

@@ -1,10 +1,10 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { Slide } from '../../../core/entity/domain/project/Slide.entity';
-import { BaseTimeModel } from '../../common/BaseTimeModel';
+import { BaseTimeResponse } from '../../common/BaseTimeResponse';
 import { DateTimeUtils } from '../../../util/DateTImeUtils';
 
 @ObjectType(Slide.name)
-export class SlideModel extends BaseTimeModel {
+export class SlideResponse extends BaseTimeResponse {
   @Field(() => ID)
   id: string;
 
@@ -18,7 +18,7 @@ export class SlideModel extends BaseTimeModel {
   description: string;
 
   static fromEntity(slide: Slide) {
-    const model = new SlideModel();
+    const model = new SlideResponse();
     model.id = slide.id.toString();
     model.seq = slide.seq;
     model.title = slide.title;

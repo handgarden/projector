@@ -8,7 +8,7 @@ registerEnumType(OAuthProvider, {
 });
 
 @ObjectType(OAuthProfile.name)
-export class OAuthProfileModel {
+export class OAuthProfileResponse {
   @Field(() => ID)
   id: string;
 
@@ -22,7 +22,7 @@ export class OAuthProfileModel {
   provider: OAuthProvider;
 
   static fromEntity(entity: OAuthProfile) {
-    const model = new OAuthProfileModel();
+    const model = new OAuthProfileResponse();
     model.id = entity.id;
     model.name = entity.username;
     model.email = entity.email;

@@ -3,6 +3,7 @@ import { DataSource, In, Repository } from 'typeorm';
 import { Slide } from '../domain/project/Slide.entity';
 import { Nil } from '../../../common/nil/Nil';
 import { SlideImage } from '../domain/project/SlideImage.entity';
+import { Project } from '../domain/project/Project.entity';
 
 @Injectable()
 export class SlideRepository extends Repository<Slide> {
@@ -48,6 +49,25 @@ export class SlideRepository extends Repository<Slide> {
 
         return [slide.id, slideImages];
       }),
+    );
+  }
+
+  async findSlidesByProjectIds(ids: number[]): Promise<[number, Slide[]][]> {
+    const projects = await this.manager.find(Project, {
+      select: {
+        id: true,
+        slides: true,
+      },
+      where: {
+        id: In(ids),
+      },
+      relations: {
+        slides: true,
+      },
+    });
+
+    return Promise.all(
+      projects.map(async (project) => [project.id, await project.slides]),
     );
   }
 }

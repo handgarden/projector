@@ -40,7 +40,7 @@ type Slide {
   seq: Int!
   title: String!
   description: String!
-  images: [SlideImage!]!
+  images: [SlideImage]!
 }
 
 type SlideImage {
@@ -55,11 +55,11 @@ type Project {
   title: String!
   description: String!
   creator: User!
-  slides: [Slide!]!
+  slides: [Slide]!
   thumbnail: String
 }
 
-type PaginatedProjectModel {
+type PaginatedProjectResponse {
   items: [Project!]!
   total: Int!
   hasNext: Boolean!
@@ -70,7 +70,7 @@ type Query {
   uploadFile(key: String!): UploadFile!
   uploadFiles(keys: [String!]!): [UploadFile!]!
   project(id: ID!): Project!
-  projectsPageable(pageable: PaginationInput): PaginatedProjectModel!
+  projectsPageable(pageable: PaginationInput): PaginatedProjectResponse!
   slide(slideId: ID!): Slide!
 }
 

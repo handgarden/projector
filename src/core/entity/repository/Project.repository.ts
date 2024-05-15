@@ -2,7 +2,6 @@ import { DataSource, In, Repository } from 'typeorm';
 import { Project } from '../domain/project/Project.entity';
 import { Injectable } from '@nestjs/common';
 import { User } from '../domain/user/User.entity';
-import { Slide } from '../domain/project/Slide.entity';
 import { Nil } from '../../../common/nil/Nil';
 import { PageableType } from '../../../common/page/Pageable';
 
@@ -73,25 +72,6 @@ export class ProjectRepository extends Repository<Project> {
 
     return Promise.all(
       projects.map(async (project) => [project.id, await project.creator]),
-    );
-  }
-
-  async findSlidesByIds(ids: number[]): Promise<[number, Slide[]][]> {
-    const projects = await this.find({
-      select: {
-        id: true,
-        slides: true,
-      },
-      where: {
-        id: In(ids),
-      },
-      relations: {
-        slides: true,
-      },
-    });
-
-    return Promise.all(
-      projects.map(async (project) => [project.id, await project.slides]),
     );
   }
 

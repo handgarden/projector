@@ -1,5 +1,5 @@
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
-import { SlideModel } from '../model/Slide.model';
+import { SlideResponse } from '../response/Slide.response';
 import { CreateSlideInput } from '../input/CreateSlide.input';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { SlideGqlService } from '../SlideGql.service';
@@ -9,26 +9,26 @@ import { UpdateSlideInput } from '../input/UpdateSlide.input';
 import { ParseIntPipe } from '@nestjs/common';
 
 @GqlAuth()
-@Resolver(() => SlideModel)
+@Resolver(() => SlideResponse)
 export class SlideMutationResolver {
   constructor(private readonly slideService: SlideGqlService) {}
 
-  @Mutation(() => SlideModel)
+  @Mutation(() => SlideResponse)
   createSlide(
     @GqlUser() user: TokenUser,
     @Args('slide', { type: () => CreateSlideInput }) slide: CreateSlideInput,
-  ) {
+  ): Promise<SlideResponse> {
     return this.slideService.createSlide({
       userId: user.id,
       slideInput: slide,
     });
   }
 
-  @Mutation(() => SlideModel)
+  @Mutation(() => SlideResponse)
   updateSlide(
     @GqlUser() user: TokenUser,
     @Args('slide', { type: () => UpdateSlideInput }) slide: UpdateSlideInput,
-  ) {
+  ): Promise<SlideResponse> {
     return this.slideService.updateSlide({
       userId: user.id,
       slideInput: slide,
@@ -36,11 +36,11 @@ export class SlideMutationResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteSlide(
+  deleteSlide(
     @GqlUser() user: TokenUser,
     @Args('slideId', { type: () => ID }, ParseIntPipe) slideId: number,
-  ) {
-    return await this.slideService.deleteSlide({
+  ): Promise<boolean> {
+    return this.slideService.deleteSlide({
       userId: user.id,
       slideId,
     });

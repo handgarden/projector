@@ -1,10 +1,10 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { UploadFile } from '../../../core/entity/domain/UploadFile.entity';
-import { BaseTimeModel } from '../../common/BaseTimeModel';
+import { BaseTimeResponse } from '../../common/BaseTimeResponse';
 import { DateTimeUtils } from '../../../util/DateTImeUtils';
 
 @ObjectType(UploadFile.name)
-export class UploadFileModel extends BaseTimeModel {
+export class UploadFileResponse extends BaseTimeResponse {
   @Field(() => ID)
   key: string;
 
@@ -15,7 +15,7 @@ export class UploadFileModel extends BaseTimeModel {
   bucket: string;
 
   static fromEntity(uploadFile: UploadFile) {
-    const model = new UploadFileModel();
+    const model = new UploadFileResponse();
     model.bucket = uploadFile.bucket;
     model.key = uploadFile.key;
     model.originalName = uploadFile.originalName;

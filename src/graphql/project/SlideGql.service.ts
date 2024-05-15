@@ -1,27 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { SlideRepository } from '../../core/entity/repository/Slide.repository';
-import { SlideModel } from './model/Slide.model';
 import { Slide } from '../../core/entity/domain/project/Slide.entity';
 import { ProjectRepository } from '../../core/entity/repository/Project.repository';
 import { ValidationError } from 'class-validator';
 import { CreateSlideInput } from './input/CreateSlide.input';
 import { UploadFile } from '../../core/entity/domain/UploadFile.entity';
 import { SlideImage } from '../../core/entity/domain/project/SlideImage.entity';
-import { SlideImageRepository } from '../../core/entity/repository/SlideImage.repository';
 import { GraphQLNotFoundError } from '../common/exception/GraphQLNotFoundError';
 import { UpdateSlideInput } from './input/UpdateSlide.input';
 import { In, Not } from 'typeorm';
 import { CreateSlideImageInput } from './input/CreateSlideImage.input';
+import { SlideResponse } from './response/Slide.response';
 
 @Injectable()
 export class SlideGqlService {
   constructor(
     private readonly slideRepository: SlideRepository,
     private readonly projectRepository: ProjectRepository,
-    private readonly slideImageRepository: SlideImageRepository,
   ) {}
 
-  async getSlide({ slideId, userId }: { slideId: number; userId: number }) {
+  async getSlide({
+    slideId,
+    userId,
+  }: {
+    slideId: number;
+    userId: number;
+  }): Promise<SlideResponse> {
     const nilSlide = await this.slideRepository.findById(slideId);
 
     if (nilSlide.isNil()) {
@@ -32,7 +36,7 @@ export class SlideGqlService {
 
     slide.validateCreator(userId);
 
-    return SlideModel.fromEntity(slide);
+    return SlideResponse.fromEntity(slide);
   }
 
   async createSlide({
@@ -78,7 +82,7 @@ export class SlideGqlService {
       },
     );
 
-    return SlideModel.fromEntity(saved);
+    return SlideResponse.fromEntity(saved);
   }
 
   async updateSlide({
@@ -122,7 +126,7 @@ export class SlideGqlService {
       },
     );
 
-    return SlideModel.fromEntity(updatedSlide);
+    return SlideResponse.fromEntity(updatedSlide);
   }
 
   async deleteSlide({ userId, slideId }: { userId: number; slideId: number }) {

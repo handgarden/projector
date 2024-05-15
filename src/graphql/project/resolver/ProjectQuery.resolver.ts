@@ -1,61 +1,67 @@
 import { Args, ID, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
-import { UserModel } from '../../user/model/User.model';
-import { SlideModel } from '../model/Slide.model';
-import { ProjectModel } from '../model/Project.model';
-import { ProjectLoader } from '../loader/ProjectLoader';
+import { UserResponse } from '../../user/response/User.response';
+import { SlideResponse } from '../response/Slide.response';
+import { ProjectResponse } from '../response/Project.response';
+import { ProjectLoader } from '../loader/Project.loader';
 import { ProjectGqlService } from '../ProjectGql.service';
 import { ParseIntPipe } from '@nestjs/common';
 import { S3Service } from '../../../lib/s3/S3.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
-import { PaginatedProjectModel } from '../model/PaginatedProject.model';
+import { PaginatedProjectResponse } from '../response/PaginatedProject.response';
 import { PaginationInput } from '../../common/page/PaginationInput';
+import { UserLoader } from '../../user/loader/User.loader';
+import { SlideLoader } from '../loader/Slide.loader';
 
-@Resolver(() => ProjectModel)
+@Resolver(() => ProjectResponse)
 export class ProjectQueryResolver {
   constructor(
     private readonly projectService: ProjectGqlService,
     private readonly projectLoader: ProjectLoader,
     private readonly s3Service: S3Service,
+    private readonly userLoader: UserLoader,
+    private readonly slideLoader: SlideLoader,
   ) {}
 
-  @Query(() => ProjectModel)
-  project(@Args('id', { type: () => ID }, ParseIntPipe) id: number) {
+  @Query(() => ProjectResponse)
+  project(
+    @Args('id', { type: () => ID }, ParseIntPipe) id: number,
+  ): Promise<ProjectResponse> {
     return this.projectService.getProject(id);
   }
 
   @GqlAuth()
-  @Query(() => PaginatedProjectModel)
+  @Query(() => PaginatedProjectResponse)
   async projectsPageable(
     @GqlUser() user: TokenUser,
     @Args('pageable', { nullable: true })
     pageable: PaginationInput,
-  ) {
-    const { items, total } = await this.projectService.getProjectsPagable(
+  ): Promise<PaginatedProjectResponse> {
+    const { items, total } = await this.projectService.getProjectsPageable(
       user.id,
       pageable,
     );
 
-    const response = new PaginatedProjectModel();
+    const response = new PaginatedProjectResponse();
     response.items = items;
     response.total = total;
     response.hasNext = !!items.length;
     return response;
   }
 
-  @ResolveField(() => UserModel)
-  creator(@Root() project: ProjectModel) {
-    return this.projectLoader.loadUserById.load(project.id);
+  @ResolveField(() => UserResponse)
+  creator(@Root() project: ProjectResponse): Promise<UserResponse> {
+    return this.userLoader.loadCreatorsByProjectIds.load(project.id);
   }
 
-  @ResolveField(() => [SlideModel])
-  slides(@Root() project: ProjectModel) {
-    return this.projectLoader.loadSlidesById.load(project.id);
+  @ResolveField(() => [SlideResponse], { nullable: 'items' })
+  slides(@Root() project: ProjectResponse): Promise<SlideResponse[]> {
+    return this.slideLoader.loadSlidesById.load(project.id);
   }
 
   @ResolveField(() => String, { nullable: true })
-  async thumbnail(@Root() project: ProjectModel) {
+  async thumbnail(@Root() project: ProjectResponse): Promise<string | null> {
     const thumbnailKey = await this.projectLoader.loadThumbnailKeysById.load(
       project.id,
     );

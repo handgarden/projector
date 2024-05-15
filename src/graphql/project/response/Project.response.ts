@@ -1,10 +1,10 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Project } from '../../../core/entity/domain/project/Project.entity';
-import { BaseTimeModel } from '../../common/BaseTimeModel';
+import { BaseTimeResponse } from '../../common/BaseTimeResponse';
 import { DateTimeUtils } from '../../../util/DateTImeUtils';
 
 @ObjectType(Project.name)
-export class ProjectModel extends BaseTimeModel {
+export class ProjectResponse extends BaseTimeResponse {
   @Field(() => ID)
   id: string;
 
@@ -14,8 +14,8 @@ export class ProjectModel extends BaseTimeModel {
   @Field(() => String)
   description: string;
 
-  static fromEntity(project: Project): ProjectModel {
-    const model = new ProjectModel();
+  static fromEntity(project: Project): ProjectResponse {
+    const model = new ProjectResponse();
     model.id = project.id.toString();
     model.title = project.title;
     model.description = project.description;

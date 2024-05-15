@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { SlideModel } from '../model/Slide.model';
+import { SlideResponse } from '../response/Slide.response';
 import { DefaultValidationMessage } from '../../../common/message/validation/DefaultValidation.message';
 import {
   ArrayMaxSize,
@@ -11,7 +11,7 @@ import {
 import { CreateSlideImageInput } from './CreateSlideImage.input';
 
 @InputType()
-export class CreateSlideInput implements Partial<SlideModel> {
+export class CreateSlideInput implements Partial<SlideResponse> {
   @Field(() => Int)
   @IsInt({ message: DefaultValidationMessage.IS_NUMBER })
   projectId: number;

@@ -1,7 +1,7 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { OAuthProfileRepository } from '../../../core/entity/repository/OAuthProfile.repository';
 import * as DataLoader from 'dataloader';
-import { OAuthProfileModel } from '../model/OAuthProfile.model';
+import { OAuthProfileResponse } from '../response/OAuthProfile.response';
 
 @Injectable({
   scope: Scope.REQUEST,
@@ -11,19 +11,20 @@ export class OAuthProfileLoader {
     private readonly oauthProfileRepository: OAuthProfileRepository,
   ) {}
 
-  public findByUserId = new DataLoader<string, OAuthProfileModel[]>(
+  public findByUserId = new DataLoader<string, OAuthProfileResponse[]>(
     async (keys) => {
       const profiles = await this.oauthProfileRepository.findByUserIds(
         keys.map((key) => parseInt(key)),
       );
-      const profilesMap = new Map<string, OAuthProfileModel[]>();
+      const profilesMap = new Map<string, OAuthProfileResponse[]>();
       profiles.forEach((profile) => {
         const userId = profile.userId.toString();
-        const model = OAuthProfileModel.fromEntity(profile);
         if (!profilesMap.has(userId)) {
-          profilesMap.set(userId, [model]);
+          profilesMap.set(userId, [OAuthProfileResponse.fromEntity(profile)]);
         } else {
-          profilesMap.get(userId)!.push(model);
+          profilesMap
+            .get(userId)!
+            .push(OAuthProfileResponse.fromEntity(profile));
         }
       });
 

@@ -1,28 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { ProjectRepository } from '../../core/entity/repository/Project.repository';
-import { ProjectModel } from './model/Project.model';
 import { CreateProjectInput } from './input/CreateProject.input';
 import { Project } from '../../core/entity/domain/project/Project.entity';
 import { GraphQLNotFoundError } from '../common/exception/GraphQLNotFoundError';
 import { PageableType } from '../../common/page/Pageable';
+import { ProjectResponse } from './response/Project.response';
+import { PaginatedType } from '../../common/page/Paginated';
 
 @Injectable()
 export class ProjectGqlService {
   constructor(private readonly projectRepository: ProjectRepository) {}
 
-  async getProject(id: number) {
+  async getProject(id: number): Promise<ProjectResponse> {
     const project = await this.projectRepository.findById(id);
 
     if (project.isNil()) {
       throw new Error('Project not found');
     }
 
-    const model = ProjectModel.fromEntity(project.unwrap());
-
-    return model;
+    return ProjectResponse.fromEntity(project.unwrap());
   }
 
-  async getProjectsPagable(creatorId: number, pageable: PageableType) {
+  async getProjectsPageable(
+    creatorId: number,
+    pageable: PageableType,
+  ): Promise<PaginatedType<ProjectResponse>> {
     const [data, total] =
       await this.projectRepository.findAllByCreatorIdPageable(
         creatorId,
@@ -30,12 +32,16 @@ export class ProjectGqlService {
       );
 
     return {
-      items: data.map(ProjectModel.fromEntity),
+      items: data.map(ProjectResponse.fromEntity),
       total,
+      hasNext: pageable.size + pageable.skip < total,
     };
   }
 
-  async createProject(userId: number, projectInput: CreateProjectInput) {
+  async createProject(
+    userId: number,
+    projectInput: CreateProjectInput,
+  ): Promise<ProjectResponse> {
     const project = await Project.create({
       creatorId: userId,
       title: projectInput.title,
@@ -44,14 +50,14 @@ export class ProjectGqlService {
 
     const saved = await this.projectRepository.save(project);
 
-    return ProjectModel.fromEntity(saved);
+    return ProjectResponse.fromEntity(saved);
   }
 
   async updateProject(
     creatorId: number,
     projectId: number,
     projectInput: CreateProjectInput,
-  ) {
+  ): Promise<ProjectResponse> {
     const nilProject = await this.projectRepository.findById(projectId);
 
     if (nilProject.isNil()) {
@@ -67,7 +73,7 @@ export class ProjectGqlService {
 
     await this.projectRepository.save(project);
 
-    return ProjectModel.fromEntity(project);
+    return ProjectResponse.fromEntity(project);
   }
 
   async deleteProject({
@@ -76,7 +82,7 @@ export class ProjectGqlService {
   }: {
     userId: number;
     projectId: number;
-  }) {
+  }): Promise<boolean> {
     const nilProject =
       await this.projectRepository.findOneByIdWithSlidesAndImages(projectId);
 

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UploadFileRepository } from '../../core/entity/repository/UploadFile.repository';
-import { UploadFileModel } from './model/UploadFile.model';
+import { UploadFileResponse } from './response/UploadFile.response';
 
 @Injectable()
 export default class UploadFileGqlService {
@@ -12,9 +12,7 @@ export default class UploadFileGqlService {
       throw new NotFoundException();
     }
 
-    const file = nilFile.unwrap();
-
-    return UploadFileModel.fromEntity(file);
+    return UploadFileResponse.fromEntity(nilFile.unwrap());
   }
 
   async getUploadFiles(keys: string[]) {
