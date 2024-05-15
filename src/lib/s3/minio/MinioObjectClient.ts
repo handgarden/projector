@@ -20,17 +20,13 @@ export class MinioObjectClient implements ObjectStorageClient {
     });
     this.bucket = configService.get<string>('MINIO_BUCKET') ?? '';
 
-    this.checkBucket();
-
-    this.checkBucketExists();
+    this.createBucketIfNotExists();
   }
 
-  private checkBucket() {
+  private async createBucketIfNotExists() {
     if (!this.bucket) {
       throw new BucketRequiredError('MINIO', 'MINIO_BUCKET');
     }
-  }
-  private async checkBucketExists() {
     const isExists = await this.client.bucketExists(this.bucket);
     if (isExists) {
       return;
