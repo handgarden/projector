@@ -1,4 +1,8 @@
-import { LocalDate, LocalDateTime } from '@js-joda/core';
+import {
+  DateTimeParseException,
+  LocalDate,
+  LocalDateTime,
+} from '@js-joda/core';
 import { DateTimeUtils } from '../../../src/util/DateTImeUtils';
 
 describe(DateTimeUtils, () => {
@@ -106,7 +110,7 @@ describe(DateTimeUtils, () => {
   describe('toLocalDateFromString', () => {
     it('날짜 문자열을 LocalDate로 변환한다.', () => {
       //given
-      const date = new Date(year, month - 1, day).toString();
+      const date = `${year}-0${month}-${day}`;
 
       //when
       const result = DateTimeUtils.toLocalDateFromString(date);
@@ -125,27 +129,33 @@ describe(DateTimeUtils, () => {
 
       //then
       expect(result.isNil()).toBeTruthy();
+    });
+
+    it('YYYY-MM-DD 형식이 아니면 DateTimeParseException을 던진다.', () => {
+      //given
+      const date = '2024-05-15 12:30:45';
+
+      //when
+      const result = () => DateTimeUtils.toLocalDateFromString(date);
+
+      //then
+      expect(result).toThrow(DateTimeParseException);
     });
   });
 
   describe('toLocalDateTimeFromString', () => {
     it('날짜와 시간 문자열을 LocalDateTime으로 변환한다.', () => {
       //given
-      const date = new Date(
-        year,
-        month - 1,
-        day,
-        hour,
-        minute,
-        second,
-      ).toString();
+      const date = `${year}-0${month}-${day} ${hour}:${minute}:${second}`;
 
       //when
       const result = DateTimeUtils.toLocalDateTimeFromString(date);
 
       //then
       expect(result.isNotNil()).toBeTruthy();
-      expect(result.unwrap().toString()).toBe(date);
+      expect(result.unwrap().toString()).toBe(
+        LocalDateTime.of(year, month, day, hour, minute, second).toString(),
+      );
     });
 
     it('빈 문자열이면 Nil.empty()를 반환한다.', () => {
@@ -157,6 +167,17 @@ describe(DateTimeUtils, () => {
 
       //then
       expect(result.isNil()).toBeTruthy();
+    });
+
+    it('YYYY-MM-DD HH:mm:ss 형식이 아니면 DateTimeParseException을 던진다.', () => {
+      //given
+      const date = '2024-05-15';
+
+      //when
+      const result = () => DateTimeUtils.toLocalDateTimeFromString(date);
+
+      //then
+      expect(result).toThrow(DateTimeParseException);
     });
   });
 });
