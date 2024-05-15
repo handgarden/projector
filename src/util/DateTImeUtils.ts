@@ -35,7 +35,7 @@ export class DateTimeUtils {
       return Nil.empty();
     }
 
-    return Nil.of(LocalDate.parse(date));
+    return Nil.of(LocalDate.parse(date, this.DATE_FORMATTER));
   }
 
   static toLocalDateTimeFromString(date: string): Nil<LocalDateTime> {
@@ -43,6 +43,6 @@ export class DateTimeUtils {
       return Nil.empty();
     }
 
-    return Nil.of(LocalDateTime.parse(date));
+    return Nil.of(LocalDateTime.parse(date, this.DATE_TIME_FORMATTER));
   }
 }
