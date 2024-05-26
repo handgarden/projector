@@ -58,6 +58,21 @@ services:
       timeout: 5s
       retries: 3
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: frontend.Dockerfile
+    networks:
+      - projector-network
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-I", "http://localhost:3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   nginx:
     image: nginx
     container_name: projector-nginx
