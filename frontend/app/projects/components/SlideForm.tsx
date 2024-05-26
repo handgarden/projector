@@ -1,18 +1,13 @@
 import { useState } from "react";
-import { CreateSlideImageInput, CreateSlideInput } from "../../../gql/graphql";
-import usePathUtils from "../../../common/hook/usePathUtils";
+import { CreateSlideInput } from "../../../gql/graphql";
 import useSlideValidation from "../hook/useSlideValidation";
-import Image from "next/image";
 import { UploadImage } from "../../../common/components/UploadImage";
 import { FormErrorText } from "../../../common/components/form/FormErrorText";
 import { Button, Input } from "@nextui-org/react";
 import TextEditor from "../../../common/components/TextEditor";
-import { BackLinkButton } from "../../../common/components/button/BackLinkButton";
-import { PROJECT_PATH } from "../../../common/path/ProjectPath";
 import { FormLabel } from "../../../common/components/form/FormLabel";
 import { SLIDE_MESSAGE } from "../../../common/message/Slide.message";
 import { UploadFileType } from "../../../types/file/UploadFileType";
-import { FiTrash } from "react-icons/fi";
 import { DeleteItemButton } from "../../../common/components/button/DeleteItemButton";
 import { DEFAULT_MESSAGE_KR } from "../../../common/message/Default.message";
 import { SimpleCarousel } from "../../../common/components/carousel/SimpleCarousel";
@@ -20,13 +15,14 @@ import { SimpleCarousel } from "../../../common/components/carousel/SimpleCarous
 type Props = {
   projectId: number;
   onSubmit: (slide: CreateSlideInput) => void;
+  loading: boolean;
 };
 
 type SlideFormData = Omit<CreateSlideInput, "images"> & {
   images: UploadFileType[];
 };
 
-export function SlideForm({ onSubmit, projectId }: Props) {
+export function SlideForm({ onSubmit, projectId, loading }: Props) {
   const [slide, setSlide] = useState<SlideFormData>({
     projectId: projectId,
     title: "",
@@ -150,7 +146,7 @@ export function SlideForm({ onSubmit, projectId }: Props) {
           <FormErrorText>{validationMessage.description}</FormErrorText>
         )}
       </div>
-      <Button fullWidth onClick={submit} className="mt-4">
+      <Button fullWidth onClick={submit} className="mt-4" isLoading={loading}>
         {DEFAULT_MESSAGE_KR.button.create}
       </Button>
     </div>

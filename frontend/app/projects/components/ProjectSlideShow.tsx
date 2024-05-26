@@ -31,7 +31,7 @@ export function ProjectSlideShow({ project }: Props) {
 
   return (
     <>
-      <Button onPress={onOpen} size="sm">
+      <Button onPress={onOpen} size="sm" isDisabled={!project.slides.length}>
         <MdSlideshow />
         {PROJECT_MESSAGE.project.show}
       </Button>

@@ -19,7 +19,7 @@ export default function CreateSlidePage() {
     projectId: projectId as string,
   });
 
-  const { mutate } = useSlideCreate();
+  const { mutate, loading: createLoading } = useSlideCreate();
 
   const addSlide = useProjectStore((state) => state.addNewSlide);
   const router = useRouter();
@@ -65,7 +65,11 @@ export default function CreateSlidePage() {
         />
       </div>
       <DefaultHeader>{SLIDE_MESSAGE.title.create}</DefaultHeader>
-      <SlideForm projectId={parseInt(project.id)} onSubmit={onSubmit} />
+      <SlideForm
+        projectId={parseInt(project.id)}
+        onSubmit={onSubmit}
+        loading={createLoading}
+      />
     </div>
   );
 }

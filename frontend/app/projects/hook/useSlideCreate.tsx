@@ -21,10 +21,11 @@ const CREATE_SLIDE = graphql(`
 `);
 
 export default function useSlideCreate() {
-  const [mutate] = useMutation(CREATE_SLIDE, {
+  const [mutate, { loading }] = useMutation(CREATE_SLIDE, {
     refetchQueries: [GET_PROJECTS],
   });
   return {
     mutate,
+    loading,
   };
 }
