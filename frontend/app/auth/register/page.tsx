@@ -42,12 +42,10 @@ export default function RegisterPage() {
     : "";
 
   return (
-    <>
-      <RegisterForm
-        onSubmit={onSubmit}
-        loading={status === StateStatus.PENDING}
-        globalError={globalMessage}
-      />
-    </>
+    <RegisterForm
+      onSubmit={onSubmit}
+      loading={status === StateStatus.PENDING}
+      globalError={globalMessage}
+    />
   );
 }

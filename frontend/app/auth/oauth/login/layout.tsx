@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { MainBox } from "../../../../common/layout/MainBox";
 
 export default function OAuthLoginLayout({
@@ -5,5 +6,9 @@ export default function OAuthLoginLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <MainBox>{children}</MainBox>;
+  return (
+    <MainBox>
+      <Suspense>{children}</Suspense>
+    </MainBox>
+  );
 }

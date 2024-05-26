@@ -23,12 +23,10 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      <LoginForm
-        onSubmit={onSubmit}
-        loading={status === StateStatus.PENDING}
-        error={error}
-      />
-    </>
+    <LoginForm
+      onSubmit={onSubmit}
+      loading={status === StateStatus.PENDING}
+      error={error}
+    />
   );
 }
