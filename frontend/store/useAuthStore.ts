@@ -71,7 +71,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
   logout: () => {
     JwtTokenUtils.removeToken();
-    set({ status: StateStatus.INITIAL });
+    set({ status: StateStatus.FAILURE });
   },
   oauthLogin: async (
     code: string,
