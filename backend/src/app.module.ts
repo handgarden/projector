@@ -15,7 +15,7 @@ import { GqlModule } from './graphql/Gql.module';
           port: parseInt(configService.get<string>('DB_PORT', '3306')),
           username: configService.get<string>('DB_USERNAME', 'root'),
           password: configService.get<string>('DB_PASSWORD', 'password'),
-          database: configService.get<string>('DB_NAME', 'test'),
+          database: configService.get<string>('DB_NAME', 'projector'),
           synchronize: configService.get<string>('DB_SYNCHRONIZE') === 'true',
           logging: configService.get<string>('DB_LOGGING') === 'true',
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
