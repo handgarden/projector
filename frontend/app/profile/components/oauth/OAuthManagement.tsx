@@ -10,10 +10,12 @@ type Props = {
 
 export function OAuthManagement({ oauthProfiles, refetchOAuth }: Props) {
   const isLinkedMap = useMemo(() => {
-    return oauthProfiles.reduce((acc, cur) => {
-      acc[cur.provider] = true;
-      return acc;
-    }, {} as Record<string, boolean>);
+    return oauthProfiles
+      .filter((p) => !!p)
+      .reduce((acc, cur) => {
+        acc[cur!.provider] = true;
+        return acc;
+      }, {} as Record<string, boolean>);
   }, [oauthProfiles]);
 
   return (
