@@ -1,5 +1,6 @@
 import { Controller } from '@nestjs/common';
 
 export const ApiController = (path: string) => {
-  return Controller(`/api/${path}`);
+  const resolvedPath = path.startsWith('/') ? path : `/${path}`;
+  return Controller(`/api${resolvedPath}`);
 };
