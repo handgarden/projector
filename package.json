@@ -1,0 +1,17 @@
+{
+  "name": "projector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "backend": "pnpm --filter backend",
+    "frontend": "pnpm --filter frontend",
+    "shared": "pnpm --filter shared"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "graphql": "^16.8.1"
+  }
+}
