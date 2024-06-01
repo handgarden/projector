@@ -3,7 +3,7 @@ import { UserResponse } from '../../user/response/User.response';
 import { SlideResponse } from '../response/Slide.response';
 import { ProjectResponse } from '../response/Project.response';
 import { ProjectLoader } from '../loader/Project.loader';
-import { ProjectGqlService } from '../ProjectGql.service';
+import { ProjectGqlService } from '../../../project/application/service/ProjectQuery.service';
 import { ParseIntPipe } from '@nestjs/common';
 import { S3Service } from '../../../lib/s3/S3.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
@@ -38,7 +38,7 @@ export class ProjectQueryResolver {
     @Args('pageable', { nullable: true })
     pageable: PaginationInput,
   ): Promise<PaginatedProjectResponse> {
-    const { items, total } = await this.projectService.getProjectsPageable(
+    const { items, total } = await this.projectService.getUserProjects(
       user.id,
       pageable,
     );

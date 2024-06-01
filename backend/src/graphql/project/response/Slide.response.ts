@@ -1,5 +1,5 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
-import { Slide } from '../../../core/entity/domain/project/Slide.entity';
+import { Slide } from '../../../project/domain/Slide.entity';
 import { BaseTimeResponse } from '../../common/BaseTimeResponse';
 import { DateTimeUtils } from '../../../util/DateTImeUtils';
 

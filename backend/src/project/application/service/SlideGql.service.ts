@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { SlideRepository } from '../../core/entity/repository/Slide.repository';
-import { Slide } from '../../core/entity/domain/project/Slide.entity';
-import { ProjectRepository } from '../../core/entity/repository/Project.repository';
+import { SlideRepository } from '../../../core/entity/repository/Slide.repository';
+import { Slide } from '../../domain/Slide.entity';
+import { ProjectRepository } from '../../../core/entity/repository/Project.repository';
 import { ValidationError } from 'class-validator';
-import { CreateSlideInput } from './input/CreateSlide.input';
-import { UploadFile } from '../../core/entity/domain/UploadFile.entity';
-import { SlideImage } from '../../core/entity/domain/project/SlideImage.entity';
-import { GraphQLNotFoundError } from '../common/exception/GraphQLNotFoundError';
-import { UpdateSlideInput } from './input/UpdateSlide.input';
+import { CreateSlideInput } from '../../../graphql/project/input/CreateSlide.input';
+import { UploadFile } from '../../../core/entity/domain/UploadFile.entity';
+import { SlideImage } from '../../domain/SlideImage.entity';
+import { GraphQLNotFoundError } from '../../../graphql/common/exception/GraphQLNotFoundError';
+import { UpdateSlideInput } from '../../../graphql/project/input/UpdateSlide.input';
 import { In, Not } from 'typeorm';
-import { CreateSlideImageInput } from './input/CreateSlideImage.input';
-import { SlideResponse } from './response/Slide.response';
+import { CreateSlideImageInput } from '../../../graphql/project/input/CreateSlideImage.input';
+import { SlideResponse } from '../../../graphql/project/response/Slide.response';
 
 @Injectable()
 export class SlideGqlService {

@@ -2,7 +2,7 @@ import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 import { SlideResponse } from '../response/Slide.response';
 import { CreateSlideInput } from '../input/CreateSlide.input';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
-import { SlideGqlService } from '../SlideGql.service';
+import { SlideGqlService } from '../../../project/application/service/SlideGql.service';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { UpdateSlideInput } from '../input/UpdateSlide.input';

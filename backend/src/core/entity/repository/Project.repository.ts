@@ -1,9 +1,9 @@
 import { DataSource, In, Repository } from 'typeorm';
-import { Project } from '../domain/project/Project.entity';
+import { Project } from '../../../project/domain/Project.entity';
 import { Injectable } from '@nestjs/common';
 import { User } from '../domain/user/User.entity';
 import { Nil } from '../../../common/nil/Nil';
-import { PageableType } from '../../../common/page/Pageable';
+import { Pageable } from '../../../common/page/Pageable';
 
 @Injectable()
 export class ProjectRepository extends Repository<Project> {
@@ -37,7 +37,7 @@ export class ProjectRepository extends Repository<Project> {
 
   async findAllByCreatorIdPageable(
     userId: number,
-    pageable: PageableType,
+    pageable: Pageable,
   ): Promise<[Project[], number]> {
     return this.findAndCount({
       where: {

@@ -1,5 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
-import { SlideImage } from '../domain/project/SlideImage.entity';
+import { SlideImage } from '../../../project/domain/SlideImage.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

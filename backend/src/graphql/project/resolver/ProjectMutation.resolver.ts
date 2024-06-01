@@ -1,7 +1,7 @@
 import { Args, ID, Mutation, Resolver } from '@nestjs/graphql';
 import { ProjectResponse } from '../response/Project.response';
 import { CreateProjectInput } from '../input/CreateProject.input';
-import { ProjectGqlService } from '../ProjectGql.service';
+import { ProjectGqlService } from '../../../project/application/service/ProjectQuery.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';

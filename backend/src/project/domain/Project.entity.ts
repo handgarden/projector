@@ -6,9 +6,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../user/User.entity';
+import { User } from '../../core/entity/domain/user/User.entity';
 import { Slide } from './Slide.entity';
-import { BaseTimeEntity } from '../../BaseTimeEntity';
+import { BaseTimeEntity } from '../../core/entity/BaseTimeEntity';
+import { CreateProjectDto } from '../application/dto/CreateProject.dto';
 
 @Entity()
 export class Project extends BaseTimeEntity {
@@ -48,19 +49,11 @@ export class Project extends BaseTimeEntity {
     slide.project = Promise.resolve(this);
   }
 
-  static async create({
-    title,
-    description,
-    creatorId,
-  }: {
-    title: string;
-    description: string;
-    creatorId: number;
-  }) {
+  static async fromDto(dto: CreateProjectDto) {
     const project = new Project();
-    project.title = title;
-    project.description = description;
-    project.creator = Promise.resolve({ id: creatorId } as User);
+    project.title = dto.title;
+    project.description = dto.description;
+    project.creator = Promise.resolve({ id: dto.creatorId } as User);
     return project;
   }
 

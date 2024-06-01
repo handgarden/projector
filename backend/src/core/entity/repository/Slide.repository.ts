@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, In, Repository } from 'typeorm';
-import { Slide } from '../domain/project/Slide.entity';
+import { Slide } from '../../../project/domain/Slide.entity';
 import { Nil } from '../../../common/nil/Nil';
-import { SlideImage } from '../domain/project/SlideImage.entity';
-import { Project } from '../domain/project/Project.entity';
+import { SlideImage } from '../../../project/domain/SlideImage.entity';
+import { Project } from '../../../project/domain/Project.entity';
 
 @Injectable()
 export class SlideRepository extends Repository<Slide> {

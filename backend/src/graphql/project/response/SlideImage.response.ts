@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { SlideImage } from '../../../core/entity/domain/project/SlideImage.entity';
+import { SlideImage } from '../../../project/domain/SlideImage.entity';
 import { UploadFileResponse } from '../../file/response/UploadFile.response';
 
 @ObjectType(SlideImage.name)
