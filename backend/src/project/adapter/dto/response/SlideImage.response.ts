@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { SlideImage } from '../../../project/domain/SlideImage.entity';
-import { UploadFileResponse } from '../../file/response/UploadFile.response';
+import { SlideImage } from '../../../domain/SlideImage.entity';
+import { UploadFileResponse } from '../../../../graphql/file/response/UploadFile.response';
 
 @ObjectType(SlideImage.name)
 export class SlideImageResponse {

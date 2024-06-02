@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Project } from '../../../project/domain/Project.entity';
-import { BaseTimeResponse } from '../../common/BaseTimeResponse';
-import { DateTimeUtils } from '../../../util/DateTImeUtils';
+import { BaseTimeResponse } from '../../../../graphql/common/BaseTimeResponse';
+import { ProjectDto } from '../../../application/dto/Project.dto';
+import { Project } from '../../../domain/Project.entity';
 
 @ObjectType(Project.name)
 export class ProjectResponse extends BaseTimeResponse {
@@ -14,13 +14,13 @@ export class ProjectResponse extends BaseTimeResponse {
   @Field(() => String)
   description: string;
 
-  static fromEntity(project: Project): ProjectResponse {
+  static fromDto(project: ProjectDto): ProjectResponse {
     const model = new ProjectResponse();
     model.id = project.id.toString();
     model.title = project.title;
     model.description = project.description;
-    model.createdAt = DateTimeUtils.toLocalDateTime(project.createdAt);
-    model.updatedAt = DateTimeUtils.toLocalDateTime(project.updatedAt);
+    model.createdAt = project.createdAt;
+    model.updatedAt = project.updatedAt;
     return model;
   }
 }

@@ -1,23 +1,23 @@
 import { Args, ID, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
-import { UserResponse } from '../../user/response/User.response';
-import { SlideResponse } from '../response/Slide.response';
-import { ProjectResponse } from '../response/Project.response';
-import { ProjectLoader } from '../loader/Project.loader';
-import { ProjectGqlService } from '../../../project/application/service/ProjectQuery.service';
+import { UserResponse } from '../../../graphql/user/response/User.response';
+import { SlideResponse } from '../dto/response/Slide.response';
+import { ProjectResponse } from '../dto/response/Project.response';
+import { ProjectLoader } from '../../../graphql/project/loader/Project.loader';
+import { ProjectQueryService } from '../../application/service/ProjectQuery.service';
 import { ParseIntPipe } from '@nestjs/common';
 import { S3Service } from '../../../lib/s3/S3.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
-import { PaginatedProjectResponse } from '../response/PaginatedProject.response';
-import { PaginationInput } from '../../common/page/PaginationInput';
-import { UserLoader } from '../../user/loader/User.loader';
-import { SlideLoader } from '../loader/Slide.loader';
+import { PaginatedProjectResponse } from '../dto/response/PaginatedProject.response';
+import { PaginationInput } from '../../../graphql/common/page/PaginationInput';
+import { UserLoader } from '../../../graphql/user/loader/User.loader';
+import { SlideLoader } from '../../../graphql/project/loader/Slide.loader';
 
 @Resolver(() => ProjectResponse)
 export class ProjectQueryResolver {
   constructor(
-    private readonly projectService: ProjectGqlService,
+    private readonly projectService: ProjectQueryService,
     private readonly projectLoader: ProjectLoader,
     private readonly s3Service: S3Service,
     private readonly userLoader: UserLoader,

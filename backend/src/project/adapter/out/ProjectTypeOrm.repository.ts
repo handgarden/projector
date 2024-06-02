@@ -2,6 +2,8 @@ import { DataSource, Repository } from 'typeorm';
 import { Project } from '../../domain/Project.entity';
 import { Injectable } from '@nestjs/common';
 import { ProjectPersistencePort } from '../../application/ports/out/ProjectPersistencePort';
+import { Nil } from '../../../common/nil/Nil';
+import { Pageable } from '../../../common/page/Pageable';
 
 @Injectable()
 export class ProjectTypeORMRepository
@@ -11,19 +13,56 @@ export class ProjectTypeORMRepository
   constructor(dataSource: DataSource) {
     super(Project, dataSource.manager);
   }
-  createProject(): void {
-    throw new Error('Method not implemented.');
+  async findProjectById(id: number): Promise<Nil<Project>> {
+    const findProject = await this.findOne({
+      where: {
+        id,
+      },
+    });
+    return Nil.of(findProject);
   }
-  updateProject(): void {
-    throw new Error('Method not implemented.');
+  findProjects(pageable: Pageable): Promise<[Project[], number]> {
+    return this.findAndCount({
+      take: pageable.size,
+      skip: pageable.skip,
+    });
   }
-  addSlide(): void {
-    throw new Error('Method not implemented.');
+  findProjectsByUserId(
+    userId: number,
+    pageable: Pageable,
+  ): Promise<[Project[], number]> {
+    return this.findAndCount({
+      where: {
+        creator: {
+          id: userId,
+        },
+      },
+      take: pageable.size,
+      skip: pageable.skip,
+    });
   }
-  updateSlide(): void {
-    throw new Error('Method not implemented.');
+  async findAggregatedProjectById(id: number): Promise<Nil<Project>> {
+    const findProject = await this.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        creator: true,
+        slides: {
+          images: {
+            file: true,
+          },
+        },
+      },
+    });
+    return Nil.of(findProject);
   }
-  removeSlide(): void {
-    throw new Error('Method not implemented.');
+  async saveAggregateProject(project: Project): Promise<Project> {
+    return this.save(project);
+  }
+
+  async removeAggregateProject(project: Project): Promise<boolean> {
+    await this.remove(project);
+    return true;
   }
 }

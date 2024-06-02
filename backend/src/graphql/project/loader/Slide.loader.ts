@@ -1,8 +1,8 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { SlideRepository } from '../../../core/entity/repository/Slide.repository';
 import * as DataLoader from 'dataloader';
-import { SlideResponse } from '../response/Slide.response';
-import { SlideImageResponse } from '../response/SlideImage.response';
+import { SlideResponse } from '../../../project/adapter/dto/response/Slide.response';
+import { SlideImageResponse } from '../../../project/adapter/dto/response/SlideImage.response';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SlideLoader {

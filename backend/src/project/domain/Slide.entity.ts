@@ -15,7 +15,10 @@ export class Slide extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Project, { nullable: false, lazy: true })
+  @ManyToOne(() => Project, (project) => project.slides, {
+    nullable: false,
+    lazy: true,
+  })
   @JoinColumn({ name: 'project_id' })
   project: Promise<Project>;
 
@@ -41,21 +44,34 @@ export class Slide extends BaseTimeEntity {
   @OneToMany(() => SlideImage, (image) => image.slide, {
     nullable: false,
     lazy: true,
-    cascade: false,
-    persistence: false,
+    cascade: true,
   })
   images: Promise<SlideImage[]>;
 
-  static async create({
+  static create({
     title,
     description,
+    images,
   }: {
     title: string;
     description: string;
+    images: {
+      key: string;
+      seq: number;
+    }[];
   }) {
     const slide = new Slide();
     slide.title = title;
     slide.description = description;
+    slide.images = Promise.resolve(
+      images.map((image) =>
+        SlideImage.create({
+          slide,
+          fileId: image.key,
+          seq: image.seq,
+        }),
+      ),
+    );
 
     return slide;
   }
@@ -72,25 +88,25 @@ export class Slide extends BaseTimeEntity {
   }
 
   async update({
-    userId,
     title,
     description,
     images,
   }: {
-    userId: number;
     title: string;
     description: string;
-    images: SlideImage[];
+    images: { key: string; seq: number }[];
   }) {
-    await this.validateCreator(userId);
-
     this.title = title;
     this.description = description;
-    images.forEach((i) => {
-      i.slide = Promise.resolve(this);
-      i.slideId = this.id;
-    });
-    this.images = Promise.resolve(images);
+    const updatedSlideImages = images.map((i) =>
+      SlideImage.create({
+        slide: this,
+        fileId: i.key,
+        seq: i.seq,
+      }),
+    );
+
+    this.images = Promise.resolve(updatedSlideImages);
 
     return this;
   }

@@ -1,10 +1,10 @@
 import { Args, ID, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
-import { SlideResponse } from '../response/Slide.response';
-import { SlideLoader } from '../loader/Slide.loader';
-import { SlideGqlService } from '../../../project/application/service/SlideGql.service';
+import { SlideResponse } from '../dto/response/Slide.response';
+import { SlideLoader } from '../../../graphql/project/loader/Slide.loader';
+import { SlideGqlService } from '../../application/service/SlideGql.service';
 import { ParseIntPipe } from '@nestjs/common';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
-import { SlideImageResponse } from '../response/SlideImage.response';
+import { SlideImageResponse } from '../dto/response/SlideImage.response';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 

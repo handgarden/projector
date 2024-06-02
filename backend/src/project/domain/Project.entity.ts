@@ -9,7 +9,7 @@ import {
 import { User } from '../../core/entity/domain/user/User.entity';
 import { Slide } from './Slide.entity';
 import { BaseTimeEntity } from '../../core/entity/BaseTimeEntity';
-import { CreateProjectDto } from '../application/dto/CreateProject.dto';
+import { SlideNotFoundException } from '../application/exception/SlideNotFoundException';
 
 @Entity()
 export class Project extends BaseTimeEntity {
@@ -36,51 +36,49 @@ export class Project extends BaseTimeEntity {
 
   @OneToMany(() => Slide, (slide) => slide.project, {
     lazy: true,
+    cascade: true,
   })
   slides: Promise<Slide[]>;
 
-  async addSlide(userId: number, slide: Slide) {
-    const creator = await this.creator;
-    creator.confirmUserId(userId);
+  async update({ title, description }: { title: string; description: string }) {
+    this.title = title;
+    this.description = description;
+  }
 
+  async addSlide(slide: Slide) {
     const prevSlides = await this.slides;
     slide.seq = prevSlides.length + 1;
     this.slides = Promise.resolve([...prevSlides, slide]);
     slide.project = Promise.resolve(this);
   }
 
-  static async fromDto(dto: CreateProjectDto) {
-    const project = new Project();
-    project.title = dto.title;
-    project.description = dto.description;
-    project.creator = Promise.resolve({ id: dto.creatorId } as User);
-    return project;
-  }
-
-  async update({
-    creatorId,
-    title,
-    description,
+  async updateSlide({
+    slideId,
+    updatedTitle,
+    updatedDescription,
+    updatedImages,
   }: {
-    creatorId: number;
-    title: string;
-    description: string;
+    slideId: number;
+    updatedTitle: string;
+    updatedDescription: string;
+    updatedImages: { key: string; seq: number }[];
   }) {
-    (await this.creator).confirmUserId(creatorId);
+    const slides = await this.slides;
 
-    this.title = title;
-    this.description = description;
+    const targetSlide = slides.find((s) => s.id === slideId);
+
+    if (!targetSlide) {
+      throw new SlideNotFoundException(this.id, slideId);
+    }
+
+    await targetSlide.update({
+      title: updatedTitle,
+      description: updatedDescription,
+      images: updatedImages,
+    });
   }
 
-  async validateCreator(userId: number) {
-    const creator = await this.creator;
-    creator.confirmUserId(userId);
-  }
-
-  async removeSlide({ userId, slideId }: { userId: number; slideId: number }) {
-    const creator = await this.creator;
-    creator.confirmUserId(userId);
-
+  async deleteSlide(slideId: number) {
     const slides = await this.slides;
     const filteredSlides = slides.filter((s) => s.id !== slideId);
     const sortedSlides = [...filteredSlides]
@@ -90,5 +88,26 @@ export class Project extends BaseTimeEntity {
         return s;
       });
     this.slides = Promise.resolve(sortedSlides);
+  }
+
+  async validateCreator(userId: number) {
+    const creator = await this.creator;
+    creator.confirmUserId(userId);
+  }
+
+  static async fromDto({
+    title,
+    description,
+    creator,
+  }: {
+    title: string;
+    description: string;
+    creator: User;
+  }) {
+    const project = new Project();
+    project.title = title;
+    project.description = description;
+    project.creator = Promise.resolve(creator);
+    return project;
   }
 }

@@ -27,4 +27,10 @@ export class User extends BaseTimeEntity {
       throw new CustomForbiddenError();
     }
   }
+
+  static of(id: number) {
+    const user = new User();
+    user.id = id;
+    return user;
+  }
 }

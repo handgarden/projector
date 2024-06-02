@@ -1,5 +1,5 @@
 import { ObjectType } from '@nestjs/graphql';
-import { Paginated } from '../../common/page/PaginatedResponse';
+import { Paginated } from '../../../../graphql/common/page/PaginatedResponse';
 import { ProjectResponse } from './Project.response';
 
 @ObjectType()

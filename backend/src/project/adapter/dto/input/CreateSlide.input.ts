@@ -1,6 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { SlideResponse } from '../response/Slide.response';
-import { DefaultValidationMessage } from '../../../common/message/validation/DefaultValidation.message';
+import { DefaultValidationMessage } from '../../../../common/message/validation/DefaultValidation.message';
 import {
   ArrayMaxSize,
   IsInt,
@@ -8,7 +8,8 @@ import {
   IsString,
   Length,
 } from 'class-validator';
-import { CreateSlideImageInput } from './CreateSlideImage.input';
+import { SlideImageInput } from './CreateSlideImage.input';
+import { CreateSlideDto } from '../../../application/dto/CreateSlide.dto';
 
 @InputType()
 export class CreateSlideInput implements Partial<SlideResponse> {
@@ -26,7 +27,17 @@ export class CreateSlideInput implements Partial<SlideResponse> {
   @IsNotEmpty({ message: DefaultValidationMessage.IS_NOT_EMPTY })
   description: string;
 
-  @Field(() => [CreateSlideImageInput], { nullable: 'items' })
+  @Field(() => [SlideImageInput], { nullable: 'items' })
   @ArrayMaxSize(5, { message: DefaultValidationMessage.ARRAY_MAX_SIZE })
-  images: CreateSlideImageInput[];
+  images: SlideImageInput[];
+
+  toDto(userId: number) {
+    const dto = new CreateSlideDto();
+    dto.creatorId = userId;
+    dto.projectId = this.projectId;
+    dto.title = this.title;
+    dto.description = this.description;
+    dto.images = this.images.map((image) => image.toDto());
+    return dto;
+  }
 }

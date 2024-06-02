@@ -17,10 +17,30 @@ export class SlideImage {
   @JoinColumn({ name: 'slide_id' })
   slide: Promise<Slide>;
 
-  @ManyToOne(() => UploadFile, { nullable: false, lazy: true })
+  @ManyToOne(() => UploadFile, {
+    nullable: false,
+    lazy: true,
+    cascade: ['remove'],
+  })
   @JoinColumn({ name: 'file_id' })
   file: Promise<UploadFile>;
 
   @Column({ name: 'image_seq', type: 'int', nullable: false })
   seq: number;
+
+  static create({
+    slide,
+    fileId,
+    seq,
+  }: {
+    slide: Slide;
+    fileId: string;
+    seq: number;
+  }) {
+    const slideImage = new SlideImage();
+    slideImage.slide = Promise.resolve(slide);
+    slideImage.fileId = fileId;
+    slideImage.seq = seq;
+    return slideImage;
+  }
 }
