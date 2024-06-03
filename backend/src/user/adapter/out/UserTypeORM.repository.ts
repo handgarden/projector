@@ -1,5 +1,5 @@
-import { DataSource, Repository } from 'typeorm';
-import { UserPersistencePort } from '../../application/out/UserPersistencePort';
+import { DataSource, In, Repository } from 'typeorm';
+import { UserPersistencePort } from '../../application/port/out/UserPersistencePort';
 import { User } from '../../../core/entity/domain/user/User.entity';
 import { Nil } from '../../../common/nil/Nil';
 
@@ -10,12 +10,20 @@ export class UserTypeORMRepository
   constructor(dataSource: DataSource) {
     super(User, dataSource.manager);
   }
-  async findById(id: number): Promise<Nil<User>> {
+  async findUserById(id: number): Promise<Nil<User>> {
     const findUser = await this.findOne({
       where: {
         id,
       },
     });
     return Nil.of(findUser);
+  }
+
+  findUsersByIds(ids: number[]): Promise<User[]> {
+    return this.find({
+      where: {
+        id: In(ids),
+      },
+    });
   }
 }

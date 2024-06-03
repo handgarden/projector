@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../core/entity/repository/User.repository';
-import { UserResponse } from './response/User.response';
+import { UserResponse } from '../../user/adapter/dto/response/User.response';
 
 @Injectable()
 export class UserGqlService {

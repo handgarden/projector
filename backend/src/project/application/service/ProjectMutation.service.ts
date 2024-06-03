@@ -3,7 +3,7 @@ import { CreateProjectDto } from '../dto/CreateProject.dto';
 import { ProjectDto } from '../dto/Project.dto';
 import { UpdateProjectDto } from '../dto/UpdateProject.dto';
 import { ProjectNotFoundException } from '../exception/ProjectNotFoundException';
-import { MutateProjectUseCase } from '../ports/in/MutateProjectUseCase';
+import { ProjectMutateUseCase } from '../ports/in/ProjectMutateUseCase';
 import { ProjectPersistencePort } from '../ports/out/ProjectPersistencePort';
 import { CreateSlideDto } from '../dto/CreateSlide.dto';
 import { SlideDto } from '../dto/Slide.dto';
@@ -13,7 +13,7 @@ import { DeleteSlideDto } from '../dto/DeleteSlide.dto';
 import { DeleteProjectDto } from '../dto/DeleteProject.dto';
 import { User } from '../../../core/entity/domain/user/User.entity';
 
-export class ProjectMutationService implements MutateProjectUseCase {
+export class ProjectMutationService implements ProjectMutateUseCase {
   constructor(
     private readonly projectPersistencePort: ProjectPersistencePort,
   ) {}

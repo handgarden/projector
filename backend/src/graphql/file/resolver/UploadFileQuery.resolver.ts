@@ -1,6 +1,6 @@
 import { Args, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
 import { UploadFileResponse } from '../response/UploadFile.response';
-import { UserResponse } from '../../user/response/User.response';
+import { UserResponse } from '../../../user/adapter/dto/response/User.response';
 import UploadFileGqlService from '../UploadFileGql.service';
 import { S3Service } from '../../../lib/s3/S3.service';
 import { UserLoader } from '../../user/loader/User.loader';

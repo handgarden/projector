@@ -6,13 +6,13 @@ import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { UpdateSlideInput } from '../dto/input/UpdateSlide.input';
 import { ParseIntPipe } from '@nestjs/common';
-import { MutateProjectUseCase } from '../../application/ports/in/MutateProjectUseCase';
+import { ProjectMutateUseCase } from '../../application/ports/in/ProjectMutateUseCase';
 import { DeleteSlideDto } from '../../application/dto/DeleteSlide.dto';
 
 @GqlAuth()
 @Resolver(() => SlideResponse)
 export class SlideMutationResolver {
-  constructor(private readonly mutateProjectUseCase: MutateProjectUseCase) {}
+  constructor(private readonly mutateProjectUseCase: ProjectMutateUseCase) {}
 
   @Mutation(() => SlideResponse)
   async createSlide(

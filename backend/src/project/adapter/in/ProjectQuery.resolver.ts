@@ -1,9 +1,8 @@
 import { Args, ID, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
-import { UserResponse } from '../../../graphql/user/response/User.response';
+import { UserResponse } from '../../../user/adapter/dto/response/User.response';
 import { SlideResponse } from '../dto/response/Slide.response';
 import { ProjectResponse } from '../dto/response/Project.response';
 import { ProjectLoader } from '../../../graphql/project/loader/Project.loader';
-import { ProjectQueryService } from '../../application/service/ProjectQuery.service';
 import { ParseIntPipe } from '@nestjs/common';
 import { S3Service } from '../../../lib/s3/S3.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
@@ -13,11 +12,15 @@ import { PaginatedProjectResponse } from '../dto/response/PaginatedProject.respo
 import { PaginationInput } from '../../../graphql/common/page/PaginationInput';
 import { UserLoader } from '../../../graphql/user/loader/User.loader';
 import { SlideLoader } from '../../../graphql/project/loader/Slide.loader';
+import { ProjectQueryUseCase } from '../../application/ports/in/ProjectQueryUseCase';
+import { UserBatchQueryUseCase } from '../../../user/application/port/in/UserBatchQueryUseCase';
+import { CreatorNotFoundException } from '../../application/exception/CreatorNotFoundException';
 
 @Resolver(() => ProjectResponse)
 export class ProjectQueryResolver {
   constructor(
-    private readonly projectService: ProjectQueryService,
+    private readonly queryProjectUseCase: ProjectQueryUseCase,
+    private readonly userBatchUseCase: UserBatchQueryUseCase,
     private readonly projectLoader: ProjectLoader,
     private readonly s3Service: S3Service,
     private readonly userLoader: UserLoader,
@@ -25,34 +28,39 @@ export class ProjectQueryResolver {
   ) {}
 
   @Query(() => ProjectResponse)
-  project(
+  async project(
     @Args('id', { type: () => ID }, ParseIntPipe) id: number,
   ): Promise<ProjectResponse> {
-    return this.projectService.getProject(id);
+    const project = await this.queryProjectUseCase.getProject(id);
+    return ProjectResponse.fromDto(project);
   }
 
   @GqlAuth()
   @Query(() => PaginatedProjectResponse)
-  async projectsPageable(
+  async projects(
     @GqlUser() user: TokenUser,
     @Args('pageable', { nullable: true })
     pageable: PaginationInput,
   ): Promise<PaginatedProjectResponse> {
-    const { items, total } = await this.projectService.getUserProjects(
+    const { items, total } = await this.queryProjectUseCase.getUserProjects(
       user.id,
       pageable,
     );
 
     const response = new PaginatedProjectResponse();
-    response.items = items;
+    response.items = items.map(ProjectResponse.fromDto);
     response.total = total;
     response.hasNext = !!items.length;
     return response;
   }
 
   @ResolveField(() => UserResponse)
-  creator(@Root() project: ProjectResponse): Promise<UserResponse> {
-    return this.userLoader.loadCreatorsByProjectIds.load(project.id);
+  async creator(@Root() project: ProjectResponse): Promise<UserResponse> {
+    const nilDto = await this.userBatchUseCase.loadUserById(project.creatorId);
+    if (nilDto.isNil()) {
+      throw new CreatorNotFoundException(project.creatorId);
+    }
+    return UserResponse.fromDto(nilDto.unwrap());
   }
 
   @ResolveField(() => [SlideResponse], { nullable: 'items' })

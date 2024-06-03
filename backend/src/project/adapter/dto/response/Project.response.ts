@@ -14,6 +14,8 @@ export class ProjectResponse extends BaseTimeResponse {
   @Field(() => String)
   description: string;
 
+  creatorId: number;
+
   static fromDto(project: ProjectDto): ProjectResponse {
     const model = new ProjectResponse();
     model.id = project.id.toString();
@@ -21,6 +23,7 @@ export class ProjectResponse extends BaseTimeResponse {
     model.description = project.description;
     model.createdAt = project.createdAt;
     model.updatedAt = project.updatedAt;
+    model.creatorId = project.creatorId;
     return model;
   }
 }

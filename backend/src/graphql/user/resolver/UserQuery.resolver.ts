@@ -1,5 +1,5 @@
 import { Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
-import { UserResponse } from '../response/User.response';
+import { UserResponse } from '../../../user/adapter/dto/response/User.response';
 import { UserGqlService } from '../UserGql.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';

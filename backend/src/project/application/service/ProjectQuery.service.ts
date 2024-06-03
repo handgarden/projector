@@ -3,10 +3,10 @@ import { Pageable } from '../../../common/page/Pageable';
 import { PaginatedType } from '../../../common/page/Paginated';
 import { ProjectPersistencePort } from '../ports/out/ProjectPersistencePort';
 import { ProjectDto } from '../dto/Project.dto';
-import { QueryProjectUseCase } from '../ports/in/QueryProjectUseCase';
+import { ProjectQueryUseCase } from '../ports/in/ProjectQueryUseCase';
 
 @Injectable()
-export class ProjectQueryService implements QueryProjectUseCase {
+export class ProjectQueryService implements ProjectQueryUseCase {
   constructor(
     private readonly projectPersistencePort: ProjectPersistencePort,
   ) {}

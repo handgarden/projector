@@ -7,7 +7,7 @@ import { SlideDto } from '../../dto/Slide.dto';
 import { UpdateProjectDto } from '../../dto/UpdateProject.dto';
 import { UpdateSlideDto } from '../../dto/UpdateSlide.dto';
 
-export interface MutateProjectUseCase {
+export interface ProjectMutateUseCase {
   createProject(createDto: CreateProjectDto): Promise<ProjectDto>;
   updateProject(updateDto: UpdateProjectDto): Promise<ProjectDto>;
   deleteProject(deleteDto: DeleteProjectDto): Promise<void>;
@@ -16,4 +16,4 @@ export interface MutateProjectUseCase {
   deleteSlide(dto: DeleteSlideDto): Promise<void>;
 }
 
-export const MutateProjectUseCase = Symbol('MutateProjectUseCase');
+export const ProjectMutateUseCase = Symbol('ProjectMutateUseCase');

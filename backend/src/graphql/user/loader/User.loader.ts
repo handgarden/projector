@@ -1,7 +1,7 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { ProjectRepository } from '../../../core/entity/repository/Project.repository';
 import * as DataLoader from 'dataloader';
-import { UserResponse } from '../response/User.response';
+import { UserResponse } from '../../../user/adapter/dto/response/User.response';
 import { UploadFileRepository } from '../../../core/entity/repository/UploadFile.repository';
 
 @Injectable({ scope: Scope.REQUEST })
@@ -11,8 +11,8 @@ export class UserLoader {
     private readonly uploadFileRepository: UploadFileRepository,
   ) {}
 
-  loadCreatorsByProjectIds = new DataLoader<string, UserResponse>(
-    async (ids: string[]) => {
+  loadUsersById = new DataLoader<number, UserResponse>(
+    async (ids: number[]) => {
       const entires = await this.projectRepository.findCreatorByIds(
         ids.map((i) => parseInt(i)),
       );

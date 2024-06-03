@@ -5,14 +5,14 @@ import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { ParseIntPipe } from '@nestjs/common';
-import { MutateProjectUseCase } from '../../application/ports/in/MutateProjectUseCase';
+import { ProjectMutateUseCase } from '../../application/ports/in/ProjectMutateUseCase';
 import { UpdateProjectInput } from '../dto/input/UpdateProject.input';
 import { DeleteProjectDto } from '../../application/dto/DeleteProject.dto';
 
 @GqlAuth()
 @Resolver(() => ProjectResponse)
 export class ProjectMutationResolver {
-  constructor(private readonly mutateProjectUseCase: MutateProjectUseCase) {}
+  constructor(private readonly mutateProjectUseCase: ProjectMutateUseCase) {}
 
   @Mutation(() => ProjectResponse)
   async createProject(
