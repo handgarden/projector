@@ -15,7 +15,7 @@ export class SlideMutationResolver {
   constructor(private readonly mutateProjectUseCase: ProjectMutateUseCase) {}
 
   @Mutation(() => SlideResponse)
-  async createSlide(
+  async addSlide(
     @GqlUser() user: TokenUser,
     @Args('slide', { type: () => CreateSlideInput }) slide: CreateSlideInput,
   ): Promise<SlideResponse> {

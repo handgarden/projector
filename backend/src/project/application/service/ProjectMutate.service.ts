@@ -13,7 +13,7 @@ import { DeleteSlideDto } from '../dto/DeleteSlide.dto';
 import { DeleteProjectDto } from '../dto/DeleteProject.dto';
 import { User } from '../../../user/domain/User.entity';
 
-export class ProjectMutationService implements ProjectMutateUseCase {
+export class ProjectMutateService implements ProjectMutateUseCase {
   constructor(
     private readonly projectPersistencePort: ProjectPersistencePort,
   ) {}

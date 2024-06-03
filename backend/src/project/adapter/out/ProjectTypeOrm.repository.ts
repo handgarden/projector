@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { Project } from '../../domain/Project.entity';
 import { Injectable } from '@nestjs/common';
 import { ProjectPersistencePort } from '../../application/ports/out/ProjectPersistencePort';
@@ -13,6 +13,7 @@ export class ProjectTypeORMRepository
   constructor(dataSource: DataSource) {
     super(Project, dataSource.manager);
   }
+
   async findProjectById(id: number): Promise<Nil<Project>> {
     const findProject = await this.findOne({
       where: {
@@ -21,12 +22,14 @@ export class ProjectTypeORMRepository
     });
     return Nil.of(findProject);
   }
+
   findProjects(pageable: Pageable): Promise<[Project[], number]> {
     return this.findAndCount({
       take: pageable.size,
       skip: pageable.skip,
     });
   }
+
   findProjectsByUserId(
     userId: number,
     pageable: Pageable,
@@ -41,6 +44,15 @@ export class ProjectTypeORMRepository
       skip: pageable.skip,
     });
   }
+
+  findProjectsByIds(ids: number[]): Promise<Project[]> {
+    return this.find({
+      where: {
+        id: In(ids),
+      },
+    });
+  }
+
   async findAggregatedProjectById(id: number): Promise<Nil<Project>> {
     const findProject = await this.findOne({
       where: {

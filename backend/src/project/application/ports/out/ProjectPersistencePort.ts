@@ -9,6 +9,7 @@ export interface ProjectPersistencePort {
     userId: number,
     pageable: Pageable,
   ): Promise<[Project[], number]>;
+  findProjectsByIds(ids: number[]): Promise<Project[]>;
   findAggregatedProjectById(id: number): Promise<Nil<Project>>;
   saveAggregateProject(project: Project): Promise<Project>;
   removeAggregateProject(project: Project): Promise<boolean>;

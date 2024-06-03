@@ -1,11 +1,11 @@
 import { Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
-import { UserResponse } from '../../../user/adapter/dto/response/User.response';
-import { UserGqlService } from '../UserGql.service';
+import { UserResponse } from '../dto/response/User.response';
+import { UserGqlService } from '../../../graphql/user/UserGql.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
-import { OAuthProfileResponse } from '../response/OAuthProfile.response';
-import { OAuthProfileLoader } from '../loader/OAuthProfile.loader';
+import { OAuthProfileResponse } from '../../../graphql/user/response/OAuthProfile.response';
+import { OAuthProfileLoader } from '../../../graphql/user/loader/OAuthProfile.loader';
 
 @Resolver(() => UserResponse)
 @GqlAuth()

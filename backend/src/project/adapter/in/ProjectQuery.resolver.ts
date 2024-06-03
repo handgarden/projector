@@ -2,29 +2,25 @@ import { Args, ID, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
 import { UserResponse } from '../../../user/adapter/dto/response/User.response';
 import { SlideResponse } from '../dto/response/Slide.response';
 import { ProjectResponse } from '../dto/response/Project.response';
-import { ProjectLoader } from '../../../graphql/project/loader/Project.loader';
 import { ParseIntPipe } from '@nestjs/common';
-import { S3Service } from '../../../lib/s3/S3.service';
+// import { S3Service } from '../../../lib/s3/S3.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { PaginatedProjectResponse } from '../dto/response/PaginatedProject.response';
 import { PaginationInput } from '../../../graphql/common/page/PaginationInput';
-import { UserLoader } from '../../../graphql/user/loader/User.loader';
-import { SlideLoader } from '../../../graphql/project/loader/Slide.loader';
 import { ProjectQueryUseCase } from '../../application/ports/in/ProjectQueryUseCase';
 import { UserBatchQueryUseCase } from '../../../user/application/port/in/UserBatchQueryUseCase';
 import { CreatorNotFoundException } from '../../application/exception/CreatorNotFoundException';
+import { SlideBatchQueryUseCase } from '../../application/ports/in/SlideBatchQueryUseCase';
 
 @Resolver(() => ProjectResponse)
 export class ProjectQueryResolver {
   constructor(
     private readonly queryProjectUseCase: ProjectQueryUseCase,
     private readonly userBatchUseCase: UserBatchQueryUseCase,
-    private readonly projectLoader: ProjectLoader,
-    private readonly s3Service: S3Service,
-    private readonly userLoader: UserLoader,
-    private readonly slideLoader: SlideLoader,
+    private readonly slideBatchUseCase: SlideBatchQueryUseCase,
+    // private readonly s3Service: S3Service,
   ) {}
 
   @Query(() => ProjectResponse)
@@ -64,19 +60,22 @@ export class ProjectQueryResolver {
   }
 
   @ResolveField(() => [SlideResponse], { nullable: 'items' })
-  slides(@Root() project: ProjectResponse): Promise<SlideResponse[]> {
-    return this.slideLoader.loadSlidesById.load(project.id);
+  async slides(@Root() project: ProjectResponse): Promise<SlideResponse[]> {
+    const slides = await this.slideBatchUseCase.loadSlidesByProjectId(
+      parseInt(project.id, 10),
+    );
+    return slides.map(SlideResponse.fromDto);
   }
 
-  @ResolveField(() => String, { nullable: true })
-  async thumbnail(@Root() project: ProjectResponse): Promise<string | null> {
-    const thumbnailKey = await this.projectLoader.loadThumbnailKeysById.load(
-      project.id,
-    );
-    if (thumbnailKey.isNil()) {
-      return null;
-    }
-    const url = this.s3Service.getPresignedUrl(thumbnailKey.unwrap());
-    return url;
-  }
+  // @ResolveField(() => String, { nullable: true })
+  // async thumbnail(@Root() project: ProjectResponse): Promise<string | null> {
+  //   const thumbnailKey = await this.projectLoader.loadThumbnailKeysById.load(
+  //     project.id,
+  //   );
+  //   if (thumbnailKey.isNil()) {
+  //     return null;
+  //   }
+  //   const url = this.s3Service.getPresignedUrl(thumbnailKey.unwrap());
+  //   return url;
+  // }
 }
