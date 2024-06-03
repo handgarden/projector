@@ -1,5 +1,5 @@
 import { LocalDateTime } from '@js-joda/core';
-import { User } from '../../../core/entity/domain/user/User.entity';
+import { User } from '../../domain/User.entity';
 import { DateTimeUtils } from '../../../util/DateTImeUtils';
 
 export class UserDto {

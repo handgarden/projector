@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../../core/entity/domain/user/User.entity';
+import { User } from '../../user/domain/User.entity';
 import { Slide } from './Slide.entity';
 import { BaseTimeEntity } from '../../core/entity/BaseTimeEntity';
 import { SlideNotFoundException } from '../application/exception/SlideNotFoundException';

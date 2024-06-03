@@ -1,5 +1,5 @@
 import { Nil } from '../../../../common/nil/Nil';
-import { User } from '../../../../core/entity/domain/user/User.entity';
+import { User } from '../../../domain/User.entity';
 
 export interface UserPersistencePort {
   findUserById(id: number): Promise<Nil<User>>;

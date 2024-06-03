@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, In, Repository } from 'typeorm';
 import { UploadFile } from '../domain/UploadFile.entity';
 import { Nil } from '../../../common/nil/Nil';
-import { User } from '../domain/user/User.entity';
+import { User } from '../../../user/domain/User.entity';
 
 @Injectable()
 export class UploadFileRepository extends Repository<UploadFile> {

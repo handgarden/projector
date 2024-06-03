@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UploadFile } from 'src/core/entity/domain/UploadFile.entity';
-import { User } from 'src/core/entity/domain/user/User.entity';
+import { User } from 'src/user/domain/User.entity';
 import { UploadFileRepository } from 'src/core/entity/repository/UploadFile.repository';
 import { TokenUser } from 'src/lib/auth/types/TokenUser';
 import { S3Service } from 'src/lib/s3/S3.service';

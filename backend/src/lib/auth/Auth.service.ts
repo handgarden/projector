@@ -5,7 +5,7 @@ import { RegisterRequestDto } from 'src/api/auth/dto/RegisterRequest.dto';
 import { DuplicateAccountError } from './error/AccountDuplicateError';
 import { LoginResponseDto } from 'src/api/auth/dto/LoginResponse.dto';
 import { UserRepository } from 'src/core/entity/repository/User.repository';
-import { User } from 'src/core/entity/domain/user/User.entity';
+import { User } from 'src/user/domain/User.entity';
 import { PasswordEncoder } from 'src/common/password/PasswordEncoder';
 import { OAuthProfileDto } from './oauth/dto/OAuthProfile';
 import { OAuthProfile } from '../../core/entity/domain/user/OAuthProfile.entity';

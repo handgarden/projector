@@ -1,6 +1,6 @@
 import { DataSource, In, Repository } from 'typeorm';
 import { UserPersistencePort } from '../../application/port/out/UserPersistencePort';
-import { User } from '../../../core/entity/domain/user/User.entity';
+import { User } from '../../domain/User.entity';
 import { Nil } from '../../../common/nil/Nil';
 
 export class UserTypeORMRepository

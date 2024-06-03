@@ -11,7 +11,7 @@ import { Slide } from '../../domain/Slide.entity';
 import { UpdateSlideDto } from '../dto/UpdateSlide.dto';
 import { DeleteSlideDto } from '../dto/DeleteSlide.dto';
 import { DeleteProjectDto } from '../dto/DeleteProject.dto';
-import { User } from '../../../core/entity/domain/user/User.entity';
+import { User } from '../../../user/domain/User.entity';
 
 export class ProjectMutationService implements ProjectMutateUseCase {
   constructor(

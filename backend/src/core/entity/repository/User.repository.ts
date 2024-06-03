@@ -1,5 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
-import { User } from '../domain/user/User.entity';
+import { User } from '../../../user/domain/User.entity';
 import { Injectable } from '@nestjs/common';
 import { Nil } from 'src/common/nil/Nil';
 import { OAuthProfileDto } from '../../../lib/auth/oauth/dto/OAuthProfile';
