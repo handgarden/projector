@@ -1,6 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { SlideBatchLoadPort } from '../../application/ports/out/SlideBatchLoadPort';
-import { SlidePersistencePort } from '../../application/ports/out/SlidePersistencePort';
+import { SlideBatchLoadPort } from '../../application/port/out/SlideBatchLoadPort';
+import { SlidePersistencePort } from '../../application/port/out/SlidePersistencePort';
 import * as DataLoader from 'dataloader';
 
 @Injectable({

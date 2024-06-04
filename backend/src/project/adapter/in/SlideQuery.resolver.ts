@@ -5,7 +5,7 @@ import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 // import { SlideImageResponse } from '../dto/response/SlideImage.response';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
-import { SlideQueryUseCase } from '../../application/ports/in/SlideQueryUseCase';
+import { SlideQueryUseCase } from '../../application/port/in/SlideQueryUseCase';
 
 @GqlAuth()
 @Resolver(() => SlideResponse)

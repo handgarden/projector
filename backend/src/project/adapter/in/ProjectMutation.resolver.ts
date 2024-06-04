@@ -5,7 +5,7 @@ import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { ParseIntPipe } from '@nestjs/common';
-import { ProjectMutateUseCase } from '../../application/ports/in/ProjectMutateUseCase';
+import { ProjectMutateUseCase } from '../../application/port/in/ProjectMutateUseCase';
 import { UpdateProjectInput } from '../dto/input/UpdateProject.input';
 import { DeleteProjectDto } from '../../application/dto/DeleteProject.dto';
 

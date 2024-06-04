@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SlideDto } from '../dto/Slide.dto';
-import { SlideQueryUseCase } from '../ports/in/SlideQueryUseCase';
-import { SlidePersistencePort } from '../ports/out/SlidePersistencePort';
+import { SlideQueryUseCase } from '../port/in/SlideQueryUseCase';
+import { SlidePersistencePort } from '../port/out/SlidePersistencePort';
 import { SlideNotFoundException } from '../exception/SlideNotFoundException';
 
 @Injectable()

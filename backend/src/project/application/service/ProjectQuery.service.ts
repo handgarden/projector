@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Pageable } from '../../../common/page/Pageable';
 import { PaginatedType } from '../../../common/page/Paginated';
-import { ProjectPersistencePort } from '../ports/out/ProjectPersistencePort';
+import { ProjectPersistencePort } from '../port/out/ProjectPersistencePort';
 import { ProjectDto } from '../dto/Project.dto';
-import { ProjectQueryUseCase } from '../ports/in/ProjectQueryUseCase';
+import { ProjectQueryUseCase } from '../port/in/ProjectQueryUseCase';
 
 @Injectable()
 export class ProjectQueryService implements ProjectQueryUseCase {

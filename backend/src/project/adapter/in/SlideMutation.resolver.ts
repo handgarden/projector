@@ -6,7 +6,7 @@ import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { UpdateSlideInput } from '../dto/input/UpdateSlide.input';
 import { ParseIntPipe } from '@nestjs/common';
-import { ProjectMutateUseCase } from '../../application/ports/in/ProjectMutateUseCase';
+import { ProjectMutateUseCase } from '../../application/port/in/ProjectMutateUseCase';
 import { DeleteSlideDto } from '../../application/dto/DeleteSlide.dto';
 
 @GqlAuth()

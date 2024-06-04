@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { SlideBatchQueryUseCase } from '../ports/in/SlideBatchQueryUseCase';
+import { SlideBatchQueryUseCase } from '../port/in/SlideBatchQueryUseCase';
 import { SlideDto } from '../dto/Slide.dto';
-import { SlideBatchLoadPort } from '../ports/out/SlideBatchLoadPort';
+import { SlideBatchLoadPort } from '../port/out/SlideBatchLoadPort';
 
 @Injectable()
 export class SlideBatchQueryService implements SlideBatchQueryUseCase {

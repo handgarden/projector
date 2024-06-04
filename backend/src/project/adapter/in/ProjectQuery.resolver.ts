@@ -9,10 +9,10 @@ import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { PaginatedProjectResponse } from '../dto/response/PaginatedProject.response';
 import { PaginationInput } from '../../../graphql/common/page/PaginationInput';
-import { ProjectQueryUseCase } from '../../application/ports/in/ProjectQueryUseCase';
+import { ProjectQueryUseCase } from '../../application/port/in/ProjectQueryUseCase';
 import { UserBatchQueryUseCase } from '../../../user/application/port/in/UserBatchQueryUseCase';
 import { CreatorNotFoundException } from '../../application/exception/CreatorNotFoundException';
-import { SlideBatchQueryUseCase } from '../../application/ports/in/SlideBatchQueryUseCase';
+import { SlideBatchQueryUseCase } from '../../application/port/in/SlideBatchQueryUseCase';
 
 @Resolver(() => ProjectResponse)
 export class ProjectQueryResolver {

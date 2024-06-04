@@ -1,7 +1,7 @@
 import { DataSource, In, Repository } from 'typeorm';
 import { Project } from '../../domain/Project.entity';
 import { Injectable } from '@nestjs/common';
-import { ProjectPersistencePort } from '../../application/ports/out/ProjectPersistencePort';
+import { ProjectPersistencePort } from '../../application/port/out/ProjectPersistencePort';
 import { Nil } from '../../../common/nil/Nil';
 import { Pageable } from '../../../common/page/Pageable';
 
