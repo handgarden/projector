@@ -8,44 +8,48 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from 'src/lib/auth/Auth.service';
 import { LocalAuthGuard } from 'src/lib/auth/decorator/LocalAuth.guard';
 import { ApiController } from 'src/common/decorator/ApiController';
-import { RegisterRequestDto } from './dto/RegisterRequest.dto';
+import { RegisterRequestDto } from '../dto/RegisterRequest.dto';
 import { RestTemplate } from 'src/common/response/RestTemplate';
 import { Authorized } from 'src/lib/auth/decorator/Authorized.decorator';
-import { CurrentUser } from '../../lib/auth/decorator/CurrentUser.decorator';
-import { TokenUser } from '../../lib/auth/types/TokenUser';
-import { CustomError } from '../../common/filter/error/CustomError';
-import { OAuthFacadeService } from '../../lib/auth/oauth/OAuthFacade.service';
-import { OAuthProvider } from '../../core/entity/enum/OAuthProvider';
-import { CustomEnumPipe } from '../../common/pipe/CustomEnum.pipe';
+import { CurrentUser } from '../../../lib/auth/decorator/CurrentUser.decorator';
+import { TokenUser } from '../../../lib/auth/types/TokenUser';
+import { CustomError } from '../../../common/filter/error/CustomError';
+import { OAuthFacadeService } from '../../../lib/auth/oauth/OAuthFacade.service';
+import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
+import { CustomEnumPipe } from '../../../common/pipe/CustomEnum.pipe';
+import { AuthMutateUseCase } from '../../application/port/in/AuthMutateUseCase';
+import { LoginResponseDto } from '../dto/LoginResponse.dto';
 
 @ApiController('auth')
-export class AuthApiController {
+export class AuthController {
   constructor(
-    private readonly authService: AuthService,
+    private readonly authMutateUseCase: AuthMutateUseCase,
     private readonly oauthService: OAuthFacadeService,
   ) {}
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() registerDto: RegisterRequestDto) {
-    await this.authService.register(registerDto);
+  async register(
+    @Body() registerDto: RegisterRequestDto,
+  ): Promise<RestTemplate<null>> {
+    await this.authMutateUseCase.register(registerDto);
     return RestTemplate.OK();
   }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
+  async login(@Request() req): Promise<RestTemplate<LoginResponseDto>> {
     const user = req.user;
-    const loginResponse = await this.authService.login(user);
-    return RestTemplate.OK_WITH_DATA(loginResponse);
+    const token = await this.authMutateUseCase.login(user);
+    const response = new LoginResponseDto(token);
+    return RestTemplate.OK_WITH_DATA(response);
   }
 
   @Authorized()
   @Post('access')
-  async tokenLogin() {
+  async tokenLogin(): Promise<RestTemplate<null>> {
     return RestTemplate.OK();
   }
 

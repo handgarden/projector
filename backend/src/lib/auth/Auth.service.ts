@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { TokenPayload } from './types/TokenPayload';
 import { JwtService } from '@nestjs/jwt';
-import { RegisterRequestDto } from 'src/api/auth/dto/RegisterRequest.dto';
+import { RegisterRequestDto } from 'src/auth/adapter/dto/RegisterRequest.dto';
 import { DuplicateAccountError } from './error/AccountDuplicateError';
-import { LoginResponseDto } from 'src/api/auth/dto/LoginResponse.dto';
+import { LoginResponseDto } from 'src/auth/adapter/dto/LoginResponse.dto';
 import { UserRepository } from 'src/core/entity/repository/User.repository';
 import { User } from 'src/user/domain/User.entity';
 import { PasswordEncoder } from 'src/common/password/PasswordEncoder';
 import { OAuthProfileDto } from './oauth/dto/OAuthProfile';
-import { OAuthProfile } from '../../core/entity/domain/user/OAuthProfile.entity';
+import { OAuthProfile } from '../../auth/domain/OAuthProfile.entity';
 import { OAuthProfileRepository } from '../../core/entity/repository/OAuthProfile.repository';
 import { OAuthProvider } from '../../core/entity/enum/OAuthProvider';
 import { DuplicateOAuthProfileError } from './error/DuplicateOAuthProfileError';

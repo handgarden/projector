@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { OAuthProfile } from '../../../core/entity/domain/user/OAuthProfile.entity';
+import { OAuthProfile } from '../../../auth/domain/OAuthProfile.entity';
 import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
 
 registerEnumType(OAuthProvider, {

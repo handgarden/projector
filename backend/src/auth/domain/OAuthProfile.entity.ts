@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { OAuthProvider } from '../../enum/OAuthProvider';
-import { User } from '../../../../user/domain/User.entity';
-import { OAuthProfileDto } from '../../../../lib/auth/oauth/dto/OAuthProfile';
+import { OAuthProvider } from '../../core/entity/enum/OAuthProvider';
+import { User } from '../../user/domain/User.entity';
+import { OAuthProfileDto } from '../../lib/auth/oauth/dto/OAuthProfile';
 
 @Entity({
   name: 'oauth_profile',

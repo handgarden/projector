@@ -1,5 +1,5 @@
 import { ValidationError } from 'class-validator';
-import { RegisterRequestDto } from 'src/api/auth/dto/RegisterRequest.dto';
+import { RegisterRequestDto } from 'src/auth/adapter/dto/RegisterRequest.dto';
 import { BadParameterError } from 'src/common/filter/validation/BadParameterError';
 
 export class DuplicateAccountError extends BadParameterError {
