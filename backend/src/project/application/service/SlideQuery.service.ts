@@ -5,7 +5,7 @@ import { SlidePersistencePort } from '../port/out/SlidePersistencePort';
 import { SlideNotFoundException } from '../exception/SlideNotFoundException';
 
 @Injectable()
-export class SlideQueryService implements SlideQueryUseCase {
+export class SlideService implements SlideQueryUseCase {
   constructor(private readonly slidePersistencePort: SlidePersistencePort) {}
 
   async getSlide(id: number): Promise<SlideDto> {

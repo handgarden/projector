@@ -4,9 +4,8 @@ import { ProjectQueryResolver } from './adapter/in/ProjectQuery.resolver';
 import { SlideMutationResolver } from './adapter/in/SlideMutation.resolver';
 import { SlideQueryResolver } from './adapter/in/SlideQuery.resolver';
 import { ProjectMutateUseCase } from './application/port/in/ProjectMutateUseCase';
-import { ProjectMutateService } from './application/service/ProjectMutate.service';
 import { ProjectQueryUseCase } from './application/port/in/ProjectQueryUseCase';
-import { ProjectQueryService } from './application/service/ProjectQuery.service';
+import { ProjectService } from './application/service/ProjectQuery.service';
 import { SlideBatchQueryUseCase } from './application/port/in/SlideBatchQueryUseCase';
 import { SlideBatchQueryService } from './application/service/SlideBatchQuery.service';
 import { SlideBatchDataLoader } from './adapter/out/SlideBatchDataLoader';
@@ -14,7 +13,7 @@ import { SlideBatchLoadPort } from './application/port/out/SlideBatchLoadPort';
 import { ProjectPersistencePort } from './application/port/out/ProjectPersistencePort';
 import { ProjectTypeORMRepository } from './adapter/out/ProjectTypeOrm.repository';
 import { SlideQueryUseCase } from './application/port/in/SlideQueryUseCase';
-import { SlideQueryService } from './application/service/SlideQuery.service';
+import { SlideService } from './application/service/SlideQuery.service';
 import { UserModule } from '../user/User.module';
 
 @Module({
@@ -34,11 +33,11 @@ import { UserModule } from '../user/User.module';
     },
     {
       provide: ProjectMutateUseCase,
-      useClass: ProjectMutateService,
+      useClass: ProjectService,
     },
     {
       provide: ProjectQueryUseCase,
-      useClass: ProjectQueryService,
+      useClass: ProjectService,
     },
     {
       provide: SlideBatchQueryUseCase,
@@ -46,7 +45,7 @@ import { UserModule } from '../user/User.module';
     },
     {
       provide: SlideQueryUseCase,
-      useClass: SlideQueryService,
+      useClass: SlideService,
     },
   ],
   exports: [],
