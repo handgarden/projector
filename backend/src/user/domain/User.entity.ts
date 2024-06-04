@@ -28,6 +28,19 @@ export class User extends BaseTimeEntity {
     }
   }
 
+  static register({
+    account,
+    password,
+  }: {
+    account: string;
+    password: string;
+  }) {
+    const user = new User();
+    user.account = account;
+    user.password = password;
+    return user;
+  }
+
   static of(id: number) {
     const user = new User();
     user.id = id;
