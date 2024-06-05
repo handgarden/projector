@@ -5,5 +5,7 @@ import { RegisterDto } from '../../dto/Register.dto';
 export interface AuthMutateUseCase {
   register(registerDto: RegisterDto): Promise<AuthUserDto>;
   validateUser(account: string, password: string): Promise<Nil<AuthUserDto>>;
-  login(user: AuthUserDto): Promise<string>;
+  login(user: AuthUserDto): Promise<AuthUserDto>;
 }
+
+export const AuthMutateUseCase = Symbol('AuthMutateUseCase');

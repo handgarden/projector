@@ -1,19 +1,19 @@
-import { JwtService } from '@nestjs/jwt';
 import { Nil } from '../../../common/nil/Nil';
 import { PasswordEncoder } from '../../../common/password/PasswordEncoder';
-import { TokenPayload } from '../../../lib/auth/types/TokenPayload';
 import { User } from '../../../user/domain/User.entity';
 import { AuthUserDto } from '../dto/AuthUser.dto';
 import { RegisterDto } from '../dto/Register.dto';
 import { AuthMutateUseCase } from '../port/in/AuthMutateUseCase';
 import { AuthUserPersistencePort } from '../port/out/AuthUserPersistencePort';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class AuthService implements AuthMutateUseCase {
   constructor(
-    private readonly authUserPersistencePort: AuthUserPersistencePort,
     private readonly passwordEncoder: PasswordEncoder,
-    private readonly jwtService: JwtService,
+    private readonly authUserPersistencePort: AuthUserPersistencePort,
   ) {}
+
   async register(registerDto: RegisterDto): Promise<AuthUserDto> {
     const hashedPassword = await this.passwordEncoder.encode(
       registerDto.password,
@@ -28,12 +28,7 @@ export class AuthService implements AuthMutateUseCase {
   }
 
   async login(user: User) {
-    const payload: TokenPayload = {
-      account: user.account,
-      sub: user.id.toString(),
-    };
-
-    return this.jwtService.sign(payload);
+    return AuthUserDto.fromEntity(user);
   }
 
   async validateUser(

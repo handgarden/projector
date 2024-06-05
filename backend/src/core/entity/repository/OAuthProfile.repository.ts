@@ -1,13 +1,13 @@
 import { DataSource, In, Repository } from 'typeorm';
-import { OAuthProfile } from '../../../auth/domain/OAuthProfile.entity';
+import { OAuthUserProfile } from '../../../auth/domain/OAuthProfile.entity';
 import { Injectable } from '@nestjs/common';
 import { OAuthProvider } from '../enum/OAuthProvider';
 import { Nil } from '../../../common/nil/Nil';
 
 @Injectable()
-export class OAuthProfileRepository extends Repository<OAuthProfile> {
+export class OAuthProfileRepository extends Repository<OAuthUserProfile> {
   constructor(dataSource: DataSource) {
-    super(OAuthProfile, dataSource.manager);
+    super(OAuthUserProfile, dataSource.manager);
   }
 
   async findOneByProviderAndUserId(provider: OAuthProvider, userId: number) {

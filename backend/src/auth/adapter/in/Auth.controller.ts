@@ -16,17 +16,22 @@ import { Authorized } from 'src/lib/auth/decorator/Authorized.decorator';
 import { CurrentUser } from '../../../lib/auth/decorator/CurrentUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { CustomError } from '../../../common/filter/error/CustomError';
-import { OAuthFacadeService } from '../../../lib/auth/oauth/OAuthFacade.service';
 import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
 import { CustomEnumPipe } from '../../../common/pipe/CustomEnum.pipe';
 import { AuthMutateUseCase } from '../../application/port/in/AuthMutateUseCase';
 import { LoginResponseDto } from '../dto/LoginResponse.dto';
+import { AuthUserDto } from '../../application/dto/AuthUser.dto';
+import { JwtService } from '@nestjs/jwt';
+import { TokenPayload } from '../../../lib/auth/types/TokenPayload';
+import { OAuthUserProfileMutateUseCase } from '../../application/port/in/OAuthUserProfileMutateUseCase';
+import { OAuthRequestDto } from '../../application/dto/OAuthRequest.dto';
 
 @ApiController('auth')
 export class AuthController {
   constructor(
     private readonly authMutateUseCase: AuthMutateUseCase,
-    private readonly oauthService: OAuthFacadeService,
+    private readonly oauthUserProfileMutateUseCase: OAuthUserProfileMutateUseCase,
+    private readonly jwtService: JwtService,
   ) {}
 
   @Post('register')
@@ -41,8 +46,12 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req): Promise<RestTemplate<LoginResponseDto>> {
-    const user = req.user;
-    const token = await this.authMutateUseCase.login(user);
+    const user = req.user as AuthUserDto;
+    const tokenPayload: TokenPayload = {
+      sub: user.id.toString(),
+      account: user.account,
+    };
+    const token = this.jwtService.sign(tokenPayload);
     const response = new LoginResponseDto(token);
     return RestTemplate.OK_WITH_DATA(response);
   }
@@ -59,9 +68,12 @@ export class AuthController {
     provider: OAuthProvider,
     @Query('code') code: string,
   ) {
-    const githubProfile = await this.getOAuthProfile(provider, code);
     try {
-      const loginResponse = await this.authService.OAuthLogin(githubProfile);
+      const oauthDto = new OAuthRequestDto(provider, code);
+      const loginResponse =
+        await this.oauthUserProfileMutateUseCase.loginWithOAuthProfile(
+          oauthDto,
+        );
       return RestTemplate.OK_WITH_DATA(loginResponse);
     } catch (e) {
       if (e instanceof CustomError) {
@@ -79,8 +91,11 @@ export class AuthController {
     provider: OAuthProvider,
     @Query('code') code: string,
   ) {
-    const githubProfile = await this.getOAuthProfile(provider, code);
-    await this.authService.linkOAuthProfile(user.id, githubProfile);
+    const oauthRequest = new OAuthRequestDto(provider, code);
+    await this.oauthUserProfileMutateUseCase.linkOAuthProfile(
+      user.id,
+      oauthRequest,
+    );
     return RestTemplate.OK();
   }
 
@@ -91,21 +106,10 @@ export class AuthController {
     @Query('provider', new CustomEnumPipe(OAuthProvider))
     provider: OAuthProvider,
   ) {
-    await this.authService.unlinkOAuthProfile(user.id, provider);
+    await this.oauthUserProfileMutateUseCase.unlinkOAuthProfile(
+      user.id,
+      provider,
+    );
     return RestTemplate.OK();
-  }
-
-  private async getOAuthProfile(provider: OAuthProvider, code: string) {
-    try {
-      const githubToken = await this.oauthService.getToken(provider, code);
-      const githubProfile = await this.oauthService.getProfile(
-        provider,
-        githubToken.accessToken,
-      );
-      return githubProfile;
-    } catch (e) {
-      console.log(e);
-      throw new UnauthorizedException();
-    }
   }
 }

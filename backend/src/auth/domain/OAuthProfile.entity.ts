@@ -1,12 +1,12 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { OAuthProvider } from '../../core/entity/enum/OAuthProvider';
 import { User } from '../../user/domain/User.entity';
-import { OAuthProfileDto } from '../../lib/auth/oauth/dto/OAuthProfile';
+import { Nil } from '../../common/nil/Nil';
 
 @Entity({
   name: 'oauth_profile',
 })
-export class OAuthProfile {
+export class OAuthUserProfile {
   @PrimaryColumn({
     name: 'id',
     type: 'varchar',
@@ -30,12 +30,24 @@ export class OAuthProfile {
   @Column({ name: 'user_id', type: 'int' })
   userId: number;
 
-  static fromDto(userId: number, dto: OAuthProfileDto) {
-    const profile = new OAuthProfile();
-    profile.id = dto.id;
-    profile.provider = dto.provider;
-    profile.username = dto.name;
-    profile.email = dto.email.isNotNil() ? dto.email.unwrap() : null;
+  static create({
+    userId,
+    id,
+    provider,
+    name,
+    email,
+  }: {
+    userId: number;
+    id: string;
+    provider: OAuthProvider;
+    name: string;
+    email: Nil<string>;
+  }) {
+    const profile = new OAuthUserProfile();
+    profile.id = id;
+    profile.provider = provider;
+    profile.username = name;
+    profile.email = email.isNotNil() ? email.unwrap() : null;
     profile.userId = userId;
 
     return profile;

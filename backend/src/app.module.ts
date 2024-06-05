@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiModule } from './api/Api.module';
 import { GqlModule } from './graphql/Gql.module';
+import { HealthController } from './Health.controller';
 
 @Module({
   imports: [
@@ -26,5 +27,6 @@ import { GqlModule } from './graphql/Gql.module';
     ApiModule,
     GqlModule,
   ],
+  controllers: [HealthController],
 })
 export class AppModule {}
