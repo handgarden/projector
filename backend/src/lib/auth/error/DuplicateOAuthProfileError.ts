@@ -1,5 +1,5 @@
 import { CustomBadRequestError } from '../../../common/filter/error/CustomBadRequestError';
-import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../../auth/domain/OAuthProvider';
 
 export class DuplicateOAuthProfileError extends CustomBadRequestError {
   constructor({ provider }: { provider: OAuthProvider }) {

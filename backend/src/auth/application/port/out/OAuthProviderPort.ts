@@ -1,4 +1,4 @@
-import { OAuthProvider } from '../../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../../domain/OAuthProvider';
 import { OAuthProfileDto } from '../../../../lib/auth/oauth/dto/OAuthProfile';
 
 export interface OAuthProviderPort {

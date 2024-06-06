@@ -1,5 +1,5 @@
 import { Nil } from '../../../../common/nil/Nil';
-import { OAuthProvider } from '../../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../../domain/OAuthProvider';
 import { OAuthUserProfile } from '../../../domain/OAuthProfile.entity';
 
 export interface OAuthUserProfilePersistencePort {

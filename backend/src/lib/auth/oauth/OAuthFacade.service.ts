@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { OAuthService } from './OAuth.service';
 import { OAuthProviderNotFoundException } from '../error/OAuthProviderNotFoundError';
-import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../../auth/domain/OAuthProvider';
 
 @Injectable()
 export class OAuthFacadeService {

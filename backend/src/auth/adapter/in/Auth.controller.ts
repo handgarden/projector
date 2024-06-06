@@ -16,22 +16,22 @@ import { Authorized } from 'src/lib/auth/decorator/Authorized.decorator';
 import { CurrentUser } from '../../../lib/auth/decorator/CurrentUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { CustomError } from '../../../common/filter/error/CustomError';
-import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../domain/OAuthProvider';
 import { CustomEnumPipe } from '../../../common/pipe/CustomEnum.pipe';
-import { AuthMutateUseCase } from '../../application/port/in/AuthMutateUseCase';
 import { LoginResponseDto } from '../dto/LoginResponse.dto';
 import { AuthUserDto } from '../../application/dto/AuthUser.dto';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../../../lib/auth/types/TokenPayload';
 import { OAuthUserProfileMutateUseCase } from '../../application/port/in/OAuthUserProfileMutateUseCase';
 import { OAuthRequestDto } from '../../application/dto/OAuthRequest.dto';
+import { UserMutateUseCase } from '../../../user/application/port/in/UserMutateUseCase';
 
 @ApiController('auth')
 export class AuthController {
   constructor(
-    private readonly authMutateUseCase: AuthMutateUseCase,
     private readonly oauthUserProfileMutateUseCase: OAuthUserProfileMutateUseCase,
     private readonly jwtService: JwtService,
+    private readonly userMutateUseCase: UserMutateUseCase,
   ) {}
 
   @Post('register')
@@ -39,7 +39,7 @@ export class AuthController {
   async register(
     @Body() registerDto: RegisterRequestDto,
   ): Promise<RestTemplate<null>> {
-    await this.authMutateUseCase.register(registerDto);
+    await this.userMutateUseCase.register(registerDto);
     return RestTemplate.OK();
   }
 

@@ -1,5 +1,5 @@
 import { Nil } from '../../../../common/nil/Nil';
-import { OAuthProvider } from '../../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../../../auth/domain/OAuthProvider';
 import { GithubProfile } from '../github/GithubProfile';
 
 export class OAuthProfileDto {

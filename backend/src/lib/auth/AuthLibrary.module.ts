@@ -4,9 +4,9 @@ import { LocalStrategy } from './strategy/Local.strategy';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/Jwt.strategy';
-import { BcryptPasswordEncoder } from 'src/common/password/BcryptPasswordEncorder';
 import { PasswordEncoder } from 'src/common/password/PasswordEncoder';
 import { OAuthModule } from './oauth/OAuth.module';
+import { UserModule } from '../../user/User.module';
 
 @Module({
   imports: [
@@ -19,15 +19,9 @@ import { OAuthModule } from './oauth/OAuth.module';
       inject: [ConfigService],
     }),
     OAuthModule,
+    UserModule,
   ],
-  providers: [
-    LocalStrategy,
-    JwtStrategy,
-    {
-      provide: PasswordEncoder,
-      useClass: BcryptPasswordEncoder,
-    },
-  ],
+  providers: [LocalStrategy, JwtStrategy],
   exports: [OAuthModule, PasswordEncoder, JwtService],
 })
 export class AuthLibraryModule {}

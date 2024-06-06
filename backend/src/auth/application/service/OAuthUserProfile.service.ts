@@ -3,40 +3,37 @@ import { OAuthUserProfileMutateUseCase } from '../port/in/OAuthUserProfileMutate
 import { OAuthUserProfilePersistencePort } from '../port/out/OAuthUserProfilePersistencePort';
 import { OAuthProviderPort } from '../port/out/OAuthProviderPort';
 import { OAuthRequestDto } from '../dto/OAuthRequest.dto';
-import { AuthUserPersistencePort } from '../port/out/AuthUserPersistencePort';
 import { OAuthAccountNotFoundError } from '../../../lib/auth/error/OAuthAccountNotFoundError';
-import { AuthUserDto } from '../dto/AuthUser.dto';
 import { OAuthUserProfileDto } from '../dto/OAuthUserProfile.dto';
 import { OAuthUserProfile } from '../../domain/OAuthProfile.entity';
-import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../domain/OAuthProvider';
 import { DuplicateOAuthProfileError } from '../../../lib/auth/error/DuplicateOAuthProfileError';
+import { UserQueryUseCase } from '../../../user/application/port/in/UserQueryUseCase';
+import { UserDto } from '../../../user/application/dto/User.dto';
 
 @Injectable()
 export class OAuthUserProfileService implements OAuthUserProfileMutateUseCase {
   constructor(
     private readonly oauthProviderPort: OAuthProviderPort,
     private readonly oauthProfilePersistencePort: OAuthUserProfilePersistencePort,
-    private readonly authUserPersistencePort: AuthUserPersistencePort,
+    private readonly userQueryUseCase: UserQueryUseCase,
   ) {}
-  async loginWithOAuthProfile(dto: OAuthRequestDto): Promise<AuthUserDto> {
+  async loginWithOAuthProfile(dto: OAuthRequestDto): Promise<UserDto> {
     const vendorProfile = await this.oauthProviderPort.getOAuthProfile(
       dto.code,
       dto.provider,
     );
 
-    const userNil =
-      await this.authUserPersistencePort.findOneByOAuthProfileIdAndProvider(
-        vendorProfile.id,
+    const oauthProfile =
+      await this.oauthProfilePersistencePort.findByProviderAndId(
         vendorProfile.provider,
+        vendorProfile.id,
       );
-
-    if (userNil.isNil()) {
+    if (oauthProfile.isNil()) {
       throw new OAuthAccountNotFoundError();
     }
 
-    const user = userNil.unwrap();
-
-    return AuthUserDto.fromEntity(user);
+    return this.userQueryUseCase.getUser(oauthProfile.unwrap().userId);
   }
 
   async linkOAuthProfile(

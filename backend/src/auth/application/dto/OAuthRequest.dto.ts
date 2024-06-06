@@ -1,4 +1,4 @@
-import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../domain/OAuthProvider';
 
 export class OAuthRequestDto {
   provider: OAuthProvider;

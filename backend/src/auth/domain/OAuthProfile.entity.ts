@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { OAuthProvider } from '../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from './OAuthProvider';
 import { User } from '../../user/domain/User.entity';
 import { Nil } from '../../common/nil/Nil';
 

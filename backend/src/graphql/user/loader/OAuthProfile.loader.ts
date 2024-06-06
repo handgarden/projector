@@ -1,7 +1,7 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { OAuthProfileRepository } from '../../../core/entity/repository/OAuthProfile.repository';
 import * as DataLoader from 'dataloader';
-import { OAuthProfileResponse } from '../response/OAuthProfile.response';
+import { OAuthProfileResponse } from '../../../auth/adapter/dto/OAuthProfile.response';
 
 @Injectable({
   scope: Scope.REQUEST,

@@ -1,6 +1,6 @@
 import { OAuthFacadeService } from '../../../lib/auth/oauth/OAuthFacade.service';
 import { OAuthProviderPort } from '../../application/port/out/OAuthProviderPort';
-import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../domain/OAuthProvider';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

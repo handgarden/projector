@@ -5,7 +5,7 @@ import { OAuthService } from '../OAuth.service';
 import { OAuthToken } from '../dto/OAuthToken';
 import { OAuthProfileDto } from '../dto/OAuthProfile';
 import { GithubProfile } from './GithubProfile';
-import { OAuthProvider } from '../../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../../../auth/domain/OAuthProvider';
 
 @Injectable()
 export class GithubOAuthService implements OAuthService {
