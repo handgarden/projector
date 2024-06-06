@@ -5,3 +5,5 @@ import { BatchLoader } from '../../../../common/type/BatchLoader';
 export interface UserBatchQueryPort {
   loadUsersByIds: BatchLoader<number, Nil<User>>;
 }
+
+export const UserBatchQueryPort = Symbol('UserBatchQueryPort');

@@ -7,4 +7,4 @@ export interface UserPersistencePort {
   save(user: User): Promise<User>;
 }
 
-const UserPersistencePort = Symbol.for('UserPersistencePort');
+export const UserPersistencePort = Symbol.for('UserPersistencePort');
