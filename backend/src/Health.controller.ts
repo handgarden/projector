@@ -1,6 +1,6 @@
 import { Get } from '@nestjs/common';
-import { ApiController } from '../common/decorator/ApiController';
-import { RestTemplate } from '../common/response/RestTemplate';
+import { RestTemplate } from './common/response/RestTemplate';
+import { ApiController } from './common/decorator/ApiController';
 
 @ApiController('/health')
 export class HealthController {
