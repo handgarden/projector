@@ -3,7 +3,6 @@ import { UserResponse } from '../../../user/adapter/dto/response/User.response';
 import { SlideResponse } from '../dto/response/Slide.response';
 import { ProjectResponse } from '../dto/response/Project.response';
 import { ParseIntPipe } from '@nestjs/common';
-// import { S3Service } from '../../../lib/s3/S3.service';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
@@ -13,21 +12,22 @@ import { ProjectQueryUseCase } from '../../application/port/in/ProjectQueryUseCa
 import { UserBatchQueryUseCase } from '../../../user/application/port/in/UserBatchQueryUseCase';
 import { CreatorNotFoundException } from '../../application/exception/CreatorNotFoundException';
 import { SlideBatchQueryUseCase } from '../../application/port/in/SlideBatchQueryUseCase';
+import { UploadFileBatchQueryUseCase } from '../../../file/application/port/in/UploadFileBatchQueryUseCase';
 
 @Resolver(() => ProjectResponse)
 export class ProjectQueryResolver {
   constructor(
-    private readonly queryProjectUseCase: ProjectQueryUseCase,
+    private readonly projectQueryUseCase: ProjectQueryUseCase,
     private readonly userBatchUseCase: UserBatchQueryUseCase,
     private readonly slideBatchUseCase: SlideBatchQueryUseCase,
-    // private readonly s3Service: S3Service,
+    private readonly uploadFileBatchQueryUseCase: UploadFileBatchQueryUseCase,
   ) {}
 
   @Query(() => ProjectResponse)
   async project(
     @Args('id', { type: () => ID }, ParseIntPipe) id: number,
   ): Promise<ProjectResponse> {
-    const project = await this.queryProjectUseCase.getProject(id);
+    const project = await this.projectQueryUseCase.getProject(id);
     return ProjectResponse.fromDto(project);
   }
 
@@ -38,7 +38,7 @@ export class ProjectQueryResolver {
     @Args('pageable', { nullable: true })
     pageable: PaginationInput,
   ): Promise<PaginatedProjectResponse> {
-    const { items, total } = await this.queryProjectUseCase.getUserProjects(
+    const { items, total } = await this.projectQueryUseCase.getUserProjects(
       user.id,
       pageable,
     );
@@ -67,15 +67,17 @@ export class ProjectQueryResolver {
     return slides.map(SlideResponse.fromDto);
   }
 
-  // @ResolveField(() => String, { nullable: true })
-  // async thumbnail(@Root() project: ProjectResponse): Promise<string | null> {
-  //   const thumbnailKey = await this.projectLoader.loadThumbnailKeysById.load(
-  //     project.id,
-  //   );
-  //   if (thumbnailKey.isNil()) {
-  //     return null;
-  //   }
-  //   const url = this.s3Service.getPresignedUrl(thumbnailKey.unwrap());
-  //   return url;
-  // }
+  @ResolveField(() => String, { nullable: true })
+  async thumbnail(@Root() project: ProjectResponse): Promise<string | null> {
+    const thumbnailKey = await this.projectQueryUseCase.getThumbnailKey(
+      parseInt(project.id),
+    );
+    if (thumbnailKey.isNil()) {
+      return null;
+    }
+    const url = await this.uploadFileBatchQueryUseCase.loadUrlByKey(
+      thumbnailKey.unwrap(),
+    );
+    return url.unwrap();
+  }
 }

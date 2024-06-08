@@ -1,15 +1,15 @@
 import { Test } from '@nestjs/testing';
-import { S3Service } from '../../../../src/lib/s3/S3.service';
+import { UploadFileService } from '../../../../src/file/application/service/UploadFile.service';
 import { ObjectStorageClient } from '../../../../src/lib/s3/ObjectStorageClient';
 import { StoredFile } from '../../../../src/lib/s3/StoredFile';
 
-describe(S3Service, () => {
-  let s3Service: S3Service;
+describe(UploadFileService, () => {
+  let s3Service: UploadFileService;
   let objectStorageClient: ObjectStorageClient;
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
-        S3Service,
+        UploadFileService,
         {
           provide: ObjectStorageClient,
           useValue: {
@@ -21,7 +21,7 @@ describe(S3Service, () => {
       ],
     }).compile();
 
-    s3Service = moduleRef.get<S3Service>(S3Service);
+    s3Service = moduleRef.get<UploadFileService>(UploadFileService);
     objectStorageClient =
       moduleRef.get<ObjectStorageClient>(ObjectStorageClient);
   });

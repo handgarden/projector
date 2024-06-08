@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { SlideImage } from './SlideImage.entity';
 import { Project } from './Project.entity';
-import { BaseTimeEntity } from '../../core/entity/BaseTimeEntity';
+import { BaseTimeEntity } from '../../common/entity/BaseTimeEntity';
 
 @Entity()
 export class Slide extends BaseTimeEntity {

@@ -4,7 +4,9 @@ import { DefaultValidationMessage } from '../../../../common/message/validation/
 import { UpdateProjectDto } from '../../../application/dto/UpdateProject.dto';
 
 @InputType()
-export class UpdateProjectInput implements Omit<CreateProjectDto, 'creatorId'> {
+export class UpdateProjectInput
+  implements Omit<UpdateProjectDto, 'projectId' | 'creatorId'>
+{
   @Field(() => String)
   @IsInt({ message: DefaultValidationMessage.IS_NUMBER })
   @IsNotEmpty({ message: DefaultValidationMessage.IS_NOT_EMPTY })

@@ -8,8 +8,10 @@ import {
 } from 'typeorm';
 import { User } from '../../user/domain/User.entity';
 import { Slide } from './Slide.entity';
-import { BaseTimeEntity } from '../../core/entity/BaseTimeEntity';
+import { BaseTimeEntity } from '../../common/entity/BaseTimeEntity';
 import { SlideNotFoundException } from '../application/exception/SlideNotFoundException';
+import { Nil } from '../../common/nil/Nil';
+import { UploadFile } from '../../file/domain/UploadFile.entity';
 
 @Entity()
 export class Project extends BaseTimeEntity {
@@ -68,7 +70,10 @@ export class Project extends BaseTimeEntity {
     const targetSlide = slides.find((s) => s.id === slideId);
 
     if (!targetSlide) {
-      throw new SlideNotFoundException(this.id, slideId);
+      throw new SlideNotFoundException({
+        projectId: this.id,
+        slideId,
+      });
     }
 
     await targetSlide.update({
@@ -88,6 +93,18 @@ export class Project extends BaseTimeEntity {
         return s;
       });
     this.slides = Promise.resolve(sortedSlides);
+  }
+
+  async getThumbnail(): Promise<Nil<UploadFile>> {
+    const slides = await this.slides;
+    for (const slide of slides) {
+      const images = await slide.images;
+      if (images.length > 0) {
+        const file = await images[0].file;
+        return Nil.of(file);
+      }
+    }
+    return Nil.empty();
   }
 
   async validateCreator(userId: number) {

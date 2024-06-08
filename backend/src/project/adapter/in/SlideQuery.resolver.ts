@@ -1,4 +1,4 @@
-import { Args, ID, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
 import { SlideResponse } from '../dto/response/Slide.response';
 import { ParseIntPipe } from '@nestjs/common';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
@@ -6,11 +6,16 @@ import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
 import { SlideQueryUseCase } from '../../application/port/in/SlideQueryUseCase';
+import { SlideImageResponse } from '../dto/response/SlideImage.response';
+import { SlideBatchQueryUseCase } from '../../application/port/in/SlideBatchQueryUseCase';
 
 @GqlAuth()
 @Resolver(() => SlideResponse)
 export class SlideQueryResolver {
-  constructor(private readonly slideQueryUseCase: SlideQueryUseCase) {}
+  constructor(
+    private readonly slideQueryUseCase: SlideQueryUseCase,
+    private readonly slideBatchQueryUseCase: SlideBatchQueryUseCase,
+  ) {}
 
   @Query(() => SlideResponse)
   async slide(
@@ -21,8 +26,12 @@ export class SlideQueryResolver {
     return SlideResponse.fromDto(slide);
   }
 
-  // @ResolveField(() => [SlideImageResponse], { nullable: 'items' })
-  // async images(@Root() slide: SlideResponse): Promise<SlideImageResponse[]> {
-  //   return this.slideLoader.loadImagesById.load(slide.id);
-  // }
+  @ResolveField(() => [SlideImageResponse], { nullable: 'items' })
+  async images(@Root() slide: SlideResponse): Promise<SlideImageResponse[]> {
+    const slideImages =
+      await this.slideBatchQueryUseCase.loadSlideImagesBySlideId(
+        parseInt(slide.id, 10),
+      );
+    return slideImages.map((image) => SlideImageResponse.fromDto(image));
+  }
 }

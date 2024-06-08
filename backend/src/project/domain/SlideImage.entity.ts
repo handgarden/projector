@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
-import { UploadFile } from '../../core/entity/domain/UploadFile.entity';
+import { UploadFile } from '../../file/domain/UploadFile.entity';
 import { Slide } from './Slide.entity';
 
 @Entity()

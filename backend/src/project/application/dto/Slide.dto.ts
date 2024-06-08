@@ -7,7 +7,6 @@ export class SlideDto {
   title: string;
   description: string;
   seq: number;
-  images: string[];
   createdAt: LocalDateTime;
   updatedAt: LocalDateTime;
 
@@ -17,7 +16,6 @@ export class SlideDto {
     dto.title = slide.title;
     dto.description = slide.description;
     dto.seq = slide.seq;
-    dto.images;
     dto.createdAt = DateTimeUtils.toLocalDateTime(slide.createdAt);
     dto.updatedAt = DateTimeUtils.toLocalDateTime(slide.updatedAt);
     return dto;

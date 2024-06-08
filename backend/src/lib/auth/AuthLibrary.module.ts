@@ -4,7 +4,6 @@ import { LocalStrategy } from './strategy/Local.strategy';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategy/Jwt.strategy';
-import { PasswordEncoder } from 'src/common/password/PasswordEncoder';
 import { OAuthModule } from './oauth/OAuth.module';
 import { UserModule } from '../../user/User.module';
 
@@ -21,7 +20,7 @@ import { UserModule } from '../../user/User.module';
     OAuthModule,
     UserModule,
   ],
-  providers: [LocalStrategy, JwtStrategy],
-  exports: [OAuthModule, PasswordEncoder, JwtService],
+  providers: [LocalStrategy, JwtStrategy, JwtService],
+  exports: [OAuthModule, JwtService],
 })
 export class AuthLibraryModule {}

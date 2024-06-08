@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseTimeEntity } from '../../core/entity/BaseTimeEntity';
+import { BaseTimeEntity } from '../../common/entity/BaseTimeEntity';
 import { OAuthUserProfile } from '../../auth/domain/OAuthProfile.entity';
 import { CustomForbiddenError } from '../../common/filter/error/CustomForbiddenError';
 

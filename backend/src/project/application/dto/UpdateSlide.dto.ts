@@ -1,4 +1,4 @@
-import { SlideImageDto } from './SlideImage.dto';
+import { CreateSlideImageDto } from './CreateSlideImage.dto';
 
 export class UpdateSlideDto {
   creatorId: number;
@@ -6,5 +6,5 @@ export class UpdateSlideDto {
   slideId: number;
   title: string;
   description: string;
-  images: SlideImageDto[];
+  images: CreateSlideImageDto[];
 }

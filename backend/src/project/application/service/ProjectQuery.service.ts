@@ -16,6 +16,7 @@ import { DeleteProjectDto } from '../dto/DeleteProject.dto';
 import { CreateSlideDto } from '../dto/CreateSlide.dto';
 import { Slide } from '../../domain/Slide.entity';
 import { UpdateSlideDto } from '../dto/UpdateSlide.dto';
+import { Nil } from '../../../common/nil/Nil';
 
 @Injectable()
 export class ProjectService
@@ -24,6 +25,21 @@ export class ProjectService
   constructor(
     private readonly projectPersistencePort: ProjectPersistencePort,
   ) {}
+  async getThumbnailKey(projectId: number): Promise<Nil<string>> {
+    const projectNil =
+      await this.projectPersistencePort.findProjectById(projectId);
+    if (projectNil.isNil()) {
+      throw new Error('Project not found');
+    }
+    const project = projectNil.unwrap();
+    const thumbnail = await project.getThumbnail();
+
+    if (thumbnail.isNil()) {
+      return Nil.empty();
+    }
+
+    return Nil.of(thumbnail.unwrap().key);
+  }
 
   async getProject(id: number): Promise<ProjectDto> {
     const project = await this.projectPersistencePort.findProjectById(id);
