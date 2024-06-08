@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { SlideBatchQueryUseCase } from '../port/in/SlideBatchQueryUseCase';
 import { SlideDto } from '../dto/Slide.dto';
 import { SlideBatchLoadPort } from '../port/out/SlideBatchLoadPort';
@@ -6,7 +6,10 @@ import { SlideImageDto } from '../dto/SlideImage.dto';
 
 @Injectable()
 export class SlideBatchQueryService implements SlideBatchQueryUseCase {
-  constructor(private readonly slideBatchLoadPort: SlideBatchLoadPort) {}
+  constructor(
+    @Inject(SlideBatchLoadPort)
+    private readonly slideBatchLoadPort: SlideBatchLoadPort,
+  ) {}
 
   async loadSlidesByProjectId(projectId: number): Promise<SlideDto[]> {
     const slides =

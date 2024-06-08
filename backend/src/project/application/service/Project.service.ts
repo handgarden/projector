@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Pageable } from '../../../common/page/Pageable';
 import { PaginatedType } from '../../../common/page/Paginated';
 import { ProjectPersistencePort } from '../port/out/ProjectPersistencePort';
@@ -23,6 +23,7 @@ export class ProjectService
   implements ProjectQueryUseCase, ProjectMutateUseCase
 {
   constructor(
+    @Inject(ProjectPersistencePort)
     private readonly projectPersistencePort: ProjectPersistencePort,
   ) {}
   async getThumbnailKey(projectId: number): Promise<Nil<string>> {

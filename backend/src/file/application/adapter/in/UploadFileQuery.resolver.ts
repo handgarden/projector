@@ -3,11 +3,14 @@ import { UserResponse } from '../../../../user/adapter/dto/response/User.respons
 import { UploadFileQueryUseCase } from '../../port/in/UploadFileQueryUseCase';
 import { UploadFileResponse } from '../dto/UploadFile.response';
 import { UserBatchQueryUseCase } from '../../../../user/application/port/in/UserBatchQueryUseCase';
+import { Inject } from '@nestjs/common';
 
 @Resolver(() => UploadFileResponse)
 export class UploadFileQueryResolver {
   constructor(
+    @Inject(UploadFileQueryUseCase)
     private readonly uploadFileQueryUseCase: UploadFileQueryUseCase,
+    @Inject(UserBatchQueryUseCase)
     private readonly userBatchUseCase: UserBatchQueryUseCase,
   ) {}
 

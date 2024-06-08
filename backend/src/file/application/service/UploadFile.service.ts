@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { RawFile } from '../../../lib/s3/RawFile';
 import { UploadFileQueryUseCase } from '../port/in/UploadFileQueryUseCase';
 import { UploadFileMutateUseCase } from '../port/in/UploadFileMutateUseCase';
@@ -14,7 +14,9 @@ export class UploadFileService
   implements UploadFileMutateUseCase, UploadFileQueryUseCase
 {
   constructor(
+    @Inject(UploadFileObjectStoragePort)
     private readonly uploadFileObjectStoragePort: UploadFileObjectStoragePort,
+    @Inject(UploadFilePersistencePort)
     private readonly uploadFilePersistencePort: UploadFilePersistencePort,
   ) {}
 

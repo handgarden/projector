@@ -2,7 +2,7 @@ import { Args, ID, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
 import { UserResponse } from '../../../user/adapter/dto/response/User.response';
 import { SlideResponse } from '../dto/response/Slide.response';
 import { ProjectResponse } from '../dto/response/Project.response';
-import { ParseIntPipe } from '@nestjs/common';
+import { Inject, ParseIntPipe } from '@nestjs/common';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
@@ -17,9 +17,13 @@ import { UploadFileBatchQueryUseCase } from '../../../file/application/port/in/U
 @Resolver(() => ProjectResponse)
 export class ProjectQueryResolver {
   constructor(
+    @Inject(ProjectQueryUseCase)
     private readonly projectQueryUseCase: ProjectQueryUseCase,
+    @Inject(UserBatchQueryUseCase)
     private readonly userBatchUseCase: UserBatchQueryUseCase,
+    @Inject(SlideBatchQueryUseCase)
     private readonly slideBatchUseCase: SlideBatchQueryUseCase,
+    @Inject(UploadFileBatchQueryUseCase)
     private readonly uploadFileBatchQueryUseCase: UploadFileBatchQueryUseCase,
   ) {}
 

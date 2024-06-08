@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { RegisterDto } from '../port/dto/Register.dto';
 import { PasswordEncoder } from '../../../common/password/PasswordEncoder';
 import { User } from '../../domain/User.entity';
@@ -11,7 +11,8 @@ import { LoginDto } from '../port/dto/Login.dto';
 @Injectable()
 export class UserMutateService implements UserMutateUseCase {
   constructor(
-    private readonly passwordEncoder: PasswordEncoder,
+    @Inject(PasswordEncoder) private readonly passwordEncoder: PasswordEncoder,
+    @Inject(UserPersistencePort)
     private readonly userPersistencePort: UserPersistencePort,
   ) {}
 

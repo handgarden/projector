@@ -1,4 +1,4 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Inject, Injectable, Scope } from '@nestjs/common';
 import { BatchLoader } from '../../../../common/type/BatchLoader';
 import { UploadFileBatchLoadPort } from '../../port/out/UploadFileBatchLoadPort';
 import { Nil } from '../../../../common/nil/Nil';
@@ -12,7 +12,9 @@ import { UploadFileObjectStoragePort } from '../../port/out/UploadFileObjectStor
 })
 export class UploadFileBatchDataLoader implements UploadFileBatchLoadPort {
   constructor(
+    @Inject(UploadFilePersistencePort)
     private readonly uploadFilePersistencePort: UploadFilePersistencePort,
+    @Inject(UploadFileObjectStoragePort)
     private readonly uploadFileObjectStoragePort: UploadFileObjectStoragePort,
   ) {}
 

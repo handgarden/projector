@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ObjectStorageClient } from '../../../../lib/s3/ObjectStorageClient';
 import { RawFile } from '../../../../lib/s3/RawFile';
 import { StoredFile } from '../../../../lib/s3/StoredFile';
@@ -6,7 +6,10 @@ import { UploadFileObjectStoragePort } from '../../port/out/UploadFileObjectStor
 
 @Injectable()
 export class UploadObjectStorage implements UploadFileObjectStoragePort {
-  constructor(private readonly objectStorage: ObjectStorageClient) {}
+  constructor(
+    @Inject(ObjectStorageClient)
+    private readonly objectStorage: ObjectStorageClient,
+  ) {}
   putObject(file: RawFile): Promise<StoredFile> {
     return this.objectStorage.putObject(file);
   }

@@ -10,6 +10,8 @@ import { UserTypeORMRepository } from './adapter/out/UserTypeORM.repository';
 import { UserQueryResolver } from './adapter/in/UserQuery.resolver';
 import { UserMutateUseCase } from './application/port/in/UserMutateUseCase';
 import { UserMutateService } from './application/service/UserMutate.service';
+import { PasswordEncoder } from '../common/password/PasswordEncoder';
+import { BcryptPasswordEncoder } from '../common/password/BcryptPasswordEncorder';
 
 @Module({
   imports: [],
@@ -34,8 +36,12 @@ import { UserMutateService } from './application/service/UserMutate.service';
       provide: UserMutateUseCase,
       useClass: UserMutateService,
     },
+    {
+      provide: PasswordEncoder,
+      useClass: BcryptPasswordEncoder,
+    },
     UserQueryResolver,
   ],
-  exports: [UserBatchQueryPort, UserQueryUseCase, UserMutateUseCase],
+  exports: [UserBatchQueryUseCase, UserQueryUseCase, UserMutateUseCase],
 })
 export class UserModule {}

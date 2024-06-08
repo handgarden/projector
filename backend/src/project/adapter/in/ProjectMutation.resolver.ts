@@ -4,7 +4,7 @@ import { CreateProjectInput } from '../dto/input/CreateProject.input';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
 import { TokenUser } from '../../../lib/auth/types/TokenUser';
-import { ParseIntPipe } from '@nestjs/common';
+import { Inject, ParseIntPipe } from '@nestjs/common';
 import { ProjectMutateUseCase } from '../../application/port/in/ProjectMutateUseCase';
 import { UpdateProjectInput } from '../dto/input/UpdateProject.input';
 import { DeleteProjectDto } from '../../application/dto/DeleteProject.dto';
@@ -12,7 +12,10 @@ import { DeleteProjectDto } from '../../application/dto/DeleteProject.dto';
 @GqlAuth()
 @Resolver(() => ProjectResponse)
 export class ProjectMutationResolver {
-  constructor(private readonly mutateProjectUseCase: ProjectMutateUseCase) {}
+  constructor(
+    @Inject(ProjectMutateUseCase)
+    private readonly mutateProjectUseCase: ProjectMutateUseCase,
+  ) {}
 
   @Mutation(() => ProjectResponse)
   async createProject(

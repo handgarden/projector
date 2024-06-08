@@ -9,9 +9,14 @@ import { UploadObjectStorage } from './application/adapter/out/UploadObjectStora
 import { UploadFilePersistencePort } from './application/port/out/UploadFilePersistencePort';
 import { FileController } from './application/adapter/in/File.controller';
 import { UploadFileQueryResolver } from './application/adapter/in/UploadFileQuery.resolver';
+import { UploadFileBatchQueryUseCase } from './application/port/in/UploadFileBatchQueryUseCase';
+import { UploadFileBatchQueryService } from './application/service/UploadFileBatchQuery.service';
+import { UploadFileBatchLoadPort } from './application/port/out/UploadFileBatchLoadPort';
+import { UploadFileBatchDataLoader } from './application/adapter/out/UploadFileBatchDataLoader';
+import { UserModule } from '../user/User.module';
 
 @Module({
-  imports: [ObjectStorageModule],
+  imports: [ObjectStorageModule, UserModule],
   controllers: [FileController],
   providers: [
     UploadFileQueryResolver,
@@ -24,6 +29,14 @@ import { UploadFileQueryResolver } from './application/adapter/in/UploadFileQuer
       useClass: UploadFileService,
     },
     {
+      provide: UploadFileBatchQueryUseCase,
+      useClass: UploadFileBatchQueryService,
+    },
+    {
+      provide: UploadFileBatchLoadPort,
+      useClass: UploadFileBatchDataLoader,
+    },
+    {
       provide: UploadFileObjectStoragePort,
       useClass: UploadObjectStorage,
     },
@@ -32,6 +45,6 @@ import { UploadFileQueryResolver } from './application/adapter/in/UploadFileQuer
       useClass: UploadFileTypeORMRepository,
     },
   ],
-  exports: [],
+  exports: [UploadFileBatchQueryUseCase],
 })
 export class UploadFileModule {}

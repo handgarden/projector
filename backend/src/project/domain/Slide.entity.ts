@@ -24,6 +24,12 @@ export class Slide extends BaseTimeEntity {
 
   @Column({
     type: 'int',
+    name: 'project_id',
+  })
+  projectId: number;
+
+  @Column({
+    type: 'int',
     name: 'seq',
   })
   seq: number;

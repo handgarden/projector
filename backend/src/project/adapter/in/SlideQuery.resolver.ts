@@ -1,6 +1,6 @@
 import { Args, ID, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
 import { SlideResponse } from '../dto/response/Slide.response';
-import { ParseIntPipe } from '@nestjs/common';
+import { Inject, ParseIntPipe } from '@nestjs/common';
 import { GqlAuth } from '../../../lib/auth/decorator/GqlAuth.decorator';
 // import { SlideImageResponse } from '../dto/response/SlideImage.response';
 import { GqlUser } from '../../../lib/auth/decorator/GqUser.decorator';
@@ -13,7 +13,9 @@ import { SlideBatchQueryUseCase } from '../../application/port/in/SlideBatchQuer
 @Resolver(() => SlideResponse)
 export class SlideQueryResolver {
   constructor(
+    @Inject(SlideQueryUseCase)
     private readonly slideQueryUseCase: SlideQueryUseCase,
+    @Inject(SlideBatchQueryUseCase)
     private readonly slideBatchQueryUseCase: SlideBatchQueryUseCase,
   ) {}
 

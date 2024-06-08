@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { OAuthUserProfileMutateUseCase } from '../port/in/OAuthUserProfileMutateUseCase';
 import { OAuthUserProfilePersistencePort } from '../port/out/OAuthUserProfilePersistencePort';
 import { OAuthProviderPort } from '../port/out/OAuthProviderPort';
@@ -14,8 +14,11 @@ import { UserDto } from '../../../user/application/dto/User.dto';
 @Injectable()
 export class OAuthUserProfileService implements OAuthUserProfileMutateUseCase {
   constructor(
+    @Inject(OAuthProviderPort)
     private readonly oauthProviderPort: OAuthProviderPort,
+    @Inject(OAuthUserProfilePersistencePort)
     private readonly oauthProfilePersistencePort: OAuthUserProfilePersistencePort,
+    @Inject(UserQueryUseCase)
     private readonly userQueryUseCase: UserQueryUseCase,
   ) {}
   async loginWithOAuthProfile(dto: OAuthRequestDto): Promise<UserDto> {
