@@ -28,7 +28,7 @@ export class ProjectService
   ) {}
   async getThumbnailKey(projectId: number): Promise<Nil<string>> {
     const projectNil =
-      await this.projectPersistencePort.findProjectById(projectId);
+      await this.projectPersistencePort.findAggregatedProjectById(projectId);
     if (projectNil.isNil()) {
       throw new Error('Project not found');
     }
