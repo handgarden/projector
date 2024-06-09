@@ -18,6 +18,7 @@ import { UserModule } from '../user/User.module';
 import { UploadFileModule } from '../file/UploadFile.module';
 import { SlidePersistencePort } from './application/port/out/SlidePersistencePort';
 import { SlideTypeORMRepository } from './adapter/out/SlideTypeORM.repository';
+import { SlideImageQueryResolver } from './adapter/in/SlideImageQuery.resolver';
 
 @Module({
   imports: [UserModule, UploadFileModule],
@@ -26,6 +27,7 @@ import { SlideTypeORMRepository } from './adapter/out/SlideTypeORM.repository';
     ProjectQueryResolver,
     SlideMutationResolver,
     SlideQueryResolver,
+    SlideImageQueryResolver,
     {
       provide: SlideBatchLoadPort,
       useClass: SlideBatchDataLoader,

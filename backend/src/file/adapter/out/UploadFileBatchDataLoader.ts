@@ -1,4 +1,4 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
+import { Inject, Injectable, Logger, Scope } from '@nestjs/common';
 import { BatchLoader } from '../../../common/type/BatchLoader';
 import { UploadFileBatchLoadPort } from '../../application/port/out/UploadFileBatchLoadPort';
 import { Nil } from '../../../common/nil/Nil';
@@ -11,6 +11,7 @@ import { UploadFileObjectStoragePort } from '../../application/port/out/UploadFi
   scope: Scope.REQUEST,
 })
 export class UploadFileBatchDataLoader implements UploadFileBatchLoadPort {
+  private readonly logger: Logger = new Logger(UploadFileBatchDataLoader.name);
   constructor(
     @Inject(UploadFilePersistencePort)
     private readonly uploadFilePersistencePort: UploadFilePersistencePort,
@@ -31,7 +32,7 @@ export class UploadFileBatchDataLoader implements UploadFileBatchLoadPort {
             );
             return Nil.of<string>(url);
           } catch (e) {
-            console.error(e);
+            this.logger.error(e);
             return Nil.empty<string>();
           }
         }),
@@ -60,7 +61,7 @@ export class UploadFileBatchDataLoader implements UploadFileBatchLoadPort {
               await this.uploadFileObjectStoragePort.getPresignedUrl(key);
             return Nil.of<string>(url);
           } catch (e) {
-            console.error(e);
+            this.logger.error(e);
             return Nil.empty<string>();
           }
         }),
