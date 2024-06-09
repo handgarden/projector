@@ -1,8 +1,8 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { UploadFile } from '../../../domain/UploadFile.entity';
-import { BaseTimeResponse } from '../../../../graphql/common/BaseTimeResponse';
-import { DateTimeUtils } from '../../../../util/DateTImeUtils';
-import { UploadFileDto } from '../../port/dto/UploadFile.dto';
+import { UploadFile } from '../../domain/UploadFile.entity';
+import { BaseTimeResponse } from '../../../graphql/common/BaseTimeResponse';
+import { DateTimeUtils } from '../../../util/DateTImeUtils';
+import { UploadFileDto } from '../../application/port/dto/UploadFile.dto';
 
 @ObjectType(UploadFile.name)
 export class UploadFileResponse extends BaseTimeResponse {

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ObjectStorageClient } from '../../../../lib/s3/ObjectStorageClient';
-import { RawFile } from '../../../../lib/s3/RawFile';
-import { StoredFile } from '../../../../lib/s3/StoredFile';
-import { UploadFileObjectStoragePort } from '../../port/out/UploadFileObjectStoragePort';
+import { ObjectStorageClient } from '../../../lib/s3/ObjectStorageClient';
+import { RawFile } from '../../../lib/s3/RawFile';
+import { StoredFile } from '../../../lib/s3/StoredFile';
+import { UploadFileObjectStoragePort } from '../../application/port/out/UploadFileObjectStoragePort';
 
 @Injectable()
 export class UploadObjectStorage implements UploadFileObjectStoragePort {

@@ -1,8 +1,8 @@
 import { Args, Query, ResolveField, Resolver, Root } from '@nestjs/graphql';
-import { UserResponse } from '../../../../user/adapter/dto/response/User.response';
-import { UploadFileQueryUseCase } from '../../port/in/UploadFileQueryUseCase';
+import { UserResponse } from '../../../user/adapter/dto/response/User.response';
+import { UploadFileQueryUseCase } from '../../application/port/in/UploadFileQueryUseCase';
 import { UploadFileResponse } from '../dto/UploadFile.response';
-import { UserBatchQueryUseCase } from '../../../../user/application/port/in/UserBatchQueryUseCase';
+import { UserBatchQueryUseCase } from '../../../user/application/port/in/UserBatchQueryUseCase';
 import { Inject } from '@nestjs/common';
 
 @Resolver(() => UploadFileResponse)

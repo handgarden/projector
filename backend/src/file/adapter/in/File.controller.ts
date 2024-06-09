@@ -1,17 +1,18 @@
-import { Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Inject, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ApiController } from 'src/common/decorator/ApiController';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { RestTemplate } from 'src/common/response/RestTemplate';
 import { Authorized } from 'src/lib/auth/decorator/Authorized.decorator';
 import { CurrentUser } from 'src/lib/auth/decorator/CurrentUser.decorator';
 import { TokenUser } from 'src/lib/auth/types/TokenUser';
-import { UploadFileMutateUseCase } from '../../port/in/UploadFileMutateUseCase';
-import { UUIDUtils } from '../../../../util/UUIDUtils';
-import { RawFile } from '../../../../lib/s3/RawFile';
+import { UploadFileMutateUseCase } from '../../application/port/in/UploadFileMutateUseCase';
+import { UUIDUtils } from '../../../util/UUIDUtils';
+import { RawFile } from '../../../lib/s3/RawFile';
 
 @ApiController('files')
 export class FileController {
   constructor(
+    @Inject(UploadFileMutateUseCase)
     private readonly uploadFileMutateUseCase: UploadFileMutateUseCase,
   ) {}
 

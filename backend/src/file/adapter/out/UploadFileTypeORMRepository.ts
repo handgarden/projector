@@ -1,8 +1,8 @@
 import { DataSource, In, Repository } from 'typeorm';
-import { UploadFile } from '../../../domain/UploadFile.entity';
-import { UploadFilePersistencePort } from '../../port/out/UploadFilePersistencePort';
+import { UploadFile } from '../../domain/UploadFile.entity';
+import { UploadFilePersistencePort } from '../../application/port/out/UploadFilePersistencePort';
 import { Injectable } from '@nestjs/common';
-import { Nil } from '../../../../common/nil/Nil';
+import { Nil } from '../../../common/nil/Nil';
 
 @Injectable()
 export class UploadFileTypeORMRepository

@@ -1,11 +1,11 @@
 import { Inject, Injectable, Scope } from '@nestjs/common';
-import { BatchLoader } from '../../../../common/type/BatchLoader';
-import { UploadFileBatchLoadPort } from '../../port/out/UploadFileBatchLoadPort';
-import { Nil } from '../../../../common/nil/Nil';
-import { UploadFileDto } from '../../port/dto/UploadFile.dto';
-import { UploadFilePersistencePort } from '../../port/out/UploadFilePersistencePort';
+import { BatchLoader } from '../../../common/type/BatchLoader';
+import { UploadFileBatchLoadPort } from '../../application/port/out/UploadFileBatchLoadPort';
+import { Nil } from '../../../common/nil/Nil';
+import { UploadFileDto } from '../../application/port/dto/UploadFile.dto';
+import { UploadFilePersistencePort } from '../../application/port/out/UploadFilePersistencePort';
 import * as DataLoader from 'dataloader';
-import { UploadFileObjectStoragePort } from '../../port/out/UploadFileObjectStoragePort';
+import { UploadFileObjectStoragePort } from '../../application/port/out/UploadFileObjectStoragePort';
 
 @Injectable({
   scope: Scope.REQUEST,
