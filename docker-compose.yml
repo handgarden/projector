@@ -13,6 +13,7 @@ services:
     command: server /data --console-address ":9001"
     ports:
       - ${MINIO_CONSOLE_PORT}:9001
+      - 9000:9000
     networks:
       - projector-network
     healthcheck:

@@ -48,7 +48,9 @@ export class MinioObjectClient implements ObjectStorageClient {
   }
 
   async getPresignedUrl(key: string): Promise<any> {
-    return this.client.presignedGetObject(this.bucket, key);
+    const isProduction = process.env.NODE_ENV === 'production';
+    const url = await this.client.presignedGetObject(this.bucket, key);
+    return isProduction ? url : url.replace('s3', 'localhost:9000');
   }
 
   async deleteObject(key: string): Promise<any> {
