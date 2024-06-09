@@ -50,7 +50,7 @@ export class ProjectQueryResolver {
     const response = new PaginatedProjectResponse();
     response.items = items.map(ProjectResponse.fromDto);
     response.total = total;
-    response.hasNext = !!items.length;
+    response.hasNext = items.length === pageable.size;
     return response;
   }
 
