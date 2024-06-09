@@ -2,6 +2,7 @@ import {
   Body,
   HttpCode,
   HttpStatus,
+  Inject,
   Post,
   Query,
   Request,
@@ -22,15 +23,17 @@ import { LoginResponseDto } from '../dto/LoginResponse.dto';
 import { AuthUserDto } from '../../application/dto/AuthUser.dto';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../../../lib/auth/types/TokenPayload';
-import { OAuthUserProfileMutateUseCase } from '../../application/port/in/OAuthUserProfileMutateUseCase';
+import { OAuthProfileMutateUseCase } from '../../application/port/in/OAuthUserProfileMutateUseCase';
 import { OAuthRequestDto } from '../../application/dto/OAuthRequest.dto';
 import { UserMutateUseCase } from '../../../user/application/port/in/UserMutateUseCase';
 
 @ApiController('auth')
 export class AuthController {
   constructor(
-    private readonly oauthUserProfileMutateUseCase: OAuthUserProfileMutateUseCase,
     private readonly jwtService: JwtService,
+    @Inject(OAuthProfileMutateUseCase)
+    private readonly oauthUserProfileMutateUseCase: OAuthProfileMutateUseCase,
+    @Inject(UserMutateUseCase)
     private readonly userMutateUseCase: UserMutateUseCase,
   ) {}
 

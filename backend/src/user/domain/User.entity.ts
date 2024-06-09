@@ -1,7 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseTimeEntity } from '../../common/entity/BaseTimeEntity';
-import { OAuthUserProfile } from '../../auth/domain/OAuthProfile.entity';
+import { OAuthProfile } from '../../auth/domain/OAuthProfile.entity';
 import { CustomForbiddenError } from '../../common/filter/error/CustomForbiddenError';
 
 @Entity()
@@ -16,11 +16,11 @@ export class User extends BaseTimeEntity {
   @Column({ name: 'password', type: 'varchar', length: 255 })
   password: string;
 
-  @OneToMany(() => OAuthUserProfile, (oauthProfile) => oauthProfile.user, {
+  @OneToMany(() => OAuthProfile, (oauthProfile) => oauthProfile.user, {
     lazy: true,
     cascade: false,
   })
-  oauthProfile: Promise<OAuthUserProfile[]>;
+  oauthProfile: Promise<OAuthProfile[]>;
 
   confirmUserId(id: number) {
     if (this.id !== id) {

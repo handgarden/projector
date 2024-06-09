@@ -1,5 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { UploadFileResponse } from '../../../../file/application/adapter/dto/UploadFile.response';
+import { UploadFileResponse } from '../../../../file/adapter/dto/UploadFile.response';
 import { CreateSlideImageDto } from '../../../application/dto/CreateSlideImage.dto';
 
 @InputType()

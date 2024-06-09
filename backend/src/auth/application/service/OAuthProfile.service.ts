@@ -1,23 +1,23 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { OAuthUserProfileMutateUseCase } from '../port/in/OAuthUserProfileMutateUseCase';
-import { OAuthUserProfilePersistencePort } from '../port/out/OAuthUserProfilePersistencePort';
+import { OAuthProfileMutateUseCase } from '../port/in/OAuthUserProfileMutateUseCase';
+import { OAuthProfilePersistencePort } from '../port/out/OAuthProfilePersistencePort';
 import { OAuthProviderPort } from '../port/out/OAuthProviderPort';
 import { OAuthRequestDto } from '../dto/OAuthRequest.dto';
 import { OAuthAccountNotFoundError } from '../../../lib/auth/error/OAuthAccountNotFoundError';
-import { OAuthUserProfileDto } from '../dto/OAuthUserProfile.dto';
-import { OAuthUserProfile } from '../../domain/OAuthProfile.entity';
+import { OAuthProfileDto } from '../dto/OAuthProfile.dto';
+import { OAuthProfile } from '../../domain/OAuthProfile.entity';
 import { OAuthProvider } from '../../domain/OAuthProvider';
 import { DuplicateOAuthProfileError } from '../../../lib/auth/error/DuplicateOAuthProfileError';
 import { UserQueryUseCase } from '../../../user/application/port/in/UserQueryUseCase';
 import { UserDto } from '../../../user/application/dto/User.dto';
 
 @Injectable()
-export class OAuthUserProfileService implements OAuthUserProfileMutateUseCase {
+export class OAuthProfileService implements OAuthProfileMutateUseCase {
   constructor(
     @Inject(OAuthProviderPort)
     private readonly oauthProviderPort: OAuthProviderPort,
-    @Inject(OAuthUserProfilePersistencePort)
-    private readonly oauthProfilePersistencePort: OAuthUserProfilePersistencePort,
+    @Inject(OAuthProfilePersistencePort)
+    private readonly oauthProfilePersistencePort: OAuthProfilePersistencePort,
     @Inject(UserQueryUseCase)
     private readonly userQueryUseCase: UserQueryUseCase,
   ) {}
@@ -42,7 +42,7 @@ export class OAuthUserProfileService implements OAuthUserProfileMutateUseCase {
   async linkOAuthProfile(
     userId: number,
     dto: OAuthRequestDto,
-  ): Promise<OAuthUserProfileDto> {
+  ): Promise<OAuthProfileDto> {
     const vendorProfile = await this.oauthProviderPort.getOAuthProfile(
       dto.code,
       dto.provider,
@@ -53,7 +53,7 @@ export class OAuthUserProfileService implements OAuthUserProfileMutateUseCase {
       vendorProfile.provider,
     );
 
-    const profile = OAuthUserProfile.create({
+    const profile = OAuthProfile.create({
       userId,
       id: vendorProfile.id,
       provider: vendorProfile.provider,
@@ -63,7 +63,7 @@ export class OAuthUserProfileService implements OAuthUserProfileMutateUseCase {
 
     const saved = await this.oauthProfilePersistencePort.save(profile);
 
-    return OAuthUserProfileDto.fromEntity(saved);
+    return OAuthProfileDto.fromEntity(saved);
   }
 
   async unlinkOAuthProfile(

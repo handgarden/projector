@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { OAuthUserProfile } from '../../domain/OAuthProfile.entity';
+import { OAuthProfile } from '../../domain/OAuthProfile.entity';
 import { OAuthProvider } from '../../domain/OAuthProvider';
 
 registerEnumType(OAuthProvider, {
@@ -7,7 +7,7 @@ registerEnumType(OAuthProvider, {
   description: 'OAuth provider',
 });
 
-@ObjectType(OAuthUserProfile.name)
+@ObjectType(OAuthProfile.name)
 export class OAuthProfileResponse {
   @Field(() => ID)
   id: string;
@@ -21,7 +21,7 @@ export class OAuthProfileResponse {
   @Field(() => OAuthProvider)
   provider: OAuthProvider;
 
-  static fromEntity(entity: OAuthUserProfile) {
+  static fromEntity(entity: OAuthProfile) {
     const model = new OAuthProfileResponse();
     model.id = entity.id;
     model.name = entity.username;

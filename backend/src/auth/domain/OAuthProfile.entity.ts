@@ -6,7 +6,7 @@ import { Nil } from '../../common/nil/Nil';
 @Entity({
   name: 'oauth_profile',
 })
-export class OAuthUserProfile {
+export class OAuthProfile {
   @PrimaryColumn({
     name: 'id',
     type: 'varchar',
@@ -43,7 +43,7 @@ export class OAuthUserProfile {
     name: string;
     email: Nil<string>;
   }) {
-    const profile = new OAuthUserProfile();
+    const profile = new OAuthProfile();
     profile.id = id;
     profile.provider = provider;
     profile.username = name;

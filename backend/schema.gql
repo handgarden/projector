@@ -5,29 +5,17 @@
 type User {
   id: ID!
   account: String!
-  oauthProfiles: [OAuthProfile]!
 }
 
-type OAuthProfile {
-  id: ID!
-  name: String!
-  email: String
-  provider: OAuthProvider!
-}
-
-"""OAuth provider"""
-enum OAuthProvider {
-  GITHUB
-}
-
-type UploadFile {
+type Project {
   createdAt: LocalDateTime!
   updatedAt: LocalDateTime!
-  key: ID!
-  originalName: String!
-  bucket: String!
-  uploader: User!
-  url: String!
+  id: ID!
+  title: String!
+  description: String!
+  creator: User!
+  slides: [Slide]!
+  thumbnail: String
 }
 
 """LocalDateTime custom scalar type"""
@@ -43,35 +31,32 @@ type Slide {
   images: [SlideImage]!
 }
 
-type SlideImage {
-  seq: Int!
-  file: UploadFile!
-}
-
-type Project {
-  createdAt: LocalDateTime!
-  updatedAt: LocalDateTime!
-  id: ID!
-  title: String!
-  description: String!
-  creator: User!
-  slides: [Slide]!
-  thumbnail: String
-}
-
 type PaginatedProjectResponse {
   items: [Project!]!
   total: Int!
   hasNext: Boolean!
 }
 
+type SlideImage {
+  seq: Int!
+}
+
+type UploadFile {
+  createdAt: LocalDateTime!
+  updatedAt: LocalDateTime!
+  key: ID!
+  originalName: String!
+  url: String!
+  uploader: User!
+}
+
 type Query {
   user: User!
+  project(id: ID!): Project!
+  projects(pageable: PaginationInput): PaginatedProjectResponse!
+  slide(slideId: ID!): Slide!
   uploadFile(key: String!): UploadFile!
   uploadFiles(keys: [String!]!): [UploadFile!]!
-  project(id: ID!): Project!
-  projectsPageable(pageable: PaginationInput): PaginatedProjectResponse!
-  slide(slideId: ID!): Slide!
 }
 
 input PaginationInput {
@@ -81,14 +66,20 @@ input PaginationInput {
 
 type Mutation {
   createProject(project: CreateProjectInput!): Project!
-  updateProject(id: ID!, project: CreateProjectInput!): Project!
+  updateProject(project: UpdateProjectInput!): Project!
   deleteProject(id: ID!): Boolean!
-  createSlide(slide: CreateSlideInput!): Slide!
+  addSlide(slide: CreateSlideInput!): Slide!
   updateSlide(slide: UpdateSlideInput!): Slide!
-  deleteSlide(slideId: ID!): Boolean!
+  deleteSlide(projectId: ID!, slideId: ID!): Boolean!
 }
 
 input CreateProjectInput {
+  title: String!
+  description: String!
+}
+
+input UpdateProjectInput {
+  id: String!
   title: String!
   description: String!
 }
@@ -97,10 +88,10 @@ input CreateSlideInput {
   projectId: Int!
   title: String!
   description: String!
-  images: [CreateSlideImageInput]!
+  images: [SlideImageInput]!
 }
 
-input CreateSlideImageInput {
+input SlideImageInput {
   seq: Int!
   key: ID!
 }
@@ -109,6 +100,6 @@ input UpdateSlideInput {
   projectId: Int!
   title: String!
   description: String!
-  images: [CreateSlideImageInput]!
+  images: [SlideImageInput]!
   slideId: ID!
 }
