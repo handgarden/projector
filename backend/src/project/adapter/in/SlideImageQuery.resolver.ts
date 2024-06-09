@@ -13,7 +13,7 @@ export class SlideImageQueryResolver {
   @ResolveField(() => UploadFileResponse, {
     nullable: true,
   })
-  async image(
+  async file(
     @Root() slideImage: SlideImageResponse,
   ): Promise<UploadFileResponse | null> {
     const key = slideImage.imageKey;
