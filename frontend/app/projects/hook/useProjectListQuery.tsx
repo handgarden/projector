@@ -4,7 +4,7 @@ import { graphql } from "../../../gql";
 export const GET_PROJECTS = graphql(
   `
     query getProjects($page: Int = 1, $size: Int = 10) {
-      projects: projectsPageable(pageable: { page: $page, size: $size }) {
+      projects(pageable: { page: $page, size: $size }) {
         items {
           id
           title

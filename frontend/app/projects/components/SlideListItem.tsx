@@ -20,7 +20,7 @@ import { DEFAULT_MESSAGE_KR } from "../../../common/message/Default.message";
 import { SimpleCarousel } from "../../../common/components/carousel/SimpleCarousel";
 
 type Props = {
-  slide: GetProjectQuery["project"]["slides"][0];
+  slide: GetProjectQuery["project"]["slides"][number];
   projectId: string;
 };
 
@@ -40,6 +40,7 @@ export default function SlideListItem({ slide, projectId }: Props) {
 
     mutate({
       variables: {
+        projectId,
         slideId: slide.id,
       },
       onCompleted: () => {

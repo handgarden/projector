@@ -3,13 +3,9 @@ import { graphql } from "../../../gql";
 
 export const GET_PROFILE = graphql(`
   query getProfile {
-    user {
+    oauthProfiles {
       id
-      account
-      oauthProfiles {
-        id
-        provider
-      }
+      provider
     }
   }
 `);
@@ -17,7 +13,7 @@ export const GET_PROFILE = graphql(`
 export function useProfileQuery() {
   const { data, loading, error, refetch } = useQuery(GET_PROFILE);
   return {
-    profile: data?.user,
+    profile: data?.oauthProfiles,
     loading,
     error,
     refetch,
