@@ -32,7 +32,7 @@ COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/tsconfig.json ./tsconfig.json
 COPY --from=build /app/tsconfig.build.json ./tsconfig.build.json
 
-COPY .env  ./.env
+COPY .env.production  ./.env
 COPY /migrations ./migrations
 COPY /migration-config.ts ./migration-config.ts
 
