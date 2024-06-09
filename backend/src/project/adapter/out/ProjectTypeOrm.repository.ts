@@ -69,12 +69,7 @@ export class ProjectTypeORMRepository
     });
     return Nil.of(findProject);
   }
-  async saveAggregateProject(project: Project): Promise<Project> {
+  async saveProject(project: Project): Promise<Project> {
     return this.save(project);
-  }
-
-  async removeAggregateProject(project: Project): Promise<boolean> {
-    await this.remove(project);
-    return true;
   }
 }

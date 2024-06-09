@@ -9,6 +9,7 @@ import {
 import { SlideImage } from './SlideImage.entity';
 import { Project } from './Project.entity';
 import { BaseTimeEntity } from '../../common/entity/BaseTimeEntity';
+import { instanceToInstance } from 'class-transformer';
 
 @Entity()
 export class Slide extends BaseTimeEntity {
@@ -50,7 +51,7 @@ export class Slide extends BaseTimeEntity {
   @OneToMany(() => SlideImage, (image) => image.slide, {
     nullable: false,
     lazy: true,
-    cascade: true,
+    cascade: false,
   })
   images: Promise<SlideImage[]>;
 
@@ -90,19 +91,20 @@ export class Slide extends BaseTimeEntity {
     description: string;
     images: { key: string; seq: number }[];
   }) {
-    this.title = title;
-    this.description = description;
+    const updatedSlide = instanceToInstance(this);
+    updatedSlide.title = title;
+    updatedSlide.description = description;
     const updatedSlideImages = images.map((i) =>
       SlideImage.create({
-        slide: this,
+        slide: updatedSlide,
         fileId: i.key,
         seq: i.seq,
       }),
     );
 
-    this.images = Promise.resolve(updatedSlideImages);
+    updatedSlide.images = Promise.resolve(updatedSlideImages);
 
-    return this;
+    return updatedSlide;
   }
 
   async validateCreator(userId: number) {

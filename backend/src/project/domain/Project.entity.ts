@@ -12,6 +12,7 @@ import { BaseTimeEntity } from '../../common/entity/BaseTimeEntity';
 import { SlideNotFoundException } from '../application/exception/SlideNotFoundException';
 import { Nil } from '../../common/nil/Nil';
 import { UploadFile } from '../../file/domain/UploadFile.entity';
+import { CreateSlideDto } from '../application/dto/CreateSlide.dto';
 
 @Entity()
 export class Project extends BaseTimeEntity {
@@ -44,7 +45,7 @@ export class Project extends BaseTimeEntity {
 
   @OneToMany(() => Slide, (slide) => slide.project, {
     lazy: true,
-    cascade: true,
+    cascade: false,
   })
   slides: Promise<Slide[]>;
 
@@ -53,11 +54,13 @@ export class Project extends BaseTimeEntity {
     this.description = description;
   }
 
-  async addSlide(slide: Slide) {
+  async addSlide(dto: CreateSlideDto) {
+    const slide = Slide.create({ ...dto });
     const prevSlides = await this.slides;
     slide.seq = prevSlides.length + 1;
     this.slides = Promise.resolve([...prevSlides, slide]);
     slide.project = Promise.resolve(this);
+    return slide;
   }
 
   async updateSlide({
@@ -82,29 +85,37 @@ export class Project extends BaseTimeEntity {
       });
     }
 
-    await targetSlide.update({
+    const updated = await targetSlide.update({
       title: updatedTitle,
       description: updatedDescription,
       images: updatedImages,
     });
+
+    return updated;
   }
 
-  async deleteSlide(slideId: number) {
+  async deleteSlide(slideId: number): Promise<Nil<Slide>> {
     const slides = await this.slides;
-    const filteredSlides = slides.filter((s) => s.id !== slideId);
-    const sortedSlides = [...filteredSlides]
-      .sort((a, b) => a.seq - b.seq)
+    const targetSlide = slides.find((s) => s.id === slideId);
+
+    if (!targetSlide) {
+      return Nil.empty();
+    }
+
+    const updatedSlides = slides
+      .filter((s) => s.id !== slideId)
       .map((s, i) => {
         s.seq = i + 1;
         return s;
       });
-    this.slides = Promise.resolve(sortedSlides);
+    this.slides = Promise.resolve(updatedSlides);
+    return Nil.of(targetSlide);
   }
 
   async getThumbnail(): Promise<Nil<UploadFile>> {
-    const slides = await this.slides;
+    const slides = (await this.slides).sort((a, b) => a.seq - b.seq);
     for (const slide of slides) {
-      const images = await slide.images;
+      const images = (await slide.images).sort((a, b) => a.seq - b.seq);
       if (images.length > 0) {
         const file = await images[0].file;
         return Nil.of(file);

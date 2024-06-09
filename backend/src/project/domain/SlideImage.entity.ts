@@ -21,6 +21,7 @@ export class SlideImage {
   @ManyToOne(() => Slide, (slide) => slide.images, {
     nullable: false,
     lazy: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'slide_id' })
   slide: Promise<Slide>;
@@ -28,7 +29,7 @@ export class SlideImage {
   @ManyToOne(() => UploadFile, {
     nullable: false,
     lazy: true,
-    cascade: ['remove'],
+    cascade: false,
   })
   @JoinColumn({ name: 'file_id' })
   file: Promise<UploadFile>;

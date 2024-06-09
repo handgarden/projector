@@ -10,19 +10,17 @@ export class SlideImageQueryResolver {
     @Inject(UploadFileBatchQueryUseCase)
     private readonly uploadFileBatchQueryUseCase: UploadFileBatchQueryUseCase,
   ) {}
-  @ResolveField(() => UploadFileResponse, {
-    nullable: true,
-  })
+  @ResolveField(() => UploadFileResponse)
   async file(
     @Root() slideImage: SlideImageResponse,
-  ): Promise<UploadFileResponse | null> {
+  ): Promise<UploadFileResponse> {
     const key = slideImage.imageKey;
 
     const image =
       await this.uploadFileBatchQueryUseCase.loadUploadFileByKey(key);
 
     if (image.isNil()) {
-      return null;
+      throw new Error(`Image with key ${key} not found`);
     }
 
     return UploadFileResponse.fromDto(image.unwrap());

@@ -14,9 +14,9 @@ import { User } from '../../../user/domain/User.entity';
 import { UpdateProjectDto } from '../dto/UpdateProject.dto';
 import { DeleteProjectDto } from '../dto/DeleteProject.dto';
 import { CreateSlideDto } from '../dto/CreateSlide.dto';
-import { Slide } from '../../domain/Slide.entity';
 import { UpdateSlideDto } from '../dto/UpdateSlide.dto';
 import { Nil } from '../../../common/nil/Nil';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class ProjectService
@@ -25,6 +25,7 @@ export class ProjectService
   constructor(
     @Inject(ProjectPersistencePort)
     private readonly projectPersistencePort: ProjectPersistencePort,
+    private readonly em: EntityManager,
   ) {}
   async getThumbnailKey(projectId: number): Promise<Nil<string>> {
     const projectNil =
@@ -77,8 +78,7 @@ export class ProjectService
       description: projectDto.description,
     });
 
-    const saved =
-      await this.projectPersistencePort.saveAggregateProject(project);
+    const saved = await this.projectPersistencePort.saveProject(project);
 
     return ProjectDto.fromEntity(saved);
   }
@@ -102,8 +102,7 @@ export class ProjectService
       description: updateProjectDto.description,
     });
 
-    const updated =
-      await this.projectPersistencePort.saveAggregateProject(project);
+    const updated = await this.projectPersistencePort.saveProject(project);
 
     return ProjectDto.fromEntity(updated);
   }
@@ -113,7 +112,18 @@ export class ProjectService
 
     await project.validateCreator(dto.creatorId);
 
-    await this.projectPersistencePort.removeAggregateProject(project);
+    const slides = await project.slides;
+    const images = (await Promise.all(slides.map((s) => s.images))).flat();
+
+    this.em.transaction(async (tem) => {
+      if (slides.length > 0) {
+        await tem.remove(slides);
+      }
+      if (images.length > 0) {
+        await tem.remove(images);
+      }
+      await tem.remove(project);
+    });
   }
 
   public async addSlide(createDto: CreateSlideDto): Promise<SlideDto> {
@@ -121,14 +131,17 @@ export class ProjectService
 
     await project.validateCreator(createDto.creatorId);
 
-    const slide = Slide.create({ ...createDto });
+    const slide = await project.addSlide(createDto);
 
-    await project.addSlide(slide);
-
-    const saved =
-      await this.projectPersistencePort.saveAggregateProject(project);
-    const savedSlides = await saved.slides;
-    const savedSlide = savedSlides[savedSlides.length - 1];
+    const savedSlide = await this.em.transaction(async (tem) => {
+      const saved = await tem.save(slide);
+      const images = await slide.images;
+      if (images.length > 0) {
+        images.forEach((i) => (i.slide = Promise.resolve(saved)));
+        await tem.save(images);
+      }
+      return saved;
+    });
 
     return SlideDto.fromEntity(savedSlide);
   }
@@ -138,20 +151,28 @@ export class ProjectService
 
     await project.validateCreator(updateDto.creatorId);
 
-    await project.updateSlide({
+    const slides = await project.slides;
+    const slide = slides.find((s) => s.id === updateDto.slideId);
+    const prevImages = await slide?.images;
+
+    const updated = await project.updateSlide({
       slideId: updateDto.slideId,
       updatedTitle: updateDto.title,
       updatedDescription: updateDto.description,
       updatedImages: updateDto.images,
     });
 
-    const updated =
-      await this.projectPersistencePort.saveAggregateProject(project);
+    const updatedImages = await updated.images;
 
-    const updatedSlides = await updated.slides;
-    const updatedSlide = updatedSlides.find((s) => s.id === updateDto.slideId);
+    await this.em.transaction(async (tem) => {
+      if (prevImages && prevImages.length > 0) {
+        await tem.remove(prevImages);
+      }
+      await tem.save(updated);
+      await tem.save(updatedImages);
+    });
 
-    return SlideDto.fromEntity(updatedSlide!);
+    return SlideDto.fromEntity(updated);
   }
 
   public async deleteSlide(dto: DeleteSlideDto): Promise<void> {
@@ -159,9 +180,20 @@ export class ProjectService
 
     await project.validateCreator(dto.creatorId);
 
-    await project.deleteSlide(dto.slideId);
+    const deleted = await project.deleteSlide(dto.slideId);
 
-    await this.projectPersistencePort.saveAggregateProject(project);
+    if (deleted.isNil()) {
+      return;
+    }
+
+    const deletedSlide = deleted.unwrap();
+    const deletedImages = await deletedSlide.images;
+    const updatedSlides = await project.slides;
+    await this.em.transaction(async (tem) => {
+      await tem.remove(deletedImages);
+      await tem.remove(deletedSlide);
+      await tem.save(updatedSlides);
+    });
   }
 
   private async getAggregateProject(id: number) {

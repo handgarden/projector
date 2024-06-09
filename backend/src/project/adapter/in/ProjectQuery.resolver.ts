@@ -63,7 +63,7 @@ export class ProjectQueryResolver {
     return UserResponse.fromDto(nilDto.unwrap());
   }
 
-  @ResolveField(() => [SlideResponse], { nullable: 'items' })
+  @ResolveField(() => [SlideResponse])
   async slides(@Root() project: ProjectResponse): Promise<SlideResponse[]> {
     const slides = await this.slideBatchUseCase.loadSlidesByProjectId(
       parseInt(project.id, 10),

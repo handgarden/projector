@@ -28,7 +28,7 @@ export class SlideQueryResolver {
     return SlideResponse.fromDto(slide);
   }
 
-  @ResolveField(() => [SlideImageResponse], { nullable: 'items' })
+  @ResolveField(() => [SlideImageResponse])
   async images(@Root() slide: SlideResponse): Promise<SlideImageResponse[]> {
     const slideImages =
       await this.slideBatchQueryUseCase.loadSlideImagesBySlideId(

@@ -11,8 +11,7 @@ export interface ProjectPersistencePort {
   ): Promise<[Project[], number]>;
   findProjectsByIds(ids: number[]): Promise<Project[]>;
   findAggregatedProjectById(id: number): Promise<Nil<Project>>;
-  saveAggregateProject(project: Project): Promise<Project>;
-  removeAggregateProject(project: Project): Promise<boolean>;
+  saveProject(project: Project): Promise<Project>;
 }
 
 export const ProjectPersistencePort = Symbol('ProjectPersistencePort');
