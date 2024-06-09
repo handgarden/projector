@@ -13,7 +13,7 @@ export class UserQueryService implements UserQueryUseCase {
   async getUser(id: number): Promise<UserDto> {
     const user = await this.userPersistencePort.findUserById(id);
 
-    if (!user.isNil()) {
+    if (user.isNil()) {
       throw new Error('User not found');
     }
 
