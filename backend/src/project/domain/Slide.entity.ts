@@ -54,7 +54,7 @@ export class Slide extends BaseTimeEntity {
   })
   images: Promise<SlideImage[]>;
 
-  static create({
+  static async create({
     title,
     description,
     images,
@@ -69,7 +69,7 @@ export class Slide extends BaseTimeEntity {
     const slide = new Slide();
     slide.title = title;
     slide.description = description;
-    slide.images = Promise.resolve(
+    const slideImages = await Promise.resolve(
       images.map((image) =>
         SlideImage.create({
           slide,
@@ -78,6 +78,7 @@ export class Slide extends BaseTimeEntity {
         }),
       ),
     );
+    slide.addImages(slideImages);
 
     return slide;
   }
