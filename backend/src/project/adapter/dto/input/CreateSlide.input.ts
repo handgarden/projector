@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 import { SlideImageInput } from './CreateSlideImage.input';
 import { CreateSlideDto } from '../../../application/dto/CreateSlide.dto';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class CreateSlideInput implements Partial<SlideResponse> {
@@ -29,6 +30,7 @@ export class CreateSlideInput implements Partial<SlideResponse> {
 
   @Field(() => [SlideImageInput], { nullable: 'items' })
   @ArrayMaxSize(5, { message: DefaultValidationMessage.ARRAY_MAX_SIZE })
+  @Type(() => SlideImageInput)
   images: SlideImageInput[];
 
   toDto(userId: number) {
@@ -37,7 +39,10 @@ export class CreateSlideInput implements Partial<SlideResponse> {
     dto.projectId = this.projectId;
     dto.title = this.title;
     dto.description = this.description;
-    dto.images = this.images.map((image) => image.toDto());
+    dto.images = this.images.map((image) => {
+      console.log(image);
+      return image.toDto();
+    });
     return dto;
   }
 }
