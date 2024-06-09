@@ -2,7 +2,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserMutateUseCase } from '../../../user/application/port/in/UserMutateUseCase';
-import { RegisterDto } from '../../../user/application/port/dto/Register.dto';
+import { LoginDto } from '../../../user/application/port/dto/Login.dto';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -16,17 +16,17 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(account: string, password: string) {
-    const registerDto = new RegisterDto({
+    const userDto = new LoginDto({
       account,
       password,
     });
 
-    const user = await this.userMutateUseCase.validateUser(registerDto);
+    const user = await this.userMutateUseCase.validateUser(userDto);
 
-    if (!user) {
+    if (user.isNil()) {
       throw new UnauthorizedException();
     }
 
-    return user;
+    return user.unwrap();
   }
 }
