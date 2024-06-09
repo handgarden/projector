@@ -11,6 +11,7 @@ export interface OAuthProfilePersistencePort {
     provider: OAuthProvider,
     id: string,
   ): Promise<Nil<OAuthProfile>>;
+  findByUserId(userId: number): Promise<OAuthProfile[]>;
   save(profile: OAuthProfile): Promise<OAuthProfile>;
   removeOne(profile: OAuthProfile): Promise<void>;
 }

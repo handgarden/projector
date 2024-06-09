@@ -13,6 +13,13 @@ export class OAuthProfileTypeORMRepository
   constructor(dataSource: DataSource) {
     super(OAuthProfile, dataSource.manager);
   }
+  findByUserId(userId: number): Promise<OAuthProfile[]> {
+    return this.find({
+      where: {
+        userId,
+      },
+    });
+  }
 
   async findByProviderAndUserId(
     provider: OAuthProvider,

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { OAuthProfileMutateUseCase } from '../port/in/OAuthUserProfileMutateUseCase';
+import { OAuthProfileMutateUseCase } from '../port/in/OAuthProfileMutateUseCase';
 import { OAuthProfilePersistencePort } from '../port/out/OAuthProfilePersistencePort';
 import { OAuthProviderPort } from '../port/out/OAuthProviderPort';
 import { OAuthRequestDto } from '../dto/OAuthRequest.dto';
@@ -10,9 +10,12 @@ import { OAuthProvider } from '../../domain/OAuthProvider';
 import { DuplicateOAuthProfileError } from '../../../lib/auth/error/DuplicateOAuthProfileError';
 import { UserQueryUseCase } from '../../../user/application/port/in/UserQueryUseCase';
 import { UserDto } from '../../../user/application/dto/User.dto';
+import { OAuthProfileQueryUseCase } from '../port/in/OAuthProfileQueryUseCase';
 
 @Injectable()
-export class OAuthProfileService implements OAuthProfileMutateUseCase {
+export class OAuthProfileService
+  implements OAuthProfileMutateUseCase, OAuthProfileQueryUseCase
+{
   constructor(
     @Inject(OAuthProviderPort)
     private readonly oauthProviderPort: OAuthProviderPort,
@@ -21,6 +24,11 @@ export class OAuthProfileService implements OAuthProfileMutateUseCase {
     @Inject(UserQueryUseCase)
     private readonly userQueryUseCase: UserQueryUseCase,
   ) {}
+  async getOAuthProfiles(userId: number): Promise<OAuthProfileDto[]> {
+    const profiles =
+      await this.oauthProfilePersistencePort.findByUserId(userId);
+    return profiles.map((profile) => OAuthProfileDto.fromEntity(profile));
+  }
   async loginWithOAuthProfile(dto: OAuthRequestDto): Promise<UserDto> {
     const vendorProfile = await this.oauthProviderPort.getOAuthProfile(
       dto.code,

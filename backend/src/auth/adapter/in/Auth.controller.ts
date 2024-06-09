@@ -23,7 +23,7 @@ import { LoginResponseDto } from '../dto/LoginResponse.dto';
 import { AuthUserDto } from '../../application/dto/AuthUser.dto';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../../../lib/auth/types/TokenPayload';
-import { OAuthProfileMutateUseCase } from '../../application/port/in/OAuthUserProfileMutateUseCase';
+import { OAuthProfileMutateUseCase } from '../../application/port/in/OAuthProfileMutateUseCase';
 import { OAuthRequestDto } from '../../application/dto/OAuthRequest.dto';
 import { UserMutateUseCase } from '../../../user/application/port/in/UserMutateUseCase';
 

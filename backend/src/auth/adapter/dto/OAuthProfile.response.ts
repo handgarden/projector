@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { OAuthProfile } from '../../domain/OAuthProfile.entity';
 import { OAuthProvider } from '../../domain/OAuthProvider';
+import { OAuthProfileDto } from '../../application/dto/OAuthProfile.dto';
 
 registerEnumType(OAuthProvider, {
   name: 'OAuthProvider',
@@ -21,12 +22,12 @@ export class OAuthProfileResponse {
   @Field(() => OAuthProvider)
   provider: OAuthProvider;
 
-  static fromEntity(entity: OAuthProfile) {
+  static fromDto(dto: OAuthProfileDto) {
     const model = new OAuthProfileResponse();
-    model.id = entity.id;
-    model.name = entity.username;
-    model.email = entity.email;
-    model.provider = entity.provider;
+    model.id = dto.id;
+    model.name = dto.name;
+    model.email = dto.email;
+    model.provider = dto.provider;
 
     return model;
   }
