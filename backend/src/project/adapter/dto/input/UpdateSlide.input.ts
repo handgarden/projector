@@ -9,6 +9,7 @@ import {
   Length,
 } from 'class-validator';
 import { SlideImageInput } from './CreateSlideImage.input';
+import { Type } from 'class-transformer';
 
 @InputType()
 export class UpdateSlideInput {
@@ -28,6 +29,7 @@ export class UpdateSlideInput {
 
   @Field(() => [SlideImageInput], { nullable: 'items' })
   @ArrayMaxSize(5, { message: DefaultValidationMessage.ARRAY_MAX_SIZE })
+  @Type(() => SlideImageInput)
   images: SlideImageInput[];
 
   @Field(() => ID)

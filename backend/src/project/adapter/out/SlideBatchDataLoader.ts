@@ -25,11 +25,12 @@ export class SlideBatchDataLoader implements SlideBatchLoadPort {
       const slideImages =
         await this.slidePersistencePort.findSlideImagesBySlideIds(slideIds);
       const slideImageMap = new Map<number, SlideImage[]>();
-      slideImages.forEach((slideImage) => {
-        const images = slideImageMap.get(slideImage.slideId) ?? [];
+      for (const slideImage of slideImages) {
+        const slideId = (await slideImage.slide).id;
+        const images = slideImageMap.get(slideId) ?? [];
         images.push(slideImage);
-        slideImageMap.set(slideImage.slideId, images);
-      });
+        slideImageMap.set(slideId, images);
+      }
       return slideIds.map((id) => slideImageMap.get(id) ?? []);
     },
   );

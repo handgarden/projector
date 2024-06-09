@@ -121,7 +121,7 @@ export class ProjectService
 
     await project.validateCreator(createDto.creatorId);
 
-    const slide = await Slide.create({ ...createDto });
+    const slide = Slide.create({ ...createDto });
 
     await project.addSlide(slide);
 

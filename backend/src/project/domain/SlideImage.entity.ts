@@ -1,13 +1,21 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Generated,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { UploadFile } from '../../file/domain/UploadFile.entity';
 import { Slide } from './Slide.entity';
 
 @Entity()
 export class SlideImage {
-  @PrimaryColumn({ name: 'slide_id' })
-  slideId: number;
+  @PrimaryColumn({ name: 'id' })
+  @Generated('increment')
+  id: number;
 
-  @PrimaryColumn({ name: 'file_id' })
+  @Column({ name: 'file_id', type: 'varchar', length: 255, nullable: false })
   fileId: string;
 
   @ManyToOne(() => Slide, (slide) => slide.images, {

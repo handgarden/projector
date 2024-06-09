@@ -5,9 +5,9 @@ export class SlideImageDto {
   seq: number;
   imageKey: string;
 
-  static fromEntity(slideImage: SlideImage) {
+  static async fromEntity(slideImage: SlideImage) {
     const slideImageDto = new SlideImageDto();
-    slideImageDto.id = slideImage.slideId;
+    slideImageDto.id = (await slideImage.slide).id;
     slideImageDto.seq = slideImage.seq;
     slideImageDto.imageKey = slideImage.fileId;
     return slideImageDto;
