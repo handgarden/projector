@@ -15,6 +15,7 @@ export class ProjectDto {
     dto.id = project.id;
     dto.title = project.title;
     dto.description = project.description;
+    dto.creatorId = project.creatorId;
     dto.createdAt = DateTimeUtils.toLocalDateTime(project.createdAt);
     dto.updatedAt = DateTimeUtils.toLocalDateTime(project.updatedAt);
     return dto;

@@ -23,6 +23,12 @@ export class Project extends BaseTimeEntity {
   creator: Promise<User>;
 
   @Column({
+    type: 'int',
+    name: 'user_id',
+  })
+  creatorId: number;
+
+  @Column({
     type: 'varchar',
     length: 255,
     name: 'title',
