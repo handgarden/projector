@@ -15,11 +15,11 @@ import { GqlContextType } from '@nestjs/graphql';
 export class CustomGlobalFilter extends BaseExceptionFilter {
   private readonly logger = new Logger(CustomGlobalFilter.name);
   catch(exception: Error, host: ArgumentsHost): void {
-    this.logger.error(exception);
-
     if (this.isGraphqlRequest(host)) {
       throw exception;
     }
+
+    this.logger.error(exception);
 
     const ctx = host.switchToHttp();
 
