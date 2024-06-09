@@ -66,18 +66,24 @@ export class AuthController {
   }
 
   @Post('oauth/login')
-  async githubLogin(
+  async oauthLogin(
     @Query('provider', new CustomEnumPipe(OAuthProvider))
     provider: OAuthProvider,
     @Query('code') code: string,
   ) {
     try {
       const oauthDto = new OAuthRequestDto(provider, code);
-      const loginResponse =
+      const userDto =
         await this.oauthUserProfileMutateUseCase.loginWithOAuthProfile(
           oauthDto,
         );
-      return RestTemplate.OK_WITH_DATA(loginResponse);
+      const tokenPayload: TokenPayload = {
+        sub: userDto.id.toString(),
+        account: userDto.account,
+      };
+      const token = this.jwtService.sign(tokenPayload);
+      const response = new LoginResponseDto(token);
+      return RestTemplate.OK_WITH_DATA(response);
     } catch (e) {
       if (e instanceof CustomError) {
         throw new UnauthorizedException(e.message);
@@ -88,7 +94,7 @@ export class AuthController {
 
   @Authorized()
   @Post('oauth/register')
-  async githubRegister(
+  async oauthRegister(
     @CurrentUser() user: TokenUser,
     @Query('provider', new CustomEnumPipe(OAuthProvider))
     provider: OAuthProvider,
