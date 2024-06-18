@@ -1,10 +1,9 @@
-import { UseReadQueryResult } from "@apollo/client";
 import { GitHubOAuthButton } from "./GitHubOAuthButton";
 import { GetProfileQuery, OAuthProvider } from "../../../../gql/graphql";
 import { useMemo } from "react";
 
 type Props = {
-  oauthProfiles: GetProfileQuery["user"]["oauthProfiles"];
+  oauthProfiles: GetProfileQuery["oauthProfiles"];
   refetchOAuth: () => void;
 };
 

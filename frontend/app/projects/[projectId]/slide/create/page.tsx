@@ -33,7 +33,7 @@ export default function CreateSlidePage() {
       },
       onCompleted: (d) => {
         addSlide({
-          ...d.createSlide,
+          ...d.addSlide,
         });
 
         router.push(

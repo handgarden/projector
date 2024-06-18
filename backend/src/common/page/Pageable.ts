@@ -1,7 +1,7 @@
-export interface PageableType {
+export interface Pageable {
   page: number;
   size: number;
   skip: number;
-  next(): PageableType;
-  prev(): PageableType;
+  next(): Pageable;
+  prev(): Pageable;
 }

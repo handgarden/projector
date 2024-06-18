@@ -1,8 +1,8 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { PageableType } from '../../../common/page/Pageable';
+import { Pageable } from '../../../common/page/Pageable';
 
 @InputType()
-export class PaginationInput implements PageableType {
+export class PaginationInput implements Pageable {
   @Field(() => Int)
   page: number = 1;
 

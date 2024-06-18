@@ -1,14 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GITHUB_AUTH_SCOPE, GithubTokenResponse } from './GithubAuth';
 import { OAuthService } from '../OAuth.service';
 import { OAuthToken } from '../dto/OAuthToken';
 import { OAuthProfileDto } from '../dto/OAuthProfile';
 import { GithubProfile } from './GithubProfile';
-import { OAuthProvider } from '../../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../../../auth/domain/OAuthProvider';
 
 @Injectable()
 export class GithubOAuthService implements OAuthService {
+  private readonly logger = new Logger(GithubOAuthService.name);
   constructor(private readonly configService: ConfigService) {}
   isMatchProvider(provider: string): boolean {
     return provider === OAuthProvider.GITHUB;
@@ -49,7 +50,7 @@ export class GithubOAuthService implements OAuthService {
 
       return OAuthToken.fromAccessOnly(data.access_token);
     } catch (e) {
-      console.log(e);
+      this.logger.error(e);
       throw new UnauthorizedException();
     }
   }
@@ -67,7 +68,7 @@ export class GithubOAuthService implements OAuthService {
 
       return OAuthProfileDto.fromGithub(user);
     } catch (e) {
-      console.log(e);
+      this.logger.error(e);
       throw new UnauthorizedException();
     }
   }

@@ -1,9 +1,11 @@
 export class RawFile {
   private readonly _key: string;
-  private readonly _file: Express.Multer.File;
-  constructor(key: string, file: Express.Multer.File) {
-    this._key = this.addExtensionToKey(key, file.originalname);
-    this._file = file;
+  private readonly _buffer: Buffer;
+  private readonly _originalname: string;
+  constructor(key: string, originalname: string, buffer: Buffer) {
+    this._originalname = originalname;
+    this._key = this.addExtensionToKey(key, originalname);
+    this._buffer = buffer;
   }
 
   private addExtensionToKey(key: string, originalname: string): string {
@@ -16,10 +18,10 @@ export class RawFile {
   }
 
   get buffer(): Buffer {
-    return this._file.buffer;
+    return this._buffer;
   }
 
   get originalname(): string {
-    return this._file.originalname;
+    return this._originalname;
   }
 }

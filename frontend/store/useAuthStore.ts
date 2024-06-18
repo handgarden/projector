@@ -49,7 +49,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       });
     } else {
       JwtTokenUtils.removeToken();
-      set({ status: StateStatus.INITIAL });
+      set({ status: StateStatus.FAILURE });
     }
   },
   login: async (req: LoginRequest, redirect: () => void) => {

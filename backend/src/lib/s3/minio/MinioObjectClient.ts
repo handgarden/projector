@@ -47,11 +47,11 @@ export class MinioObjectClient implements ObjectStorageClient {
     return storedFile;
   }
 
-  async getPresignedUrl(key: string): Promise<any> {
+  async getPresignedUrl(key: string): Promise<string> {
     return this.client.presignedGetObject(this.bucket, key);
   }
 
-  async deleteObject(key: string): Promise<any> {
+  async deleteObject(key: string): Promise<void> {
     return this.client.removeObject(this.bucket, key);
   }
 }

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { OAuthService } from './OAuth.service';
 import { OAuthProviderNotFoundException } from '../error/OAuthProviderNotFoundError';
-import { OAuthProvider } from '../../../core/entity/enum/OAuthProvider';
+import { OAuthProvider } from '../../../auth/domain/OAuthProvider';
 
 @Injectable()
 export class OAuthFacadeService {
@@ -16,7 +16,8 @@ export class OAuthFacadeService {
 
   async getProfile(provider: OAuthProvider, code: string) {
     const service = await this.getOAuthService(provider);
-    return service.getProfile(code);
+    const oauthToken = await service.getToken(code);
+    return service.getProfile(oauthToken.accessToken);
   }
 
   private async getOAuthService(provider: OAuthProvider) {

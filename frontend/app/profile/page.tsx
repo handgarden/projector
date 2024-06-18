@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@nextui-org/react";
 import { OAuthManagement } from "./components/oauth/OAuthManagement";
 import { useProfileQuery } from "./hook/useProfileQuery";
 import { AuthButton } from "../../common/components/button/AuthButton";
@@ -19,10 +18,7 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <OAuthManagement
-        oauthProfiles={profile.oauthProfiles}
-        refetchOAuth={refetch}
-      />
+      <OAuthManagement oauthProfiles={profile} refetchOAuth={refetch} />
       <AuthButton fullWidth className="my-4" />
     </div>
   );

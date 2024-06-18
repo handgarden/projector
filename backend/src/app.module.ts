@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ApiModule } from './api/Api.module';
+import { HealthController } from './Health.controller';
 import { GqlModule } from './graphql/Gql.module';
+import { UserModule } from './user/User.module';
+import { ProjectModule } from './project/Project.module';
+import { UploadFileModule } from './file/UploadFile.module';
+import { AuthModule } from './auth/Auth.module';
 
 @Module({
   imports: [
@@ -23,8 +27,12 @@ import { GqlModule } from './graphql/Gql.module';
       },
       inject: [ConfigService],
     }),
-    ApiModule,
     GqlModule,
+    UserModule,
+    ProjectModule,
+    UploadFileModule,
+    AuthModule,
   ],
+  controllers: [HealthController],
 })
 export class AppModule {}

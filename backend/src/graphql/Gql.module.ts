@@ -2,9 +2,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { UserGqlModule } from './user/UserGql.module';
-import { UploadFileGqlModule } from './file/UploadFileGql.module';
-import { ProjectGqlModule } from './project/ProjectGql.module';
 import { LocalDateTimeScalar } from './common/scalar/LocalDateTimeScalar';
 import { GqlExceptionFormatter } from './common/GqlExceptionFormatter';
 
@@ -24,9 +21,6 @@ import { GqlExceptionFormatter } from './common/GqlExceptionFormatter';
       autoSchemaFile: join(process.cwd(), 'schema.gql'),
       path: '/graphql',
     }),
-    UserGqlModule,
-    UploadFileGqlModule,
-    ProjectGqlModule,
   ],
 })
 export class GqlModule {}

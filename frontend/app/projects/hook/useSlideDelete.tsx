@@ -2,8 +2,8 @@ import { useMutation } from "@apollo/client";
 import { graphql } from "../../../gql";
 
 const DELETE_SLIDE = graphql(`
-  mutation deleteSlide($slideId: ID!) {
-    deleteSlide(slideId: $slideId)
+  mutation deleteSlide($projectId: ID!, $slideId: ID!) {
+    deleteSlide(projectId: $projectId, slideId: $slideId)
   }
 `);
 

@@ -4,7 +4,7 @@ import { GET_PROJECTS } from "./useProjectListQuery";
 
 const CREATE_SLIDE = graphql(`
   mutation createSlide($input: CreateSlideInput!) {
-    createSlide(slide: $input) {
+    addSlide(slide: $input) {
       id
       seq
       title
